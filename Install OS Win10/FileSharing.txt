@@ -1,0 +1,24 @@
+File Sharing Windows 10
+
+- Terhubung Dalam 1 Jaringan (Router)
+
+#Computer Server
+-  Network n Sharing Center (Public Network)
+* Change Advance Sharing
+`Public Current Profile
+Turn On Network Discovery
+Turn On File and Printer Sharing
+Turn On Sharing So Anyone....
+Use 128-bit Enc...........
+
+Turn Off Password Protected Sharing
+
+- Mematikan Firewall
+- Create Folder(Untuk Sharing)
+` Klik kanan -> Properties -> Sharing -> Share -> Everyone -> Add -> Share -> Done
+` Advance Sharing -> Share this folder(Check)
+
+#Computer Client
+- File Manager -> Network
+- Pilih Laptop Server -> Sharing Data
+- Selesai

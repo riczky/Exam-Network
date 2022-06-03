@@ -1,0 +1,67 @@
+Instalasi Windows 10 Pro Menggunakan Flashdisk
+
+# Download File Iso Windows10pro
+https://www.microsoft.com/en-us/software-download/windows10
+
+*Setup
+` Accept
+` Create Instalation Media(Usb Flash drive, dvd, iso)
+` Use Recommend atau Both(Keduanya)
+` ISO File, Desktop (Penyimpanan) (Windows10) 
+` Save, Finish
+
+==============================================================
+
+# Buat Bootable Menggunakan Rufus pada Flashdisk
+
+* Cek Harddisk
+this pc-> Manage-> disk management -> Pilih Disk -> Properties -> Volumes
+
+
+* Download Rufus
+https://rufus.ie/en/ (Pilih yang Rufus3.18 Portable)
+* Setup Rufus
+` Partiotion scheme GPT (Sesuaikan dengan SSD/Harddisk)
+` Start, Oke
+
+==============================================================
+
+# Lakukan Instalasi
+- Pasang Flashdisk (Bootable)
+- Restart, Masuk Bios dengan menekan (f2/delete)
+- Pilih Boot, Boot Option #1 (Flashdisk)
+Uefi:Sandisk (Untuk GPT)
+Sandisk (Untuk MBR)
+- Save Config(F10), yes
+- Windows 10 (64-bit), Enter
+
+*Windows Setup
+- Time n Currency Format (Indonesia), Sisanya Default, Next
+- Install Now
+- I don't have a product key
+- Windows 10 Pro, Next
+- I Accept the Licence
+- Custom: Install Windows Only
+#Partisi
+- Format Partisi Disk C, Next Install(Jika sudah ada partisi) 
+
+Jika harddisk msh baru lakukan partisi
+- New 100000 Mb, Apply ,Oke
+- Pilih Unallocated, New, Apply
+- Pilih Disk C, Format, Oke
+- Next Install
+- Restart Now
+
+*Setup
+- Region = Indonesia, Yes
+- US, Yes
+- Skip
+- I don't have Internet
+- Continue with limited setup
+
+- I don't have internet
+- Continue with limited setup
+- Name = MyPC, Next
+- Password = (Kosongin), Next
+- Accept
+- Finish.

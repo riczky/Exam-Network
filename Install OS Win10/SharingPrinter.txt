@@ -1,0 +1,28 @@
+Sharing Printer Windows 10
+
+*Komputer Server
+- Terhubung dalam 1 jaringan
+- Cek IP/Nama Computer
+- Masuk Printer n Scanner(Search Windows)
+- Manage -> Printer Properties -> Sharing -> Change Sharing Options -> Share This Printer (Check)
+- Apply, oke
+
+#Network n Sharing Center
+- Change Advanced Sharing Setting
+`Turn on network discovery
+`Turn on file and printer sharing
+`Use 128 bit............
+`Turn Off Password.........
+`Save Changes
+
+
+*Computer Client
+
+- File Manager -> Network -> Cari Nama Komputer / IP
+\\acc-3pc
+Cara Lain:
+Cari Nama Komputer Atau IP Pada windows search
+\\acc-3pc
+
+- Pilih Printer (Epson LQ-2190)
+- Klik kanan -> Connect
