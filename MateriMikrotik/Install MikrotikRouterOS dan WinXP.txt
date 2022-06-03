@@ -1,0 +1,62 @@
+Mikrotik Dasar
+
+Install Mikrotik RouterOS dan Windows XP
+
+Create VM Mikrotik RouterOS
+- New
+- Name : Mikrotik RouterOS Type: Other Version: Other
+- Klik Next
+- Memory Size: 64MB, Klik Next
+- Create Virtual Harddisk Now
+- VHD(Virtual Harddisk), Klik Next
+- Dinamic Allocated, 2GB, Create
+
+Setting Mikrotik RouterOS
+-Klik OS, Setting, Storage, Empty, Choose Virtual Optical Disk File (ISO File)
+-System, First Bootorder Harddisk
+-Klik Ok
+
+Install
+- Klik Start 
+- Tekan a (Untuk memilih semua fitu)
+- Tekan i (Untuk install)
+- Tekan n (Untuk new  Configuration)
+
+Selesai
+
+
+Create VM Windows Exp
+- New
+- Name : XP Type: Mic.Windows Version: 32bit
+- Memory Size: 192MB
+- Create a Virtual harddisk now
+- VHD (Virtual Harddisk)
+- Dynamic Allocated
+- 10GB
+- Create
+
+Setting VM OS XP
+-Klik OS, Setting, Storage, Empty, Choose Virtual Optical Disk File (ISO File)
+-System, First Bootorder Harddisk
+-Klik Ok  
+
+Install
+- Klik Start 
+- Tekan Enter to Continue
+- Tekan F8 to I agree
+- Tekan Enter untuk Install tanpa Partisi(unpartioned)
+- Tekan Enter to Continue(Format the partition using NTFS file system)
+- Regional and language options, Tekan Next
+- Name: MyVM Organization: VMProject
+- Product Key: V2C47-MK7JD-3R89F-D2KXW-VPK3J
+- Computer Name: MyVM, Tekan Next
+- Date n Time Settings: Bangkok, Hanoi, Jakarta
+- Typical Settings, Tekan Next
+- Workgroup n computer domain (No, this computer is not on a network), Tekan Next
+- Not Right Now, Next
+- No, not at this time
+- Name PC : MyVM, Tekan Next 
+- Finish
+
+
+Selesai

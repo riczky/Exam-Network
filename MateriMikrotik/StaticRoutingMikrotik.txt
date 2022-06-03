@@ -1,0 +1,91 @@
+Mikrotik Dasar
+
+Static Routing pada Mikrotik 
+
+- Reset semua konfigurasi pada kedua router (jangan lupa backup)
+Backup Konfigurasi
+- Connect Mikrotik via winbox
+- Files
+- Backup
+
+Reset Konfigurasi
+- System -> Reset Configuration
+- No default configuration
+- Reset Configuration, Yes
+
+Jika ingin Reset Configutaion lewat terminal
+- Buka RouterOSMikrotik
+- /system reset-configuration no-defaults=yes
+- yes
+
+==========================================================
+Static Routing
+
+- Tambahkan IP Address pada ether2 dan ether3 pada Router1 (Terminal)
+ip address add address=192.168.10.1/24 interface=ether2
+ip address add address=10.10.10.2/24 interface=ether3
+
+- Tambahkan Destination Address pada route (Router 1)
+ip route add dst-address=192.168.20.0/24 gateway=10.10.10.3
+
+- Tambahkan Destination Address pada route (Router 2)
+ip route add dst-address=192.168.10.0/24 gateway=10.10.10.2
+
+- Jika Lewat Winbbox (Route)
+Ip -> Routes -> (+) Routes
+dst-address=192.168.10.0/24
+gateway=10.10.10.2
+
+
+- Tambahkan IP Address pada ether1 dan ether2 pada Router2 (Winbox)
+- IP -> Address -> (+) Address
+Address = 10.10.10.3/24
+network = 10.10.10.0
+interface = ether1
+
+- IP -> Address -> (+) Address
+Address = 192.168.20.1/24
+network = 192.168.20.0
+interface = ether2
+
+Finish
+
+
+Config WinXp2 (Client2)
+- Local Area Connection -> Properties -> Internet Protocol
+IP Addr = 192.168.20.100
+Subnet Mask = 255.255.255.0
+Gateway = 192.168.20.1 
+
+DNS Server = 192.168.20.1
+
+
+Config WinXp(Client1)
+- Local Area Connection -> Properties -> Internet Protocol
+IP Addr = 192.168.10.100
+Subnet Mask = 255.255.255.0
+Gateway = 192.168.10.1 
+
+DNS Server = 192.168.10.1
+
+==========================================
+- Konfigurasi Internet Menggunakan Ether1(Router1)
+
+ip address add address=192.168.137.100/24 interface=ether1
+
+ip route add gateway=192.168.137.1
+ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
+ip dns set servers=192.168.137.1,8.8.8.8 allow-remote-requests=yes
+
+
+- Konfigurasi internet WinXp2(Client2) Winbox
+#Pilih Menu IP -> Routes -> (+) Routes
+Gateway = 10.10.10.2
+Apply Oke
+
+#Pilih Menu IP -> DNS
+Servers = 10.10.10.2
+Allow remote requests= yes
+Apply, oke
+
+Selesai

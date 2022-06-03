@@ -1,0 +1,58 @@
+Mikrotik Dasar
+
+Konfigurasi Block Situs Mikrotik di Virtual Box (Firewall)
+Studi Kasus: Block Situs Youtube
+
+- nslookup(utk melihat ip youtube pada cmd)
+- youtube.com
+142.251.10.136		142.251.10.91
+142.251.10.93		142.251.10.190
+
+-Login ke Winbox
+-Pilih menu IP -> Firewall -> Filter Rules
+- Klik (+) untuk membuat filter rules
+*General
+Chain = forward
+Dst. Address = 142.251.10.190
+*Action = drop
+Apply, Oke
+
+Block Semua IP pada youtube.
+
+
+~ Address Lists
+- Klik (+) untuk membuat address lists
+Name=block-youtube
+address=142.251.10.136
+Apply, Oke
+-Lakukan pada semua IP nya
+
+-Pilih menu IP -> Firewall -> Filter Rules
+- Klik (+) untuk membuat filter rules
+*General
+Chain = forward
+*advanced
+Dst. Address = block-youtube
+*Action = drop
+Apply, Oke
+
+
+~Layer7Protocol
+- Klik (+) untuk membuat firewall L7 Protocol
+Name = block-yt
+Regexp = ^.+(youtube.com).*$
+Apply, Oke
+
+- Klik (+) untuk membuat filter rules
+*General
+Chain = forward
+Protocol = 6(tcp)
+dst.Port = 80,443
+
+*Advanced
+Layer7Protocol = block-yt
+*Action = drop
+apply, oke
+
+
+Finish 

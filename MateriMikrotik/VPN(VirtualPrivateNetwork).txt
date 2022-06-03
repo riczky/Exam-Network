@@ -1,0 +1,149 @@
+Mikrotik Dasar
+
+=============================================
+Virtual Private Network(VPN)
+=============================================
+
+Konfigurasi Mikrotik Dasar
+
+Setting MikrotikOs di VM
+- Setting
+- Network
+Adapter 1
+Attached to: Host-only adapter
+Name: VirtualBox Host-Only Ethernet Adapter
+<>Advanced
+Promiscuous Mode: Allow All
+Cable Connected: V (on)
+
+Adapter 2
+Attached to: Internal Network
+Name: intnet
+<>Advanced
+AdapterType:PCnet-FastIII (Am79C973)
+Promiscuous Mode: Allow All
+Cable Connected: V (on)
+
+Setting WinXp di VM
+- Setting
+- Network
+
+Adapter 1
+Attached to: Internal Network
+Name: intnet
+<>Advanced
+Promiscuous Mode: Allow All
+Cable Connected: V (on)
+
+==========================================
+Share Network Host Adapter Only di Windows
+- Open Network n internet settings
+- Change Adapter Options
+- Properties pada Koneksi (WIFI/Ethernet)
+- Sharing, Allow Other Network(Keduanya)
+- Home network connection: VirtualBox(Ethernet2)
+Settings, Allow All tekan Ok
+===========================================
+
+Mikrotik Login
+mikrotik login: admin
+password: 
+
+Melihat Interface yang Aktif
+[admin@Mikrotik] > interface print
+ether1
+ether2
+Config IP Ether 1
+[admin@Mikrotik] > ip address add
+[admin@Mikrotik] > ip address add address=192.168.137.100/24 interface=ether1
+[admin@Mikrotik] > ip route add gateway=192.168.137.1
+[admin@Mikrotik] > ip dns set servers=192.168.137.1,8.8.8.8 allow-remote-request=yes
+[admin@Mikrotik] > ip firewall nat add chain=srcnat action=masquerade out-interface=ether1
+[admin@Mikrotik] > ping google.com
+
+
+
+Config IP Ether 2
+[admin@Mikrotik] > ip address add address=192.168.100.1/24 interface=ether2
+Cek IpAddress, gateway, dns, dan ip firewall
+[admin@Mikrotik] > ip address print
+[admin@Mikrotik] > ip route print
+[admin@Mikrotik] > ip dns print
+[admin@Mikrotik] > ip firewall nat print
+
+Hapus ip address pada ether1:
+ip address print
+ip address remove numbers=1
+
+
+Config Ip di Win Xp
+Control panel ->network n internet connection->network connection
+Klik kanan pada adapter LAN, properties 
+Set IP, Properties
+Ip Address: 192.168.100.10
+Subnet Mask: 255.255.255.0
+Default Gateway: 192.168.100.1
+
+Preffenced DNS Server: 192.168.100.1
+Alternative DNS Server: 8.8.8.8
+
+Buka CMD, ping google.com
+
+==================================================
+Virtual Private Network(VPN)
+
+#Membuat PPTP Servers
+- Masuk winbox menggunakan IP/Mac addr
+- Pilih menu PPP -> Interface -> PPTP Servers
+Enable = yes
+Default Profile = default encryption
+apply,oke
+
+
+#Membuat User PPTP
+- Masuk winbox menggunakan IP/Mac addr
+- Pilih menu PPP -> Secrets -> (+) Tambahkan
+name = vpn-pptp
+password = 12345678
+service = pptp
+profile = default encryption
+local address = 192.168.10.1
+remote address = 192.168.10.100
+apply, oke
+
+#Menambahkan User VPN
+- Masuk winbox menggunakan IP/Mac addr
+- Pilih menu PPP -> Interface -> (+) Tambahkan Panah Bawah (PPTP Server)
+name = vpn-remote
+user = adminvpn
+apply,oke
+
+
+#Aktifkan proxy arp pada jaringan lokal mikrotik
+Jangan lupa rename ether1 menjadi publik dan ether2 menjadi lokal
+
+
+- Pilih menu interface -> Pilih Lokal -> Double Click
+ARP = proxy-arp
+apply,oke
+
+
+#Aktifkan VPN Pada Win10 yang kita gunakan
+- Masuk Settings(Network n internet setting)
+- VPN -> ON -> Add VPN
+vpn provider = windows
+connection name = vpnpptp
+server name or address = 192.168.137.100
+vpn type = point to point tunneling protocol (PPTP)
+username = vpn-pptp
+password = 12345678
+
+Connect
+
+- Lakukan Ping dari Win10 ke WinXp(Client)
+buka cmd-> ping 192.168.10.100
+
+
+#Cek Active Connection
+- Masuk Winbox
+- Pilih Menu PPP -> Active Connection

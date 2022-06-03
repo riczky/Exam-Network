@@ -1,0 +1,65 @@
+Mikrotik Dasar
+
+Konfigurasi Hotspot Login Mikrotik di Virtual Box
+
+- Login Mikrotik menggunakan winbox
+connect to:192.168.100.1:100
+login: admin
+password: 
+
+- Pilih menu IP -> Hotspot
+- Hotspot setup
+- Pilih lokal jika msh menggunakan kabel, next
+- Lokal Address Network = default(otomatis), next
+- Address pool of network = default(jika butuh banyak ip), next
+- Select certificate = none, next
+- IP address of SMTP = 0.0.0.0, next
+- DNS Servers = 192.168.137.1
+ 	      = 8.8.8.8
+- DNS Name = myhotspot.id, next
+- Create local hotspot user
+ name local hotspot user = admin
+ password for user = 123, next
+- Setup has completed, ok
+
+
+Matikan Cookie untuk Hotspot
+- Pilih Menu IP -> Hotspot -> Server Profiles -> Pilih nama hotspot(double klik)
+Login-> Uncheck Cookie -> apply ->ok
+
+
+Menambahkan User untuk sharing koneksi
+- Pilih Menu IP -> Hotspot -> Users
+- Klik (+) Tambah User
+*General
+server = hotspot1
+name = riczky
+password = 123
+*Limits (jika ingin di bagi bandwitch nya)
+Limit uptime = 00:01:00
+
+Apply, Oke
+
+
+Sharing User untuk digunakan di banyak device
+- Pilih Menu IP -> Hotspot -> User Profiles
+- Klik (+) Tambah
+*General
+Name = paket1jam
+Shared users = 10 
+apply, ok
+
+- Klik (+) Tambah
+*General
+Name = paket5jam
+Shared users = 5 
+apply, ok
+ 
+Cara Menggunakannya:
+- Pilih Menu IP -> Hotspot -> Users
+- Pilih user
+*General
+Profile = paket 1 jam (pilih paket)
+*Limit
+Limit Uptime = 01:00:00
+apply, ok

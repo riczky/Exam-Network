@@ -1,0 +1,128 @@
+Mikrotik Dasar 
+
+Management Bandwith Menggunakan Simple Queue
+
+===================================================
+
+Mikrotik
+
+Konfigurasi Mikrotik Dasar
+
+Setting MikrotikOs di VM
+- Setting
+- Network
+Adapter 1
+Attached to: Host-only adapter
+Name: VirtualBox Host-Only Ethernet Adapter
+<>Advanced
+Promiscuous Mode: Allow All
+Cable Connected: V (on)
+
+Adapter 2
+Attached to: Internal Network
+Name: intnet
+<>Advanced
+AdapterType:PCnet-FastIII (Am79C973)
+Promiscuous Mode: Allow All
+Cable Connected: V (on)
+
+Setting WinXp di VM
+- Setting
+- Network
+
+Adapter 1
+Attached to: Internal Network
+Name: intnet
+<>Advanced
+Promiscuous Mode: Allow All
+Cable Connected: V (on)
+
+==========================================
+Share Network Host Adapter Only di Windows
+- Open Network n internet settings
+- Change Adapter Options
+- Properties pada Koneksi (WIFI/Ethernet)
+- Sharing, Allow Other Network(Keduanya)
+- Home network connection: VirtualBox(Ethernet2)
+Settings, Allow All tekan Ok
+===========================================
+
+Mikrotik Login
+mikrotik login: admin
+password: 
+
+Melihat Interface yang Aktif
+[admin@Mikrotik] > interface print
+ether1
+ether2
+Config IP Ether 1
+[admin@Mikrotik] > ip address add
+[admin@Mikrotik] > ip address add address=192.168.137.100/24 interface=ether1
+[admin@Mikrotik] > ip route add gateway=192.168.137.1
+[admin@Mikrotik] > ip dns set servers=192.168.137.1,8.8.8.8 allow-remote-request=yes
+[admin@Mikrotik] > ip firewall nat add chain=srcnat action=masquerade out-interface=ether1
+[admin@Mikrotik] > ping google.com
+
+
+
+Config IP Ether 2
+[admin@Mikrotik] > ip address add address=10.10.10.1/24 interface=ether2
+Cek IpAddress, gateway, dns, dan ip firewall
+[admin@Mikrotik] > ip address print
+[admin@Mikrotik] > ip route print
+[admin@Mikrotik] > ip dns print
+[admin@Mikrotik] > ip firewall nat print
+
+Hapus ip address pada ether1:
+ip address print
+ip address remove numbers=1
+
+
+Config Ip di Win Xp
+Control panel ->network n internet connection->network connection
+Klik kanan pada adapter LAN, properties 
+Set IP, Properties
+Ip Address: 10.10.10.2
+Subnet Mask: 255.255.255.0
+Default Gateway: 10.10.10.1
+
+Preffenced DNS Server: 10.10.10.1
+Alternative DNS Server: 8.8.8.8
+
+Buka CMD, ping google.com
+
+
+
+============================================================
+Konfigurasi Management Bandwith
+
+- Masuk Winbox
+- Ubah Interface
+ether1 = publik
+ether2 = lokal
+
+- IP -> DHCP Server -> DHCP Setup
+DHCP Interface = Lokal(Interface)
+DHCP Address Space = 10.10.10.0/24
+Gateway = 10.10.10.1
+Address to give out = 10.10.10.2-10.10.10.254
+DNS Server = 192.168.137.1
+	   = 8.8.8.8
+Lease Time = 1d(1Hari)
+Next, Ok
+
+- Config IP Client menjadi DHCP
+- Ping Google.com
+
+=====================================
+Config Queue
+
+- Pilih menu Queues -> (+) Tambahkan
+*General
+name = clientXP
+target address = 10.10.10.2(Single Target) / 10.10.10.0/24(Network)
+		 10.10.10.100(Beberapa Target)	
+Upload			download
+Max Limit = 512k	512k
+
+Apply,oke

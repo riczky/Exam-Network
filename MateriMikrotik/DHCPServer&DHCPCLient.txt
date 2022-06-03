@@ -1,0 +1,118 @@
+Mikrotik Dasar
+
+DHCP Server & DHCP Client
+
+2 Router Mikrotik (Jadul), 1 WinXp(Client)
+
+- Setting Adapter
+*Mikrotik 1
+Adapter 1 = PCnet-FAST III (Host Only Adapter)
+Adapter 2 = PCnet-FAST III (Internal Network, intnet)
+Adapter 3 = PCnet-FAST III (Internal Network, intnet2)
+
+*Mikrotik 2 
+Adapter 1 = PCnet-FAST III (Internal Network, intnet2)
+
+*WinXp(Client)
+Adapter 1 = PCnet-FAST III (Internal Network, intnet)
+Adapter 2 = PCnet-FAST III (Internal Network, intnet2)
+
+=======================================================
+#Masuk Winbox pada Mikrotik 1
+
+- Ubah nama interface
+ether1 = publik
+ether2 = lokal
+ether3 = dhcp
+
+- Ubah nama identity
+Pilih menu system-> identity -> (Mikrotik 1)
+
+- Config Ip Address
+
+- Ip -> Address -> (+) Tambahkan IP
+Address = 192.168.137.10/24
+Network = 192.168.137.0
+Interface = public
+
+- Ip -> Address -> (+) Tambahkan IP
+Address = 192.168.1.1/24
+Network = 192.168.1.0
+Interface = lokal
+
+- Ip -> Address -> (+) Tambahkan IP
+Address = 192.168.2.1/24
+Network = 192.168.2.0
+Interface = dhcp
+
+
+- Config Ip Routes
+Pilih menu IP -> Routes -> Tambahkan
+*general
+gateway = 192.168.137.1
+apply, oke
+
+- Config DNS
+Pilih menu IP -> DNS -> Tambahkan
+servers = 8.8.8.8
+	= 8.8.4.4
+allow-remote = yes
+apply, oke
+
+- Config IP Firewall
+Pilih menu IP -> Firewall -> NAT -> (+) Tambahkan
+*General
+chain = srcnat
+out-interface = publik
+*action = masquerade
+apply, oke
+
+ping 8.8.8.8
+
+==================================================
+- Config IP WinXp (Client 1 Static) (Lan 2)
+- Config IP WinXp2 (Client 2  DHCP) (Lan 3)
+
+Ip address = 192.168.1.100
+subnet mask = 255.255.255.0
+gateway = 192.168.1.1
+
+prefered dns server = 192.168.1.1
+alternate = 8.8.8.8
+
+Ping google.com
+
+===================================================
+- Config DHCP Server
+Pilih menu IP -> DHCP Server -> DHCP Setup
+
+DHCP Server Interface = dhcp
+DHCP Address Space = 192.168.2.0/24
+Gateway = 192.168.2.1
+Address to give out = 192.168.2.2-192.168.2.254
+DNS Servers = 8.8.8.8
+	    = 8.8.4.4
+Lease Time = 1d
+Next, Ok
+
+====================================================
+
+#Masuk Winbox Menggunakan Mikrotik 2
+
+- Ubah Interface ether1 = RouterA
+pilih menu Interface -> Double Klik Ether1 -> Ubah Name (RouterA)
+
+- Ubah Identity
+Pilih menu system -> identity
+identity = Mikrotik 2
+
+- Tambahkan DHCP Client
+pilih menu IP -> DHCP client -> (+) Tambahkan
+Interface = RouterA
+
+Apply,oke
+
+- New Terminal -> Ping 8.8.8.8
+
+
+

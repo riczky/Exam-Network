@@ -1,0 +1,78 @@
+Konfigurasi Mikrotik Dasar di Virtual Box Part-2
+Materi Pembahasan:
+1. Mengaktifkan fitur drag n drop di virtual box
+- Masuk OS WinXp pada VM
+- Device, Insert Guest Addition Image (Next2 aja sampe selesai)
+- Ke Restart WinXp VM
+- Device, Drag n Drop, Bidirectional
+
+- Drag File winboxjadul dan putty ke OS WinXp VM
+- Install Putty dan winbox hingga selesai
+
+2. Remote mikrotik menggunakan winbox, web, dan putty
+Remote menggunakan putty
+- Buka Conf Putty
+- Masukkan IP Route(192.168.100.1) Ether2 dengan jaringan telnet
+- Open
+
+Remote Menggunakan Web
+- Masukkan 192.168.100.1
+- Login Admin
+- Dashboard
+
+Remote Menggunakan Winbox
+- Connect to: 192.168.100.1
+- Login: admin
+- Password:
+- Note: Mikrotik 
+- Connect
+
+
+3. Menutup service pada mikrotik
+- Connect Mikrotik via winbox
+- IP -> Services
+- Ganti Port (Bila diperlukan) winbox port 100
+- Disable www(via Web) dan telnet(via putty)
+
+Remote Menggunakan Winbox
+- Connect to: 192.168.100.1:100
+- Login: admin
+- Password:
+- Note: Mikrotik 
+- Connect
+
+
+4. Merubah interface
+- Connect Mikrotik via winbox
+- Interface, Double Klik Pada Ether1/Ether2
+- Ganti Nama, Klik Ok
+
+
+5. Membuat user
+- Connect Mikrotik via winbox
+- System -> Users
+- New User +
+- Name: riczky
+  Group: full
+  Password: 123
+  Confirm Password: 123
+
+
+6. Merubah identity
+- Connect Mikrotik via winbox
+- System -> Identity
+- Ganti Nama Identity
+- Apply, Oke
+
+
+7. Backup, reset konfigurasi dan restore
+Backup Konfigurasi
+- Connect Mikrotik via winbox
+- Files
+- Backup
+
+Reset Konfigurasi
+- System -> Reset Configuration
+- No default configuration
+- Reset Configuration, Yes
+

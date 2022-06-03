@@ -1,0 +1,188 @@
+Mikrotik Dasar
+
+Dynamic OSPF
+
+- Install Mikrotik Router OS 3
+- Tambahkan Host Network Manager
+File -> Host network manager -> create
+Configure adapter manually
+
+*Virtual host #2
+IPv4 Address = 192.168.1.10
+Ipv4 Network Mask = 255.255.255.0
+
+*Virtual host #3
+IPv4 Address = 192.168.2.20
+Ipv4 Network Mask = 255.255.255.0
+
+*Virtual host #4
+IPv4 Address = 192.168.3.30
+Ipv4 Network Mask = 255.255.255.0
+
+
+- Konfigurasi Network Adapter
+
+*Mikrotik 1
+Settings -> Network
+#Adapter 1
+Attached to : Host-Only Adapter
+Name : VirtualBox Host-Only Ethernet Adapter #2
+
+#Adapter 2
+Attached to : internal Network
+Name : intnet1
+
+#Adapter 3
+Attached to : internal Network
+Name : intnet2
+=====================================================
+
+*Mikrotik 2
+Settings -> Network
+#Adapter 1
+Attached to : Host-Only Adapter
+Name : VirtualBox Host-Only Ethernet Adapter #3
+
+#Adapter 2
+Attached to : internal Network
+Name : intnet3
+
+#Adapter 3
+Attached to : internal Network
+Name : intnet2
+=====================================================
+
+*Mikrotik 3
+Settings -> Network
+#Adapter 1
+Attached to : Host-Only Adapter
+Name : VirtualBox Host-Only Ethernet Adapter #4
+
+#Adapter 2
+Attached to : internal Network
+Name : intnet1
+
+#Adapter 3
+Attached to : internal Network
+Name : intnet3
+
+=====================================================
+- Jalankan 3 router OS untuk dirubah identity pada winbox
+- Cek Mac Address ( Pilih OS -> Settings -> Network -> Adapter 1-> Advanced -> MacAddress) 
+- Ubah Identity pada remote winbox
+
+*Mikrotik 1
+*Mikrotik 2
+*Mikrotik 3
+===============================================================
+Masuk Mikrotik 1 Melalui Winbox
+
+- Pilih menu IP -> Address -> (+) Tambahkan IP
+Address = 192.168.1.1/24
+Network = 192.168.1.0
+interface = ether1
+
+- Pilih menu IP -> Address -> (+) Tambahkan IP
+Address = 10.10.10.1/24
+Network = 10.10.10.0
+interface = ether2
+
+- Pilih menu IP -> Address -> (+) Tambahkan IP
+Address = 20.20.20.1/24
+Network = 20.20.20.0
+interface = ether3
+
+
+
+Masuk Mikrotik 2 Melalui Winbox
+
+- Pilih menu IP -> Address -> (+) Tambahkan IP
+Address = 192.168.2.1/24
+Network = 192.168.2.0
+interface = ether1
+
+- Pilih menu IP -> Address -> (+) Tambahkan IP
+Address = 30.30.30.1/24
+Network = 30.30.30.0
+interface = ether2
+
+- Pilih menu IP -> Address -> (+) Tambahkan IP
+Address = 20.20.20.2/24
+Network = 20.20.20.0
+interface = ether3
+
+
+
+Masuk Mikrotik 3 Melalui Winbox
+
+- Pilih menu IP -> Address -> (+) Tambahkan IP
+Address = 192.168.3.1/24
+Network = 192.168.3.0
+interface = ether1
+
+
+- Pilih menu IP -> Address -> (+) Tambahkan IP
+Address = 10.10.10.2/24
+Network = 10.10.10.0
+interface = ether2
+
+- Pilih menu IP -> Address -> (+) Tambahkan IP
+Address = 30.30.30.2/24
+Network = 30.30.30.0
+interface = ether3
+
+=======================================================
+
+# Konfigurasi OSPF 
+Router 1
+
+- Pilih Menu Routing -> OSPF -> Networks -> (+) Tambahkan
+Network = 192.168.1.0/24
+Area = backbone
+apply, oke
+
+Network = 10.10.10.0/24
+Area = backbone
+apply, oke
+
+Network = 20.20.20.0/24
+Area = backbone
+apply, oke
+
+
+# Konfigurasi OSPF 
+Router 2
+
+- Pilih Menu Routing -> OSPF -> Networks -> (+) Tambahkan
+Network = 192.168.2.0/24
+Area = backbone
+apply, oke
+
+Network = 30.30.30.0/24
+Area = backbone
+apply, oke
+
+Network = 20.20.20.0/24
+Area = backbone
+apply, oke
+
+
+# Konfigurasi OSPF 
+Router 3
+
+- Pilih Menu Routing -> OSPF -> Networks -> (+) Tambahkan
+Network = 192.168.3.0/24
+Area = backbone
+apply, oke
+
+Network = 30.30.30.0/24
+Area = backbone
+apply, oke
+
+Network = 10.10.10.0/24
+Area = backbone
+apply, oke
+
+
+Selesai
+New Terminal->Ping 

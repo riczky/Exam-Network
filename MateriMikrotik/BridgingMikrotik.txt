@@ -1,0 +1,136 @@
+Mikrotik Dasar
+
+Konfigurasi Bridging Mikrotik di Virtual Box
+(Lanjutan dari Materi Sebelumnya)
+
+- Tambahkan 1 Mikrotik RouterOS2(Router2) dan 1 OS WinXp 2(client2)
+
+Setting Adapter di Virtual Box
+
+- Setting RouterOS(Router 1)
+- Network
+- Tambahkan Adapter 3
+Enable Network Adapter(v)
+Attached to: Internal Network
+Name: intnet2
+
+- Setting RouterOS2(Router 2)
+- Network
+- Adapter 1
+Enable Network Adapter(v)
+Attached to: Internal Network
+Name: intnet2 
+
+- Adapter 2
+Enable Network Adapter(v)
+Attached to: Internal Network
+Name: intnet3
+
+- Setting WinXp2(Client2)
+- Network 
+- Adapter 1
+Enable Network Adapter(v)
+Attached to: Internal Network
+Name: intnet3
+
+
+Jalankan 4 OSnya lalu config melalui winbox client1(winXp)
+
+- Masuk winbox
+- Pilih menu interface -> Ganti nama ether1 menjadi(BridgekeR2)
+- Pilih menu IP -> Address -> Tambahkan Address
+Address = 192.168.100.2/24
+Network = 192.168.100.0 (Harus Sama Router1)
+Interface = BridgeKeR2
+apply, oke.
+
+
+Config WinXp2(Client2)
+- Open Network Connection
+- LAN -> Properties -> Internet Protocol
+- Use the following ip address(static)
+Ip address = 192.168.100.200
+Subnet Mask = 255.255.255.0  
+Default Gateway =  192.168.100.4
+
+- Use the following DNS Server Address
+Preffered DNS server = 192.168.100.4
+alternate DNS server = 8.8.8.8
+
+- Setting Drag n Drop File (Seperti OS Sebelumnya)
+- Buka winbox menggunakan macAddress
+- Pilih menu interfaces
+Ubah nama ether1 menjadi BridgeKeR1
+Ubah nama ether2 menjadi lokal2
+- apply, oke
+
+- Tambahkan IP Address
+- IP -> Address -> Tambahkan Address
+Address = 192.168.100.3/24
+Network = 192.168.100.0
+Interface = Bridge Ke R1
+
+- Tambahkan IP untuk Lokal2
+Address = 192.168.100.4/24
+Network = 192.168.100.0
+Interface = lokal2
+
+Hasilnya(Client2 sudah terhubung dengan Router1)
+
+Lakukan Bridge untuk mengkoneksikan (Client1 dan Client2)
+
+WinXp2(Client2)
+Masuk Winbox
+- Pilih menu bridge -> Tambahkan bridge(+)
+Name: bridge2
+apply, oke
+- Tambahkan Ports -> Tambahkan Port(+)
+*General
+interface = BridgeKeR1
+- Tambahkan Ports -> Tambahkan Port(+)
+*General
+interface = lokal2
+apply,oke
+ 
+
+WinXp(Client1)
+Masuk Winbox
+
+- Pilih menu bridge -> Tambahkan bridge(+)
+Name: bridge1
+apply, oke
+- Tambahkan Ports -> Tambahkan Port(+)
+*General
+interface = BridgeKeR2
+- Tambahkan Ports -> Tambahkan Port(+)
+*General
+interface = lokal
+apply,oke
+
+- Matikan firewall dari ke 2 client WinXp
+
+- Koneksikan dengan internet
+ip firewall nat add chain=srcnat out-interface=BridgeKeR1 action=masquerade
+ip dns set servers=192.168.137.1,8.8.8.8 allow-remote-requests=yes
+ip route add gateway=192.168.100.2
+ping google.com
+
+
+
+- Finish (Selesai)
+
+
+Ping Lewat CMD 
+
+-Client2 ke Client 1
+ping 192.168.100.10
+
+-Client2 ke Router1
+ping 192.168.100.1
+
+-Client1 ke Router2
+ping 192.168.100.2
+
+
+-Client1 ke Client 2
+ping 192.168.100.200
