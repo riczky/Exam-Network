@@ -1,0 +1,92 @@
+Mail Server Ubuntu 20.04 (Squirrelmail)
+
+- sudo su
+- apt-get update
+- apt-get install postfix
+ok
+internetsite
+riczky.com
+- dpkg-reconfigure postfix
+*internet site, Oke
+*riczkymail.com, Oke
+*(kosong) Oke
+*Oke, default
+*Force synchronous update (NO)
+*local network, default (oke)
+*mailbox size limit 0 (oke)
+*Local address extension char, default (oke)
+*all
+- nano /etc/postfix/main.cf
+home_mailbox = Maildir/
+ctrl + x, yes
+- systemctl restart postfix
+
+- apt-get install dovecot-common dovecot-imapd dovecot-pop3d
+- cd /etc/dovecot/conf.d
+- ls
+- nano 10-mail.conf
+mail_location = maildir:~/Maildir
+ctrl+x, yes
+- systemctl restart dovecot
+- cd
+- clear
+
+- adduser sultan
+pass: 123
+
+- adduser test
+pass: 123
+- nano /etc/group
+- nano /etc/hosts
+127.0.0.1     riczkymail.com 
+- telnet riczkymail.com smtp
+mail from: sultan
+rcpt to: test
+data
+Hallo test pesan squirrel
+.
+quit
+
+- telnet riczkymail.com pop3
+user test
+pass 123
+stat
+list
+retr 1
+quit
+
+
+- apt-get install apache2 php
+- cd /var/www/html
+- wget https://sourceforge.net/projects/squirrelmail/files/stable/1.4.22/squirrelmail-webmail-1.4.22.zip
+- apt-get install unzip
+- unzip squirrelmail-webmail-1.4.22.zip
+- cd squirrelmail-webmail-1.4.22
+- ls
+- cd ..
+- mv squirrelmail-webmail-1.4.22 /var/www/html/mail 
+- cd /var/www/html/mail
+- chown -R www-data:www-data /var/www/html/mail
+- chmod 755 -R /var/www/html/mail
+- perl /var/www/html/mail/config/conf.pl
+*1
+- 1
+riczkymail
+r
+*2
+- 1
+riczkymail.com
+r
+*4
+- 1
+/var/www/html/mail/data
+-2
+/var/www/html/mail/attach
+-11
+yes
+r
+s
+q
+
+- systemctl restart apache2
+

@@ -1,0 +1,48 @@
+Ubuntu Server 20.04 
+
+Setting Koneksi Jaringan
+
+- Setting -> Network
+attached to = host only adapter
+name = virtual box host only ethernet adapter
+
+- Login ubuntu server
+- ip add show (cek ip)
+- sudo su (12345678)
+- ping 8.8.8.8(test koneksi)
+- nano /etc/netplan/00-installer-config.yaml
+
+*Settings
+network:
+  ethernets:
+    enp0s3:
+        addresses:
+        - 192.168.137.2/24
+        dhcp4: false
+        gateway4: 192.168.137.1
+        nameservers:
+            addresses:
+            - 8.8.8.8
+            search:
+            - google.com
+  version: 2
+
+ctrl + x (simpan)
+Y , enter
+
+- netplan apply
+- ip add show
+- ping 8.8.8.8
+
+
+
+
+
+
+
+
+
+
+
+
+

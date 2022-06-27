@@ -1,0 +1,51 @@
+Virtualisasi Server Ubuntu Menggunakan VirtualMachine
+
+Install UbuntuServer
+
+- Download ISO Ubuntu Server 20.04
+https://ubuntu.com/download/server
+
+- Install menggunakan Virtual Machine
+*Create VM
+- Klik New
+Name = Ubuntu Server 20.04 LTS
+Type = linux
+Version = 64bit
+Next
+- Memory Size = 4096 mb (Recommended 1024mb)
+Next
+
+- Create Virtual Hardisk Now
+- VDI (Virtual box disk image)
+- Dynamic Allocated (10GB Recommend) / 20gb Cukup
+ 
+- Setting -> Storage -> Empty -> Ubuntuserver(Isofile) -> Ok
+- Setting -> System -> Firstboot (Harddisk)
+
+============================================================
+Install Ubuntu via VM
+- Start Ubuntu Server
+- Start Install
+- English (Language)
+- Continue Without Network
+- Done (Proxy)
+- Done (Mirror Address)
+- Use an entire Disk -> done -> continue
+- Profile setup
+name = riczky
+server name = riczky
+username = riczky
+password = 12345678
+confirm password = 12345678
+done
+- Done ( Ssh Setup)
+- Done (Featured server snaps)
+- view full log
+- reboot
+
+- Finish 
+
+- login
+login = riczky
+password = 12345678
+				

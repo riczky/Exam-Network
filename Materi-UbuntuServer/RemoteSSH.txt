@@ -1,0 +1,20 @@
+Ubuntu Server 20.04
+
+Open SSH Server
+
+- Install SSH Server pada UbuntuServer
+sudo apt-get -y install ssh openssh-server
+
+- Install Putty pada Windows (untuk remote)
+https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
+
+- Login Ubuntu Server
+- Cek Versi SSH Server
+dpkg -l openssh-server
+ctrl+c(quit)
+
+- Cek IP Server
+- Buka Putty (Remote menggunakan IP)
+192.168.137.2 (ssh)
+open
+- login server

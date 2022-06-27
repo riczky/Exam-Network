@@ -1,0 +1,122 @@
+Linux Ubuntu Server 20.04
+
+# Instalasi Web Server (Apache /nginx/ dll)
+# Instalasi Php
+# Instalasi & konfigurasi database server (mysql/ mariadb/ dll)
+# instalasi Ftp server (proftpd/ vsftpd/ dll)
+# Pembuatan user dengan home direktori didirektori website
+# Upload file website ke server melalui ftp(website bebas bisa wordpress / semacamnya asal memiliki akses database)
+
+====================================================
+- login server (server / remote)
+- ifconfig / ip add show (Cek IP)
+- cek browser dengan ipserver (192.168.137.2)
+- sudo apt install apache2 (install apache)
+- sudo apt install nginx (install nginx)
+- sudo apt install php (install php)
+- sudo apt update
+- sudo apt install mariadb-server (mariadb server)
+
+- sudo mysql_secure_installation (keamanan mysql)
+current password: enter(none)
+change the root password: Y
+new password: 12345678
+
+remove anonymous user: Y
+disallow root login remotely: Y
+remove test database: Y
+reload privilege tables: Y
+
+- sudo mysql -u root -p (login mysql)
+enter pswd: 12345678
+
+show databases; (cek databases)
+create database tutorialweb; (create database)
+create user 'riczky'@'127.0.0.1' identified by '12345678'; (buat user)
+
+- grant all privileges on tutorialweb.* to 'riczky'@'127.0.0.1';
+- flush privileges; (beri hak akses untuk localhost)
+- exit
+
+==============================================================
+
+- FTP
+- sudo apt install proftpd-basic (install ftp)
+- sudo useradd -d /var/www/html/ riczky2 (membuat user di home direktori)
+- sudo passwd riczky2
+12345678 (password)
+
+- cat /etc/passwd (cek user)
+
+- cd /var/www/html (pindah direktori)
+- download dan install filezilla client
+https://filezilla-project.org/download.php?platform=win64
+- buka filezilla
+host: 192.168.137.2
+username: riczky2
+password: 12345678
+port: 21
+quick connect, ok
+
+- cd ../
+- sudo chmod -R 777 html/ (dalam direktori /var/www) (hak akses)
+- create new file di filezila (test.txt)
+- download wordpress
+https://id.wordpress.org/download/
+- drag n drop file wordpress lewat filezilla
+
+- cd html/ (var/www/html)
+- ls
+- sudo apt install unzip (install unzip)
+- unzip wordpress-6.--id_ID.zip (unzip file)
+- sudo apt install php-mysql (install php-mysql)
+
+- sudo systemctl restart apache2.service (restart webserver)
+
+==============================================================
+
+Config Wordpress
+- 192.168.137.2/wordpress (buka ipserver)
+- Letsgo
+database name = tutorialweb
+username = riczky
+password = 12345678
+database host = 127.0.0.1
+table prefix = wp_
+
+
+- Remote server menggunakan ssh (putty) (192.168.137.2)
+- Login server (riczky)
+- cd /var/www/html
+- ls
+- cd wordpress (var/www/html/wordpress)
+- sudo nano wp-config.php
+
+- Ctrl shift v (Paste WP Config)
+- ctrl o (write out)
+- ctrl x (exit)
+- clear
+
+- Konfig info.php
+- cd ../ (var/www/html)
+- ls
+- sudo nano info.php
+<?php
+phpinfo();
+?>
+- ctrl + O (write out, enter)
+- ctrl + x
+
+- buka 192.168.137.2/info.php
+
+- Jalankan pemasangan wordpress
+- Tutorial instalasi web server
+- username = riczkyprince
+- password = telukgong7 
+- email = riczkyprince
+- install
+- 192.168.137.2/wordpress
+
+ 
+
+
