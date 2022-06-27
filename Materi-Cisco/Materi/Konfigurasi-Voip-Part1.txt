@@ -1,0 +1,93 @@
+Cisco Packet Tracert 
+
+VOIP (Voice Over Internet Protocol) Part 1
+
+- Siapkan device
+Router 2811
+Switch 2950
+IP Phone 3 (Client)
+Kabel Straight
+
+- Hubungkan IP Phone ke Switch dengan kabel automatic
+- Hubungkan Switch ke Router dengan kabel automatic 
+
+- Tambahkan VoIP power adapter ke semua VOIP
+Klik Ip Phone -> Drag adapter ke Port
+
+- Konfigurasi Switch
+Klik Swtich -> CLI
+Switch>en
+Switch#config terminal
+Switch(config)#int range fa0/1-24
+Switch(config-if-range)#switch voice vlan 1
+Switch(config-if-range)#exit
+
+- Konfigurasi Router
+Klik Router -> CLI (no)
+Router>enable
+Router#config terminal
+Router(config)#ip dhcp pool voice
+Router(dhcp-config)#network 192.168.1.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.1.1
+Router(dhcp-config)#option 150 ip 192.168.1.1
+Router(dhcp-config)#exit
+
+Router(config)#ip dhcp excluded-address 192.168.1.1
+Router(config)#int fastethernet 0/0
+Router(config-if)#ip add 192.168.1.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#exit
+
+Router(config)#telephony-service
+Router(config-telephony)#max-ephones 3
+Router(config-telephony)#max-dn 3
+Router(config-telephony)#ip source-address 192.168.1.1 port 2000
+Router(config-telephony)#auto assign 4 to 6
+Router(config-telephony)#auto assign 1 to 3
+
+Router(config-telephony)#ephone-dn 1
+Router(config-telephony)#number 111
+Router(config-telephony)#ephone-dn 2
+Router(config-telephony)#number 222
+Router(config-telephony)#ephone-dn 3
+Router(config-telephony)#number 333
+
+- Test IPPhone
+IPPhone 1 = 111
+IPPhone 2 = 222
+IPPhone 3 = 333
+
+Buka IP Phone 1 dan 2 -> GUI
+IP Phone 1 Telpon 222
+
+IP Phone 2 (Panggilan Masuk)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

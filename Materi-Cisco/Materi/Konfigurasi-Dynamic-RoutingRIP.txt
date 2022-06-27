@@ -1,0 +1,54 @@
+Cisco Packet Tracert
+
+Dynamic Routing RIP (Routing Information Protocol)
+
+- Buatlah Static Routing pada pertemuan sebelumnya.
+
+- Hapus routing pada router 1
+Klik router 1 -> CLI (no)
+Router>enable
+Router#show ip route
+Router#configure terminal
+Router(config)#no ip route 192.168.2.0 255.255.255.0
+Router(config)#exit
+Router#show ip route
+
+- Hapus routing pada router 2
+Klik router 2 -> CLI (no)
+Router>enable
+Router#show ip route
+Router#configure terminal
+Router(config)#no ip route 192.168.1.0 255.255.255.0
+Router(config)#exit
+Router#show ip route
+
+- Konfigurasi RIP pada Router 1
+Klik Router 1 -> CLI (no)
+Router>enable
+Router#configure terminal
+Router(config)#router rip
+Router(config-router)#network 192.168.1.0
+Router(config-router)#network 192.168.10.0
+Router(config)#exit
+Router#show ip route
+
+- Konfigurasi RIP pada Router 2
+Klik Router 2 -> CLI (no)
+Router>enable
+Router#configure terminal
+Router(config)#router rip
+Router(config-router)#network 192.168.2.0
+Router(config-router)#network 192.168.10.0
+Router(config)#exit
+Router#show ip route
+
+- Test Ping PC antar Network Address yang berbeda
+
+Klik Pc 1 -> Dekstop -> Command Prompt
+Ping 192.168.2.1
+Ping 192.168.2.2
+
+Klik Pc 3 -> Dekstop -> Command Prompt
+Ping 192.168.1.1
+Ping 192.168.1.2
+

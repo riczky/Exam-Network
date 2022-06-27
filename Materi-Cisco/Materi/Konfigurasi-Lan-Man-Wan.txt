@@ -1,0 +1,125 @@
+Cisco Packet Tracert
+
+Konfigurasi LAN MAN WAN
+
+- Gedung A
+Tambahkan :
+1 Server (Generic)
+1 Switch (Generic)
+3 PC (Client)
+
+- Sambungkan dengan kabel automatic
+- Setting Server
+- Ip static Server
+* double klik pada server -> desktop -> ip configuration
+static:
+ip address = 10.3.100.10
+subnet mask = 255.0.0.0
+default gateway = 10.3.100.1
+- Ip DHCP Server
+* double klik pada server -> config -> dhcp
+service = on
+default gateway = 10.3.100.1
+dns server = 8.8.8.8
+start ip address = 10.3.1.0
+subnet mask = 255.0.0.0
+max num of users = 30
+save
+
+- Aktifkan IP DHCP pada 3 PC (client)
+*double klik pada PC (client) -> Desktop -> IP Configuration
+DHCP = On
+
+- Cek Ping PC Client
+
+======================================================================
+
+- Gedung B
+Tambahkan :
+1 Server (Generic)
+1 Switch (Generic)
+3 PC (Client)
+
+- Sambungkan dengan kabel automatic
+- Setting Server
+- Ip static Server
+* double klik pada server -> desktop -> ip configuration
+static:
+ip address = 172.16.30.1
+subnet mask = 255.255.0.0
+default gateway = 172.16.30.100
+
+- Ip DHCP Server
+* double klik pada server -> config -> dhcp
+service = on
+default gateway = 172.16.30.100
+dns server = 8.8.8.8
+start ip address = 172.16.30.0
+subnet mask = 255.255.0.0
+max num of users = 30
+save
+
+- Aktifkan IP DHCP pada 3 PC (client)
+*double klik pada PC (client) -> Desktop -> IP Configuration
+DHCP = On
+
+- Cek Ping PC Client
+=================================================================================
+Metropolitan Area Network
+
+- Tambahkan 2 Router (Generic) Pada Gedung A dan Gedung B
+- Hubungkan 2 router pada masing - masing gedung (Kabel Automatic)
+*Tambahkan pada port pada switch gedung A dan gedung B
+Matikan switch
+double klik pada switch -> physical -> off
+tambahkan 4 port(PT-Switch-NM-1CE)
+Aktifkan switch
+double klik pada switch -> physical -> on 
+close
+
+- Aktifkan port pada router gedung B (fast ethernet 0/0)
+*double klik pada router -> config -> Fast Ethernet 0/0
+port status = On
+Ip Address = 172.16.30.100 (sesuai Ip gateway server)
+subnet mask = 255.255.0.0
+
+- Cek Ping dari Router ke PC client
+
+- Aktifkan port pada router gedung A (fast ethernet 0/0)
+*double klik pada router -> config -> Fast Ethernet 0/0
+port status = On
+Ip Address = 10.3.100.1 (sesuai Ip gateway server)
+subnet mask = 255.0.0.0
+
+- Cek Ping dari Router ke PC client
+
+- Hubungkan kabel automatic pada router gedung A dan gedung B
+- Setting Router gedung B pada Port Serial 2/0
+*double klik pada router -> config -> serial 2/0
+port status = on
+ip address = 10.3.100.1 (ip gateway server gedung A)
+subnet mask = 255.0.0.0
+
+- Setting Router gedung A pada Port Serial 2/0
+*double klik pada router -> config -> serial 2/0
+port status = on
+ip address = 172.16.30.100 (ip gateway server gedung B)
+subnet mask = 255.255.0.0
+
+- Cek Ping PC client gedung A ke PC client gedung B
+
+=====================================================================
+Wirelles Area Network
+
+- Tambahkan Wirelles Devices Access Point (LinkSys)
+
+- Hubungkan Switch gedung A dengan Lynksys dengan kabel automatic
+IP = 192.168.0.1
+Subnet Mask = 255.255.255.0
+
+- Tambahkan Devices
+1 Tablet 
+1 Laptop (Ganti Port Lan Menggunakan Wirreles)
+
+- Cek Ping Client dari Tablet ke Laptop
+

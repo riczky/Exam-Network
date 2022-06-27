@@ -1,0 +1,93 @@
+Cisco Packet Tracert 
+
+Konfigurasi Dasar Router (Internetwork Operating System)
+
+- Siapkan Device
+1 Router-PT
+
+- On / Off Router
+Klik server -> Physical -> Klik Tombol Power
+
+- Masuk CLI IOS
+Klik Server -> CLI
+
+Would you like to enter the initial configuration dialog? no
+
+- Mode Router
+Router>enable 
+Router#configure terminal
+Router(config)#exit
+
+- Mengubah Hostname
+router(config)#hostname Router_Gedung_A
+
+- Memberikan Password pada mode (router#)
+router(config)#enable password kunci
+
+- Memberikan Password pada mode (router>)
+router(config)#line console 0
+router(config-line)#password indonesia
+router(config-line)#login
+router(config)#ex
+
+- Melihat password router config
+router#show running-config
+
+- Memberikan Password pada mode (router#) menggunakan enkripsi
+router(config)#enable secret belajar
+router(config)#exit
+login
+router#show running-config
+
+- Membuat Pesan/Banner Untuk Login Router
+router(config)#banner motd &=== PIHAK YG TDK BERKEPENTINGAN DILARANG MASUK!!! ===&
+router(config)#exit
+Login 
+
+- Running Config(Sementara/Volatille) dan Startup Config(Permanen)
+Startup Config
+
+router(config)#hostname ROUTERKU
+router(config)#banner motd &uji coba startup config&
+router(config)#enable secret belajar
+router(config)#line console 0
+router(config-line)#password indonesia
+router(config-line)#login
+router(config-line)#exit
+router#show running-config
+
+router#copy running-config startup-config (enter)
+router#show startup-config
+
+
+
+Catatan penting:
+-   enable: command untuk menuju privilege exec mode.
+-   configure terminal: command untuk menuju global configuration mode.
+-   exit: command untuk keluar dari mode yang sedang aktif.
+-   enable password kunci: command untuk menerapkan kata 'kunci' sebagai password untuk memproteksi privilege exec mode. Password disimpan tanpa enkripsi.
+-   enable secret kunci: command untuk menerapkan kata 'kunci' sebagai password untuk memproteksi privilege exec mode. Password disimpan dengan enkripsi.
+-   banner motd &pesan&: command untuk menerapkan kalimat yang diapit tanda & sebagai pesan login atau biasa dikenal sebagai MOTD.
+-   hostname router_saya: command untuk mengubah nama router atau hostname menjadi 'router_saya
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

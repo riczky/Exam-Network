@@ -1,0 +1,153 @@
+Cisco Packet Tracert
+
+Static Routing
+
+- Siapkan Device
+2 Router PT
+2 Switch PT
+4 PC (Client)
+
+- Hubungkan PC 1 dengan switch 1 menggunakan kabel straight (fa0/1)
+- Hubungkan PC 2 dengan switch 1 menggunakan kabel straight (fa1/1)
+- Hubungkan PC 3 dengan switch 2 menggunakan kabel straight (fa0/1)
+- Hubungkan PC 4 dengan switch 2 menggunakan kabel straight (fa1/1)
+
+- Konfig IP PC1
+Klik PC -> Desktop -> IP Configuration -> Static
+IP = 192.168.1.1
+Subnet Mask = 255.255.255.0
+
+- Konfig IP PC2
+Klik PC -> Desktop -> IP Configuration -> Static
+IP = 192.168.1.2
+Subnet Mask = 255.255.255.0 
+
+- Konfig IP PC3
+Klik PC -> Desktop -> IP Configuration -> Static
+IP = 192.168.2.1
+Subnet Mask = 255.255.255.0
+
+- Konfig IP PC4
+Klik PC -> Desktop -> IP Configuration -> Static
+IP = 192.168.2.2
+Subnet Mask = 255.255.255.0
+
+
+- Hubungkan switch 1 dengan router menggunakan kabel straight (fa0/0)
+- Hubungkan switch 2 dengan router menggunakan kabel straight (fa0/0)
+
+- Konfigurasi Router 1
+Klik router 1 -> CLI (no)
+router>enable
+router#configure terminal
+router(config)#interface fa0/0
+router(config-if)#ip address 192.168.1.254 255.255.255.0
+router(config-if)#no shutdown
+router(config-if)#exit
+
+- Konfigurasi Router 2
+Klik router 2 -> CLI (no)
+router>enable
+router#configure terminal
+router(config)#interface fa0/0
+router(config-if)#ip address 192.168.2.254 255.255.255.0
+router(config-if)#no shutdown
+router(config-if)#exit
+
+
+- Tambahkan default gateway pada PC 1
+Klik PC -> Desktop -> IP Configuration
+Default Gateway = 192.168.1.254
+
+- Tambahkan default gateway pada PC 2
+Klik PC -> Desktop -> IP Configuration
+Default Gateway = 192.168.1.254
+
+- Tambahkan default gateway pada PC 3
+Klik PC -> Desktop -> IP Configuration
+Default Gateway = 192.168.2.254
+
+- Tambahkan default gateway pada PC 4
+Klik PC -> Desktop -> IP Configuration
+Default Gateway = 192.168.2.254
+
+- Test Ping dari PC 1&2 ke Router
+Klik PC -> Desktop -> Command Prompt
+ping 192.168.1.254
+
+- Test Ping dari Router ke PC 1&2
+Klik Router -> CLI (no)
+enable
+ping 192.168.1.1
+
+- Test Ping dari PC 3&4 ke Router
+Klik PC -> Desktop -> Command Prompt
+ping 192.168.2.254
+
+- Test Ping dari Router ke PC 3&4
+Klik Router -> CLI (no)
+enable
+ping 192.168.2.1
+
+
+- Hubungkan Router 1 dan Router 2 menggunakan kabel Cross-Over (Fa1/0)/(Fa1/0)
+- Konfigurasi Router 1
+Klik Router 1 -> CLI (no)
+router>enable
+router#configure terminal
+router(conig)#interface fa1/0
+router(config-if)#ip address 192.168.10.1 255.255.255.0
+router(config-if)#no shutdown
+router(config-if)#exit
+router#show ip interface brief
+
+- Konfigurasi Router 2
+Klik Router 2 -> CLI (no)
+router>enable
+router#configure terminal
+router(config)#interface fa1/0
+router(config-if)#ip address 192.168.10.2 255.255.255.0
+router(config-if)#no shutdown
+router(config-if)#exit
+router#show ip interface brief 
+
+- Test ping Router 1 ke Router 2
+Klik Router 1 -> CLI
+Router#ping 192.168.10.2
+
+- Routing Table pada Router 1
+Klik Router 1 -> CLI
+Router#show ip route
+Router#configure terminal
+Router(config)# ip route 192.168.2.0 255.255.255.0 192.168.10.2
+Router(config)#exit
+Router#show ip route
+
+
+- Routing Table pada Router 2
+Klik Router 2 -> CLI
+Router#show ip route
+Router#configure terminal
+Router(config)# ip route 192.168.1.0 255.255.255.0 192.168.10.1
+Router(config)#exit
+Router#show ip route
+
+- Test Ping Antar Network Address yang Berbeda
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

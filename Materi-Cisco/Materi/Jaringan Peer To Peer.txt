@@ -1,0 +1,25 @@
+Cisco Packet Tracert 
+
+Jaringan Peer to Peer
+
+- Buat 2 PC
+- Setting IP Static pada 2 PC
+Klik kiri pada PC -> Dekstop -> IP Configuration
+Ip Address = 192.168.1.1
+Subnet Mask = 255.255.255.0
+
+Klik kiri pada PC -> Dekstop -> IP Configuration
+Ip Address = 192.168.1.2
+Subnet Mask = 255.255.255.0
+
+- Tambahkan Catatan Ip 192.168.1.1/24
+- Tambahkan Catatan Ip 192.168.1.2/24
+
+- Hubungkan dengan kabel Cross / Automatic (Fast ethernet 0)
+- Test Ping 
+Klik kiri pada PC -> Dekstop -> Command Prompt
+ipconfig
+ping 192.168.1.1
+
+
+

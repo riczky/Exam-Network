@@ -1,0 +1,93 @@
+Cisco Packet Tracert
+
+VoIP (Voice Over Internet Protocol)
+
+- Siapkan device
+1 Router 2811
+1 Switch 2950-24
+1 IP Phone
+1 PC 
+1 Laptop
+1 VoIP device (Home-VoIP)
+1 Analog Phone
+
+1 Kabel Straight
+
+- Hubungkan PC, Laptop, IP Phone ke Switch menggunakan kabel automatic
+- Hubungkan Switch ke Router menggunakan kabel automatic
+- Hubungkan Switch ke Home-VoIP menggunakan kabel automatic 
+- Hubungkan Home-VoIP ke Analog Phone menggunakan kabel Phone(Port0)
+
+- Tambahkan VoIP Adapter pada IP Phone
+
+- Konfigurasi Switch
+Klik Switch -> CLI 
+Switch>enable
+Switch#config terminal
+Switch(config)#int range fa0/1-24
+Switch(config-if-range)#switch voice vlan 1
+Switch(config-if-range)#exit
+
+- Konfigurasi Router
+Klik Router -> CLI (no)
+Router>enable
+Router#config terminal
+Router(config)#ip dhcp pool voice
+Router(dhcp-config)#network 192.168.1.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.1.1
+Router(dhcp-config)#option 150 ip 192.168.1.1
+Router(dhcp-config)#exit
+
+Router(config)#ip dhcp excluded-address 192.168.1.1
+Router(config)#int fastethernet 0/0
+Router(config-if)#ip add 192.168.1.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#exit
+
+Router(config)#telephony-service
+Router(config-telephony)#max-ephones 5
+Router(config-telephony)#max-dn 5
+Router(config-telephony)#ip source-address 192.168.1.1 port 2000
+Router(config-telephony)#auto assign 4 to 6
+Router(config-telephony)#auto assign 1 to 5
+
+Router(config-telephony)#ephone-dn 1
+Router(config-telephony)#number 111
+Router(config-telephony)#ephone-dn 2
+Router(config-telephony)#number 222
+Router(config-telephony)#ephone-dn 3
+Router(config-telephony)#number 333
+Router(config-telephony)#ephone-dn 4
+Router(config-telephony)#number 444
+Router(config-telephony)#ephone-dn 5
+Router(config-telephony)#number 555
+
+- Konfigurasi Home VoIP
+Klik Home VoIP -> Config
+Server Address = 192.168.1.1
+
+- Analog Phone -> GUI (Cek Nomor)
+
+- IP Phone -> GUI (Cek Nomor)
+
+- Konfigurasi Laptop
+Klik Laptop -> Desktop -> IP Configuration -> DHCP
+Klik Laptop -> Desktop -> Cisco IP Comunicator
+
+- Konfigurasi PC
+Klik PC -> Desktop -> IP Configuration -> DHCP
+Klik PC -> Dekstop -> Cisco IP Comunicator
+
+- Test Calling dari IP Phone ke PC
+Klik IP Phone -> GUI
+Klik PC -> Dekstop -> Cisco IP Comunicator
+222 (Call)
+
+
+
+
+
+
+
+
+

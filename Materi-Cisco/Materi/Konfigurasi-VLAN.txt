@@ -1,0 +1,76 @@
+Cisco Packet Tracert 
+
+Konfigurasi VLAN
+
+- Siapkan Device
+1 Switch (2960-24TT)
+4 PC (client)
+
+- VLAN Pertama PC 1 dan PC 2
+- VLAN Kedua PC 3 dan PC 4
+
+- Konfigurasi PC 1
+Klik PC 1 -> Dekstop -> Static
+10.10.10.1
+255.255.255.0
+
+- Konfigurasi PC 2
+Klik PC 2 -> Dekstop -> Static
+10.10.10.2
+255.255.255.0
+
+- Konfigurasi PC 3
+Klik PC 3 -> Dekstop -> Static
+192.168.1.1
+255.255.255.0
+
+- Konfigurasi PC 4
+Klik PC 4 -> Dekstop -> Static
+192.168.1.2
+255.255.255.0
+
+- Hubungkan PC 1 ke Switch dengan Kabel Straight (FastEthernet0 / FastEthernet 0/1)
+- Hubungkan PC 2 ke Switch dengan Kabel Straight (FastEthernet0 / FastEthernet 0/2)
+- Hubungkan PC 3 ke Switch dengan Kabel Straight (FastEthernet0 / FastEthernet 0/3)
+- Hubungkan PC 4 ke Switch dengan Kabel Straight (FastEthernet0 / FastEthernet 0/4)
+
+- Konfigurasi VLAN pada Switch
+Klik Switch -> CLI
+
+Switch>enable
+Switch#show vlan
+Switch#conf t
+Switch(config)#vlan 10
+Switch(config-vlan)#name VLAN1
+Switch(config-vlan)#ex
+
+Switch(config)#vlan 20
+Switch(config-vlan)#name VLAN2
+Switch(config-vlan)#ex
+Switch(config)#ex
+Switch#show vlan
+
+Switch#conf t
+Switch(config)#int fa0/1
+Switch(config-if)#switchport access vlan 10
+Switch(config-if)#ex
+Switch(config)#
+
+Switch(config)#int fa0/2
+Switch(config-if)#switchport access vlan 10
+Switch(config-if)#ex
+Switch(config)# 
+
+Switch(config)#int fa0/3
+Switch(config-if)#switchport access vlan 20
+Switch(config-if)#ex
+Switch(config)#
+
+Switch(config)#int fa0/4
+Switch(config-if)#switchport access vlan 20
+Switch(config-if)#ex
+Switch(config)#ex
+Switch#show vlan
+
+
+ 

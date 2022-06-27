@@ -1,0 +1,113 @@
+Cisco Packet Tracert 
+
+Konfigurasi Firewall
+
+- Siapkan Device
+1 Server 
+1 Switch (2950-24)
+3 PC (Client)
+
+
+- Hubungkan Server dengan kabel automatic (Fast Ethernet 0/1)
+- Hubungkan PC 1 dengan kabel automatic (Fast Ethernet 0/2)
+- Hubungkan PC 2 dengan kabel automatic (Fast Ethernet 0/3)
+- Hubungkan PC 3 dengan kabel automatic (Fast Ethernet 0/4)
+
+
+- Konfigurasi PC 1
+Klik PC 1 -> Desktop -> IP Configuration -> Static
+IP = 192.168.10.2
+Subnet = 255.255.255.0
+Def. Gateway = 192.168.10.1  
+DNS Server = 192.168.10.1
+
+
+- Konfigurasi PC 2
+Klik PC 2 -> Desktop -> IP Configuration ->Static
+IP = 192.168.10.3
+Subnet = 255.255.255.0
+Def. Gateway = 192.168.10.1  
+DNS Server = 192.168.10.1
+
+
+- Konfigurasi PC 3
+Klik PC 3 -> Desktop -> IP Configuration ->Static
+IP = 192.168.10.4
+Subnet = 255.255.255.0
+Def. Gateway = 192.168.10.1  
+DNS Server = 192.168.10.1
+
+
+- Konfigurasi Server
+Klik Server -> Desktop -> IP Configuration ->Static
+IP = 192.168.10.1
+Subnet Mask = 255.255.255.0
+Default Gateway = 
+DNS Server = 192.168.10.1
+
+- Konfigurasi Web Server
+Klik Server -> Services -> DNS
+DNS Service = ON
+Name = situsdewasa.com
+Address = 192.168.10.1
+Klik Add.
+
+- Test situsdewasa.com
+Klik PC 1 -> Desktop -> Web Browser
+situsdewasa.com
+
+- Konfigurasi Mail
+Klik PC 1 -> Desktop -> Email
+Your name = user1
+email = user1@situsdewasa.com
+incom.mail.server = situsdewasa.com
+out.mail.server = situsdewasa.com
+username = user1
+password = 123
+Save
+
+
+Klik PC 2 -> Desktop -> Email
+Your name = user2
+email = user2@situsdewasa.com
+incom.mail.server = situsdewasa.com
+out.mail.server = situsdewasa.com
+username = user2
+password = 123
+Save
+
+Klik PC 3 -> Desktop -> Email
+Your name = user3
+email = user3@situsdewasa.com
+incom.mail.server = situsdewasa.com
+out.mail.server = situsdewasa.com
+username = user3
+password = 123
+Save
+
+
+- Konfigurasi Firewall Server
+Klik Server -> Desktop -> Firewall (IPv4)
+Services = ON
+
+Action = Deny
+Remote IP = 192.168.10.3
+Protocol = IP
+Remote Wildcard Mask = 0.0.0.0
+Add
+
+Action = Allow
+Remote IP = 192.168.10.2
+Protocol = IP
+Remote Wildcard Mask = 0.0.0.0
+Add
+
+Action = Allow
+Remote IP = 192.168.10.4
+Protocol = IP
+Remote Wildcard Mask = 0.0.0.0
+Add
+
+- Test Akses situsdewasa.com 
+Klik PC 2 -> Desktop -> Web Browser
+situsdewasa.com (Akses ditolak/berhasil)
