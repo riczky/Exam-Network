@@ -81,7 +81,7 @@ Adalah layer yang merubah packets menjadi frame untuk menyematkan mac address pe
 
 
 # Physical Layer:
-Adalah layer yang merubah packets menjadi bits (proses signaling) dan dirubah menjadi bits lagi hingga masuk ke application layer. bits->frame->packets->segments->application layer
+Adalah layer yang merubah frame menjadi bits (proses signaling) dan dirubah menjadi bits lagi hingga masuk ke application layer. bits->frame->packets->segments->application layer
 
 - Menentukan masalah kelistrikan/gelombang/medan,tegangan/arus listrik/, media transmisi, jenis kabel, konektor dan signaling.
 
