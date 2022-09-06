@@ -1,0 +1,81 @@
+Konfigurasi Switch Port Security Pada Swicth CISCO
+
+========================================================
+Violation Port Security:
+Restrict = data yang dikirim melalui port akan ada notifikasi snmp
+Protect = data yang dikirim melalui port dibiarkan saja
+Shutdown = menonaktifkan port jika ada yang mencoba masuk
+
+
+- Remote Switch Menggunakan Port Console dengan kabel FTDI RJ-45 to USB (Laptop)
+Cek Port COM & LPT
+Contoh: USB Serial COM 4
+
+Buka Putty
+Connection Type: Serial
+Serial Line: COM4
+Open, Enter
+
+- Konfig Switch
+Would you like to enter the initial configuration dialog? (no)
+Switch>en
+Switch#conf ter
+Switch(config)#int fa0/1
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport port-security 
+Switch(config-if)#switchport port-security mac-address sticky
+Switch(config-if)#switchport port-security maximum 1
+Switch(config-if)#switchport port-security violation restrict
+Switch(config-if)#exit
+
+Switch(config)#int fa0/2
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport port-security  
+Switch(config-if)#switchport port-security mac-address sticky
+Switch(config-if)#switchport port-security maximum 1
+Switch(config-if)#switchport port-security violation protect
+Switch(config-if)#exit
+
+Switch(config)#int fa0/2
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport port-security  
+Switch(config-if)#switchport port-security mac-address sticky
+Switch(config-if)#switchport port-security maximum 1
+Switch(config-if)#switchport port-security violation shutdown
+Switch(config-if)#exit
+
+
+Switch#sh port-security
+Switch#sh port-security int fa0/1
+Switch#sh port-security int fa0/2
+Switch#sh port-security int fa0/3
+Switch#write
+
+
+- Setting IP Address Static pada Laptop  
+Network & Internet Setting -> Ethernet -> Ipv4 
+Ip Addr = 10.10.10.10
+Subnet Mask = 255.255.255.0
+
+- Buka CMD pada Laptop
+ping 10.10.10.30 (PC-3)
+ping 10.10.10.20 (PC-2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

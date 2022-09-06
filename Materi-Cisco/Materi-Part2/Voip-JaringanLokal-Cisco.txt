@@ -1,0 +1,8 @@
+Implementasi VoIP Pada Jaringan Lokal dengan Cisco
+
+=====================================================
+
+Persiapan:
+Router Cisco 1800 series
+Ip Phone 7960
+Switch Layer 2 Catalyst 2960

@@ -1,0 +1,88 @@
+Konfigurasi Router Cisco Sebagai Gateway Internet 
+   Menggunakan Mikrotik Sebagai Pengganti ISP
+
+ISP -> Mikrotik -> Cisco Router -> Switch -> PC Client
+======================================================================
+
+
+- Hubungkan ether 2 pada mikrotik ke int g0/0 pada cisco Router
+int g0/0 untuk ISP/Internet
+int g0/1 untuk ke client
+
+- Remote Menggunakan PC Client
+Hubungkan dengan kabel Console
+Buka Putty -> Serial -> COM8 -> Open, Enter
+
+- Add Ip dhcp pada int g0/0 (Contoh: 20.20.20.254 mask: 255.255.255.0)
+Router>en
+Router#conf ter
+Router(config)#int g0/0
+Router(config)#ip add dhcp
+Router(config)#no sh
+
+
+- Add Ip private pada int g0/1
+Router>en
+Router#conf ter
+Router(config)#int g0/1
+Router(config)#ip add 192.168.1.1 255.255.255.0
+Router(config)#no sh
+Router#sh ip int brief
+ 
+- Setting DHCP Server
+Router>en
+Router#conf ter
+Router(config)#ip dhcp pool IP-Client
+Router(dhcp-config)#network 192.168.1.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.1.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#exit
+
+- Setting Name Server & Access List
+Router>en
+Router#conf ter
+Router(config)#ip name-server 20.20.20.254
+Router(config)#access-list 1 permit 192.168.1.0 0.0.0.255
+
+
+- NAT(Network Address Translation) dynamic overload
+Router>en
+Router#conf ter
+Router(config)#ip nat inside source list 1 int g0/0 overload
+Router(config)#int g0/0
+Router(config-if)#ip nat outside
+Router(config-if)#exit
+Router(config)#int g0/1
+Router(config-if)#ip nat inside
+Router(config-if)#end
+
+
+Router#ping 20.20.20.254
+Router#ping 8.8.8.8
+Router#ping google.com
+Router#write
+
+- Test IP DHCP pada PC Client
+Open Network & Internet Setting -> Ethernet -> Change Adapter Option -> Ipv4 -> Automatically
+Cek Ip lewat CMD -> ipconfig
+                 -> ping 20.20.20.254
+                 -> ping 192.168.1.1
+                 -> ping 8.8.8.8  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

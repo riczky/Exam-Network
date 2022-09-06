@@ -1,0 +1,59 @@
+Perintah Dasar Pada Cisco IOS
+
+# Remote Router Menggunakan Putty dengan telnet
+- Network Connection -> Ethernet -> IPv4
+IP Addr = 192.168.1.10
+Subnet Mask = 255.255.255.0
+Default Gateway = 192.168.1.1
+- Buka Putty
+Connection type: telnet
+Serial line: 192.168.1.1
+Open, Enter
+
+
+Catatan Perintah:
+Router#show = digunakan untuk melihat daftar perintah untuk di eksekusi
+Router#show running-config = digunakan untuk melihat konfigurasi yang sudah dilakukan
+Router#show startup-config = digunakan untuk menampilkan rangkaian konfigurasi yang dijalankan saat startup
+Router#copy running-config startup-config = untuk menyimpan file konfigurasi yang telah dilakukan terhadap nvram
+Router#erase startup-config = digunakan untuk menghapus file konfigurasi pada nvram
+Router#show user = digunakan untuk melihat siapa saja yang terkoneksi terhadap perangkat router
+Router#show arp = digunakan untuk melihat IP Address pada ARP
+Router#show history = digunakan untuk melihat riwayat perintah
+Router#show interface = digunakan untuk melihat interface yang tersedia
+Router#show host = digunakan untuk menampilkan case dari host yang tersedia
+Router#show flash = digunakan untuk menampilkan memoory pada perangkat
+Router#show protocol = digunakan untuk menampilkan status protocol pada perangkat yang telah dikonfigurasi
+
+
+Router#show ip int = digunakan untuk menampilkan informasi pengaturan IP address
+Router#show ip int brief = digunakan untuk menampilkan informasi  IP address yang sudah dikonfigurasi
+Router#show ip route = digunakan untuk menampilkan table routing
+Router#show clock = digunakan untuk menampilkan jam
+Router#ping = digunakan untuk melakukan test koneksi
+Router#show version = digunakan untuk melihat versi router
+Router#banner motd = digunakan untuk memberikan pesan
+Router#conf ter = digunakan untuk masuk ke global configuration
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

@@ -1,0 +1,120 @@
+Review Device Cisco
+Matery By: Manasemalo
+
+# Merakit Open Rack 25U Untuk Perangkat Cisco
+- Beamhousing (palang pendek 2)
+- Frame Column (tiang panjang 2)
+- Triangular Support plat 1 dan 2
+- Base (Tatakan dasar 1)
+- PDU / Power Distribution Unit (Colokan Listrik 1)
+- Screws / Cage Nuts / Baut - baut dan mur pengikat
+
+Peralatan
+- Kunci PAS ukuran 17 
+- Obeng
+- Sarung Tangan
+
+Cara Pasang
+- Ikat Triangular Support bagian kiri dan kanan ke Base (Tatakan Dasar) menggunakan baut dan ring
+- Kencangkan baut dan ring menggunakan kunci pas
+- Pasang Frame Column (tiang panjang) kiri dan kanan 
+- Pasang Beamhousing (palang pendek) atas dan bawah ke Frame Column (tiang panjang)
+- Kencangkan menggunakan baut dan ring menggunakan kunci pas
+  
+- Pasang Cage Nuts kelubang Rak yang sudah disediakan
+- Pasang PDU (colokan Listrik) ke Cage Nuts pada rak menggunakan mur
+
+====================================================================================================
+
+# Instalasi Perangkat Jaringan Cisco Pada Open Rack 25U
+
+Switch berfokus pada pengiriman frame
+Router berfungsi mengatur pengiriman pada packet
+
+Kebutuhan:
+- 4 Dudukan Switch
+- 4 Dudukan Router
+- 2 Switch
+- 2 Router 2901
+
+Cara memasang:
+- Pasang Dudukan pada Switch bagian kiri dan kanan
+- Pasang Cage Nuts pada Rak
+- Pasang Switch ke Rak dan Kencangkan Bautnya
+
+Nyalakan Switch dan Router:
+- Pasang Kabel Power pada Router dan Switch
+- Colokan ke PDU(Saklar)
+- Tekan Tombol Power (Nyalakan)
+- Finish
+
+====================================================================================================
+
+# Kabel Console / Rool Over Untuk Mengakses Perangkat Router
+
+- Kabel Console DB-9 (Port Serial) to RJ-45
+DB-9 (Connect to PC) to RJ-45 (Connect to Router)
+Kabel Aten (Converter DB-9 to USB) / Jika tidak ada port serial
+
+- Kabel USB to RJ-45
+- Aplikasi Putty/Tera Term (Untuk Remote)
+
+===================================================================================
+
+# Akses / Remote Perangkat Cisco Melalui Kabel Console
+
+*Remote Router menggunakan kabel console RJ-45 to DB-9(serial) diconvert USB
+
+Remote menggunakan Putty:
+- Hubungkan Port RJ-45 pada Port Console di Router dan USB pada Laptop
+- Cek Ports COM & LPT pada device manager 
+  Contoh: Aten USB to Serial Bridge (COM10)
+- Buka Aplikasi Putty
+  Connection Type: Serial
+  Serial Line : COM10 
+  Speed 9600
+- Open, Enter
+- Masuk kedalam Router
+
+
+Remote menggunakan Tera Term:
+- Hubungkan Port RJ-45 pada Port Console di Router dan USB pada Laptop
+- Cek Ports COM & LPT pada device manager 
+  Contoh: Aten USB to Serial Bridge (COM10)
+- Buka Aplikasi Tera Term
+  Connection Type: Serial
+  Port: Aten USB to Serial Bridge (COM10)
+  Ok, Enter
+- Masuk kedalam Router
+
+
+*Remote Switch Menggunakan Kabel Console FTDI RJ-45 to USB
+
+Remote Menggunakan Putty:
+- Hubungkan Port RJ-45 pada Port Console di Switch dan USB pada Laptop
+- Cek Ports COM & LPT pada device manager 
+  Contoh: USB-Serial CH340(COM7)
+- Buka Aplikasi Putty
+  Connection Type: Serial
+  Serial Line : COM7 
+  Speed 9600
+- Open, Enter
+- Masuk kedalam Switch 
+
+Remote menggunakan Tera Term:
+- Hubungkan Port RJ-45 pada Port Console di Switch dan USB pada Laptop
+- Cek Ports COM & LPT pada device manager 
+  Contoh: USB-Serial CH340(COM7)
+- Buka Aplikasi Tera Term
+  Connection Type: Serial
+  Port: USB-Serial CH340(COM7)
+  Ok, Enter
+- Masuk kedalam Switch
+
+
+
+
+
+
+
+
