@@ -1,0 +1,48 @@
+Cara Install TFTPD
+
+Link Install: Tftpd64-4.64-setup.exe
+https://bitbucket.org/phjounin/tftpd64/downloads/
+
+- Open, Yes
+- I agree, Next
+- Default Folder, Install
+- Complete
+
+- Open, Allow Access
+
+#Optional
+- Go to Settings -> Global -> Tftp Server, Tftp Client (Check)
+- Go to Settings -> Tftp -> PXE Compability, Show Progress bar, TranslateUnit Filename,
+  Bind Tftp to This Address(Local Ip), Allow \ as virtual root
+- Oke
+
+Current Directory -> Tempat File Backup
+Service Interface -> Local Ip
+
+How to Use?
+#Optional
+- Control Panel -> Program -> Turn windows features on or off -> Tftp Client (Check) -> Ok
+
+- Open CMD -> ipconfig (Local IP)
+- Setting -> Base Directory (Location File Backup)
+- Config Cisco Ios (Sesuai Kebutuhan)
+
+- Backup Router
+R1(config)#do wr
+R1#copy running-config tftp:
+address or name of remote host []? 192.168.230.1 (Local IP)
+Destination filename (r1-confg)? FJC432512(DC-Aladin-SD-TLK)
+				 (Jika ingin diubah nama filenya)
+2848 bytes copied in 334,2 secs
+
+- Restore Router
+Router-1# copy tftp: running-config
+address or name of remote host []? 192.168.230.1 (Local IP)
+Source filename []? r1-confg
+Destination filename [running-config]?
+Accessing tftp .....
+Loading r1-confg...........
+[Ok-3016 bytes]
+Router-1#
+
+
