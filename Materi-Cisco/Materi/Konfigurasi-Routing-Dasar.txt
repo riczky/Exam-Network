@@ -29,7 +29,7 @@ Subnet Mask = 255.255.255.0
 
 - Konfigurasi IP PC 4 (Network Addr = 192.168.2.0)
 Klik PC -> Desktop -> IP Configuration -> Static
-IP = 192.168.2.1
+IP = 192.168.2.2
 Subnet Mask = 255.255.255.0
 
 - Hubungkan Switch 1 dengan Router menggunakan kabel Straight(Fa0/0)

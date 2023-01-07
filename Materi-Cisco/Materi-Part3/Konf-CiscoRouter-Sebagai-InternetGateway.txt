@@ -1,0 +1,90 @@
+Setting Router Cisco Sebagai Internet Gateway
+
+Router Cisco 1921
+
+GE 0/0 = digunakan untuk Lokal/LAN 
+GE 0/1 = digunakan untuk internet
+
+- Hubungkan kabel GE 0/0 ke LAN 
+- Remote Router Menggunakan kabel Console
+- Buka Menggunakan Putty
+
+Router>en
+Router#conf t
+Router(config)#hostname R1_GateInt
+R1_GateInt(config)#int g0/0
+R1_GateInt(config-if)#description "to LAN"
+R1_GateInt(config-if)#ip add 192.10.10.1 255.255.255.0
+R1_GateInt(config-if)#no shut
+
+R1_GateInt(config-if)#int g0/1
+R1_GateInt(config-if)#description "to Internet"
+R1_GateInt(config-if)#ip address dhcp
+R1_GateInt(config-if)#no shut
+
+- Hubungkan kabel GE 0/1 ke Internet 
+Interface GigabitEthernet0/1 assgined DHCP address 192.168.1.153
+
+R1_GateInt(config)#access-list ?
+R1_GateInt(config)#access-list 10 permit any
+R1_GateInt(config)#ip nat inside source list 10 interface g0/1
+
+
+
+R1_GateInt(config)#int g0/0
+R1_GateInt(config-if)#ip nat inside
+R1_GateInt(config)#int g0/1
+R1_GateInt(config-if)#ip nat outside
+
+R1_GateInt#wr
+
+- Set Router DHCP
+
+R1_GateInt(config)#ip dhcp pool DHCP1
+R1_GateInt(dhcp-config)#network 192.168.10.0 /24
+R1_GateInt(dhcp-config)#default-router 192.168.10.1
+R1_GateInt(dhcp-config)#ip name
+R1_GateInt(dhcp-config)#dns-server 8.8.8.8
+R1_GateInt(dhcp-config)#
+R1_GateInt(config)#do sh run
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

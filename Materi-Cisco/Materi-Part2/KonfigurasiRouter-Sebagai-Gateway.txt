@@ -28,7 +28,7 @@ Router(config)#int g0/1
 Router(config)#ip add 192.168.1.1 255.255.255.0
 Router(config)#no sh
 Router#sh ip int brief
- 
+  
 - Setting DHCP Server
 Router>en
 Router#conf ter

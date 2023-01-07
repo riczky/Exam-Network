@@ -1,0 +1,215 @@
+Materi Cisco | Remote Telnet dan SSH
+
+Remote Telnet = Metode remote tanpa enkripsi
+Remote SSH(Secure Shell) = Metode remote dengan enkripsi
+
+- Siapkan Device
+
+1 Switch PT
+1 PC (Client)
+
+- Hubungkan kabel straight pada PC 1 ke Switch 1(Fa0/1)
+
+- Konfigurasi IP PC 1 
+Klik PC -> Desktop -> IP Configuration -> Static
+IP = 10.10.10.10
+Subnet Mask = 255.255.255.0
+
+- Konfigurasi IP Vlan pada Switch
+Switch>en
+Switch#conf term
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int vlan 1
+Switch(config-if)#ip address 10.10.10.2 255.255.255.0
+Switch(config-if)#no shutdown
+
+Switch(config-if)#
+%LINK-5-CHANGED: Interface Vlan1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+
+Switch(config-if)#exit
+Switch(config)#line vty 0 4
+Switch(config-line)#login local
+Switch(config-line)#user cisco password cisco
+Switch(config)#
+Switch(config)#
+Switch(config)#enable password cisco1
+Switch(config)#
+
+- Test Remote Telnet Lewat PC 1
+Klik PC -> Desktop -> Buka CMD
+C:\>telnet 10.10.10.2
+username:cisco
+password:cisco
+Switch>en
+password:cisco1
+
+- Menyimpan Konfigurasi ke Startup Config
+Switch#copy running-config startup-config 
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+
+- Enkripsi Password
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#service password-encryption
+	
+Switch(config)#do sh run
+Building configuration...
+
+Current configuration : 602 bytes
+!
+version 12.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname Switch
+!
+enable password 7 0822455D0A1654
+!
+!
+!
+!
+username cisco privilege 1 password 7 0822455D0A16
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface FastEthernet0/1
+!
+interface FastEthernet1/1
+!
+interface FastEthernet2/1
+!
+interface FastEthernet3/1
+!
+interface FastEthernet4/1
+!
+interface FastEthernet5/1
+!
+interface Vlan1
+ ip address 10.10.10.2 255.255.255.0
+!
+!
+!
+!
+line con 0
+!
+line vty 0 4
+ login local
+line vty 5 15
+ login
+!
+!
+!
+!
+end
+
+- Generate Password
+Switch(config)#ip domain-name netacad.pka
+Switch(config)#crypto key generate rsa
+% Please define a hostname other than Switch.
+Switch(config)#hostname Switch1
+Switch1(config)#crypto key generate rsa
+The name for the keys will be: Switch1.netacad.pka
+Choose the size of the key modulus in the range of 360 to 2048 for your
+  General Purpose Keys. Choosing a key modulus greater than 512 may take
+  a few minutes.
+
+How many bits in the modulus [512]: 1024
+% Generating 1024 bit RSA keys, keys will be non-exportable...[OK]
+
+- Konfigurasi SSH
+Switch1(config)#username administrator secret cisco
+*Mar 1 0:25:41.758: %SSH-5-ENABLED: SSH 1.99 has been enabled
+Switch1(config)#line vty 0 15
+Switch1(config-line)#login local
+Switch1(config-line)#transport input ssh
+Switch1(config-line)#no password cisco
+Switch1(config-line)#ex
+% Ambiguous command: "ex"
+Switch1(config-line)#exit
+Switch1(config)#exit
+Switch1#exit
+
+- Test Remote SSH (Telnet Disable) 
+[Connection to 10.10.10.2 closed by foreign host]
+C:\>telnet 10.10.10.2
+Trying 10.10.10.2 ...Open
+
+[Connection to 10.10.10.2 closed by foreign host]
+C:\>ssh -l administrator 10.10.10.2
+
+Password: cisco
+
+
+
+Switch1>en
+Password: cisco1
+Switch1#sh run
+Building configuration...
+
+Current configuration : 741 bytes
+!
+version 12.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname Switch1
+!
+enable password 7 0822455D0A1654
+!
+!
+!
+ip domain-name netacad.pka
+!
+username administrator secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+username cisco privilege 1 password 7 0822455D0A16
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface FastEthernet0/1
+!
+interface FastEthernet1/1
+!
+interface FastEthernet2/1
+!
+interface FastEthernet3/1
+!
+interface FastEthernet4/1
+!
+interface FastEthernet5/1
+!
+interface Vlan1
+ ip address 10.10.10.2 255.255.255.0
+!
+!
+!
+!
+line con 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+!
+!
+!
+end
+
+
+Switch1#
+
+

@@ -1,0 +1,219 @@
+Cisco - Konfigurasi Routing OSPF
+
+- Siapkan Device
+3 Router (2911)
+3 Switch (2950-24)
+7 PC 
+
+- Hubungkan Router 1 ke Router 2 dengan Kabel Cross (GigabitEthernet0/0 / GigabitEthernet0/0)
+- Hubungkan Router 2 ke Router 3 dengan Kabel Cross (GigabitEthernet0/1 / GigabitEthernet0/0)
+
+- Hubungkan Router 1 ke Switch 1 dengan Kabel Straight (GigabitEthernet0/2 / FastEthernet0/1)
+- Hubungkan Switch 1 ke PC 1 dengan Kabel Straight (FastEthernet0/2 / FastEthernet0)
+- Hubungkan Switch 1 ke PC 2 dengan Kabel Straight (FastEthernet0/3 / FastEthernet0)
+
+- Hubungkan Router 2 ke Switch 2 dengan Kabel Straight (GigabitEthernet0/2 / FastEthernet0/1)
+- Hubungkan Switch 2 ke PC 3 dengan Kabel Straight (FastEthernet0/2 / FastEthernet0)
+- Hubungkan Switch 2 ke PC 4 dengan Kabel Straight (FastEthernet0/3 / FastEthernet0)
+- Hubungkan Switch 2 ke PC 5 dengan Kabel Straight (FastEthernet0/4 / FastEthernet0)
+
+- Hubungkan Router 3 ke Switch 3 dengan Kabel Straight (GigabitEthernet0/2 / FastEthernet0/1)
+- Hubungkan Switch 3 ke PC 6 dengan Kabel Straight (FastEthernet0/2 / FastEthernet0)
+- Hubungkan Switch 3 ke PC 7 dengan Kabel Straight (FastEthernet0/3 / FastEthernet0)
+
+- Konfigurasi PC 1
+Klik PC 1 -> Dekstop -> Static
+192.168.1.2
+255.255.255.0
+192.168.1.1
+
+- Konfigurasi PC 2
+Klik PC 2 -> Dekstop -> Static
+192.168.1.3
+255.255.255.0
+192.168.1.1
+
+- Konfigurasi PC 3
+Klik PC 3 -> Dekstop -> Static
+192.168.2.2
+255.255.255.0
+192.168.2.1
+
+- Konfigurasi PC 4
+Klik PC 1 -> Dekstop -> Static
+192.168.2.3
+255.255.255.0
+192.168.2.1
+
+- Konfigurasi PC 5
+Klik PC 1 -> Dekstop -> Static
+192.168.2.4
+255.255.255.0
+192.168.2.1
+
+- Konfigurasi PC 6
+Klik PC 1 -> Dekstop -> Static
+192.168.3.2
+255.255.255.0
+192.168.3.1
+
+- Konfigurasi PC 7
+Klik PC 1 -> Dekstop -> Static
+192.168.3.3
+255.255.255.0
+192.168.3.1
+
+- Konfigurasi interface router 1
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname router1
+router1(config)#interface g0/0
+router1(config-if)#ip add 10.10.10.1 255.255.255.252
+router1(config-if)#description link_to_router2
+router1(config-if)#no sh
+
+router1(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+router1(config-if)#interface g0/2
+router1(config-if)#ip add 192.168.1.1 255.255.255.0
+router1(config-if)#desc link_to_net_1
+router1(config-if)#no sh
+
+router1(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/2, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/2, changed state to up
+
+router1(config-if)#
+
+- Konfigurasi Router 2
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname router2
+router2(config)#int g0/0
+router2(config-if)#ip add 10.10.10.2 255.255.255.252
+router2(config-if)#desc link_to_router1
+router2(config-if)#no sh
+
+router2(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+router2(config-if)#int g0/1
+router2(config-if)#ip add 172.16.1.1 255.255.255.252
+router2(config-if)#desc link_to_router3
+router2(config-if)#no sh
+
+router2(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to up
+
+router2(config-if)#int g0/2
+router2(config-if)#ip add 192.168.2.1 255.255.255.0
+router2(config-if)#desc link_to_net2
+router2(config-if)#no sh
+
+router2(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/2, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/2, changed state to up
+
+router2(config-if)#
+
+- Konfigurasi Router 3
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname router3
+router3(config)#int g0/0
+router3(config-if)#ip add 172.16.1.2 255.255.255.252
+router3(config-if)#desc link_to_router2
+router3(config-if)#no sh
+
+router3(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+router3(config-if)#int g0/2
+router3(config-if)#ip add 192.168.3.1 255.255.255.0
+router3(config-if)#desc link_to_net3
+router3(config-if)#no sh
+
+router3(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/2, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/2, changed state to up
+
+router3(config-if)#
+
+- Konfigurasi OSPF pada Router 1
+router1>en
+router1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+router1(config)#router ospf 1
+router1(config-router)#router-id 1.1.1.1
+router1(config-router)#network 192.168.1.0 0.0.0.255 area 0
+router1(config-router)#network 10.10.10.0 0.0.0.3 area 0
+router1(config-router)#end
+router1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+router1#
+
+- Konfigurasi OSPF pada Router 2
+router2>en
+router2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+router2(config)#router ospf 2
+router2(config-router)#router-id 2.2.2.2
+router2(config-router)#network 192.168.2.0 0.0.0.255 area 0
+router2(config-router)#network 10.10.10.0 0.0.0.3 area 0
+router2(config-router)#
+00:55:16: %OSPF-5-ADJCHG: Process 2, Nbr 1.1.1.1 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+router2(config-router)#network 172.16.1.0 0.0.0.3 area 0
+router2(config-router)#
+
+
+- Konfigurasi OSPF pada Router 3
+router3>en
+router3#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+router3(config)#router ospf 1
+router3(config-router)#router-id 3.3.3.3
+router3(config-router)#network 192.168.3.0 0.0.0.255 area 0
+router3(config-router)#network 172.16.1.0 0.0.0.3 area 0
+router3(config-router)#
+01:02:02: %OSPF-5-ADJCHG: Process 1, Nbr 2.2.2.2 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+router3(config-router)#
+
+- Cek IP OSPF pada router 2
+router2#sh ip ospf neighbor
+
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+3.3.3.3           1   FULL/BDR        00:00:31    172.16.1.2      GigabitEthernet0/1
+1.1.1.1           1   FULL/DR         00:00:30    10.10.10.1      GigabitEthernet0/0
+router2#sh ip ospf database
+            OSPF Router with ID (2.2.2.2) (Process ID 2)
+
+                Router Link States (Area 0)
+
+Link ID         ADV Router      Age         Seq#       Checksum Link count
+1.1.1.1         1.1.1.1         534         0x80000003 0x000e83 2
+2.2.2.2         2.2.2.2         136         0x80000005 0x00ce29 3
+3.3.3.3         3.3.3.3         136         0x80000003 0x00b985 2
+
+                Net Link States (Area 0)
+Link ID         ADV Router      Age         Seq#       Checksum
+10.10.10.1      1.1.1.1         534         0x80000001 0x000fa2
+172.16.1.1      2.2.2.2         136         0x80000001 0x001ae9
+router2#
+
+
+- Test Ping pada semua Pc dan Router

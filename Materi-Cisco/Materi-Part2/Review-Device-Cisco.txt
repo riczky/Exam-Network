@@ -43,9 +43,9 @@ Cara memasang:
 - Pasang Switch ke Rak dan Kencangkan Bautnya
 
 Nyalakan Switch dan Router:
-- Pasang Kabel Power pada Router dan Switch
+- Pasang Kabel Power pada Router(Bagian Depan) dan Switch(Bagian Belakang)
 - Colokan ke PDU(Saklar)
-- Tekan Tombol Power (Nyalakan)
+- Tekan Tombol Power (Nyalakan) pada switch dan router
 - Finish
 
 ====================================================================================================
@@ -56,7 +56,7 @@ Nyalakan Switch dan Router:
 DB-9 (Connect to PC) to RJ-45 (Connect to Router)
 Kabel Aten (Converter DB-9 to USB) / Jika tidak ada port serial
 
-- Kabel USB to RJ-45
+- Kabel USB to RJ-45(Kabel FTDI to USB)
 - Aplikasi Putty/Tera Term (Untuk Remote)
 
 ===================================================================================

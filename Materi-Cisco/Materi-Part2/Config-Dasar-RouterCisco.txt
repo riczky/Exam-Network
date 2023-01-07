@@ -56,7 +56,6 @@ Router#write
 IP Addr = 192.168.1.10
 Subnet Mask = 255.255.255.0
 Default Gateway = 192.168.1.1
-
 - Buka Putty
 Connection type: telnet
 Serial line: 192.168.1.1
