@@ -1,0 +1,406 @@
+Cisco | Networking Jaringan Sekolah IP DHCP
+
+
+- Siapkan Device
+18 PC
+9 Switch (PT-Switch)
+3 Router (PT-Router)
+1 DSL Modem-PT-DSL
+1 Cloud-PT
+1 Server-PT
+
+- Hubungkan PC 1 dan 2 ke Switch 1 dengan Kabel Straight (Fa0 - Fa0/1) - (Fa0 - Fa1/1)
+- Hubungkan PC 3 dan 4 ke Switch 2 dengan Kabel Straight (Fa0 - Fa0/1) - (Fa0 - Fa1/1)
+- Hubungkan PC 5 dan 6 ke Switch 1 dengan Kabel Straight (Fa0 - Fa0/1) - (Fa0 - Fa1/1)
+- Hubungkan PC 7 dan 8 ke Switch 1 dengan Kabel Straight (Fa0 - Fa0/1) - (Fa0 - Fa1/1)
+- Hubungkan PC 9 dan 10 ke Switch 1 dengan Kabel Straight (Fa0 - Fa0/1) - (Fa0 - Fa1/1)
+- Hubungkan PC 11 dan 12 ke Switch 1 dengan Kabel Straight (Fa0 - Fa0/1) - (Fa0 - Fa1/1)
+- Hubungkan PC 13 dan 14 ke Switch 1 dengan Kabel Straight (Fa0 - Fa0/1) - (Fa0 - Fa1/1)
+- Hubungkan PC 15 dan 16 ke Switch 1 dengan Kabel Straight (Fa0 - Fa0/1) - (Fa0 - Fa1/1)
+- Hubungkan PC 17 dan 18 ke Switch 1 dengan Kabel Straight (Fa0 - Fa0/1) - (Fa0 - Fa1/1)
+
+- Hubungkan Switch 1 ke Router 1 dengan Kabel Straight (Fa2/1 - Fa0/0)
+- Hubungkan Switch 2 ke Router 1 dengan Kabel Straight (Fa2/1 - Fa1/0)
+#Tambahkan Port pada Router 1 sebanyak 2 port
+Klik Router -> Physical -> Off
+PT-Router-NM-1CFE Drag to Port
+On Router
+- Hubungkan Switch 3 ke Router 1 dengan Kabel Straight (Fa2/1 - Fa6/0)
+
+- Hubungkan Switch 4 ke Router 2 dengan Kabel Straight (Fa2/1 - Fa0/0)
+- Hubungkan Switch 5 ke Router 2 dengan Kabel Straight (Fa2/1 - Fa1/0)
+#Tambahkan Port pada Router 2 sebanyak 2 port
+Klik Router -> Physical -> Off
+PT-Router-NM-1CFE Drag to Port
+On Router
+- Hubungkan Switch 6 ke Router 2 dengan Kabel Straight (Fa2/1 - Fa6/0)
+
+- Hubungkan Switch 7 ke Router 3 dengan Kabel Straight (Fa2/1 - Fa0/0)
+- Hubungkan Switch 8 ke Router 3 dengan Kabel Straight (Fa2/1 - Fa1/0)
+#Tambahkan Port pada Router 3 sebanyak 2 port
+Klik Router -> Physical -> Off
+PT-Router-NM-1CFE Drag to Port
+On Router
+- Hubungkan Switch 9 ke Router 3 dengan Kabel Straight (Fa2/1 - Fa6/0)
+
+- Hubungkan Router 1 dan Router 2 dengan Kabel Cross (Fa7/0 - Fa7-0) 
+#Tambahkan Port pada Router 2 sebanyak 1 port
+Klik Router -> Physical -> Off
+PT-Router-NM-1CFE Drag to Port
+On Router
+
+#Tambahkan Port pada Router 3 sebanyak 1 port
+Klik Router -> Physical -> Off
+PT-Router-NM-1CFE Drag to Port
+On Router
+- Hubungkan Router 2 dan Router 3 dengan Kabel Cross (Fa8/0 - Fa7-0) 
+
+- Hubungkan Router 3 dan Modem DSL dengan Kabel Straight (Fa8/0 - Port 1)
+- Hubungkan Modem DSL dan Cloud Menggunakan Kabel Phone (Port 0 - Modem 4)
+- Hubungkan Cloud dan Server Menggunakan Kabel Straight (Ethernet6 - FastEthernet0)
+
+- Konfigurasi Router 1
+Router>en
+Router#conf term
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip dhcp pool kelas1a
+Router(dhcp-config)#network 192.168.1.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.1.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#ex
+Router(config)#ex
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+Router#wr
+Building configuration...
+[OK]
+Router#
+Router(config)#int fa0/0
+Router(config-if)#ip add 192.168.1.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+Router(config-if)#
+
+Router(config)#int fa 1/0
+Router(config-if)#ip dhcp pool kelas1b
+Router(dhcp-config)#network 192.168.2.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.2.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#ex
+Router(config)#
+Router(config)#ex
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+Router#wr
+Building configuration...
+[OK]
+Router#
+Router#conf term
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa1/0
+Router(config-if)#ip add 192.168.2.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet1/0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet1/0, changed state to up
+Router(config-if)#
+
+Router(config)#int fa6/0
+Router(config-if)#ip dhcp pool kelas1c
+Router(dhcp-config)#network 192.168.3.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.3.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#ex
+Router(config)#ex
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+Router#wr
+Building configuration...
+[OK]
+Router#conf term
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa6/0
+Router(config-if)#ip add 192.168.3.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet6/0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet6/0, changed state to up
+Router(config-if)#ex
+Router(config)#
+
+
+- Konfigurasi Router 2
+Router>en
+Router#conf term
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip dhcp pool kelas2a
+Router(dhcp-config)#network 192.168.4.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.4.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#ex
+Router(config)#ex
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+Router#wr
+Building configuration...
+[OK]
+Router#conf term
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 192.168.4.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+Router(config-if)#ex
+Router(config)#int fa1/0
+Router(config-if)#ip dhcp pool kelas2b
+Router(dhcp-config)#network 192.168.5.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.5.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#ex
+Router(config)#ex
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+Router#wr
+Building configuration...
+[OK]
+Router#
+Router#conf term
+Router(config)#int fa1/0
+Router(config-if)#ip add 192.168.5.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet1/0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet1/0, changed state to up
+Router(config-if)#ex
+Router#conf term
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa6/0
+Router(config-if)#ip dhcp pool kelas2c
+Router(dhcp-config)#network 192.168.6.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.6.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#ex
+Router(config)#ex
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+Router#wr
+Building configuration...
+[OK]
+Router(config)#int fa6/0
+Router(config-if)#ip add 192.168.6.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet6/0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet6/0, changed state to up
+Router(config-if)#
+
+- Konfigurasi Router 3
+Router>en
+Router#conf term
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip dhcp pool kelas3a
+Router(dhcp-config)#network 192.168.7.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.7.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#ex
+Router(config)#ex
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+Router#wr
+Building configuration...
+[OK]
+Router#
+Router#conf term
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 192.168.7.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+Router(config-if)#ex
+Router(config)#int fa1/0
+Router(config-if)#ip dhcp pool kelas3b
+Router(dhcp-config)#network 192.168.8.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.8.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#ex
+Router(config)#ex
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+Router#wr
+Building configuration...
+[OK]
+Router#conf term
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa1/0
+Router(config-if)#ip add 192.168.8.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet1/0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet1/0, changed state to up
+Router(config-if)#ex
+Router(config)#int fa6/0
+Router(config-if)#ip dhcp pool kelas3c
+Router(dhcp-config)#network 192.168.9.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.9.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#ex
+Router(config)#ex
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+Router#wr
+Building configuration...
+[OK]
+Router#conf term
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa6/0
+Router(config-if)#ip add 192.168.9.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet6/0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet6/0, changed state to up
+Router(config-if)#
+
+- Konfigurasi IP DHCP Pada Semua PC
+
+- Konfigurasi Routing RIP Pada Router 1
+Router>enable
+Router#
+Router#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#interface FastEthernet7/0
+Router(config-if)#ip address 192.168.10.1 255.255.255.0
+Router(config-if)#ip address 192.168.10.1 255.255.255.0
+Router(config-if)#no shutdown
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet7/0, changed state to up
+
+Router(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet7/0, changed state to up
+
+Router(config-if)#exit
+Router(config)#router rip
+Router(config-router)#network 192.168.10.0
+Router(config-router)#
+Router(config-router)#end
+Router#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#router rip
+Router(config-router)#network 192.168.1.0
+Router(config-router)#network 192.168.2.0
+Router(config-router)#network 192.168.3.0
+Router(config-router)#
+
+
+- Konfigurasi Routing RIP Pada Router 2
+Router>enable
+Router#
+Router#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#interface FastEthernet7/0
+Router(config-if)#ip address 192.168.10.2 255.255.255.0
+Router(config-if)#ip address 192.168.10.2 255.255.255.0
+Router(config-if)#no shutdown
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet7/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet7/0, changed state to up
+
+Router(config-if)#exit
+Router(config)#router rip
+Router(config-router)#network 192.168.10.0
+Router(config-router)#network 192.168.4.0
+Router(config-router)#network 192.168.5.0
+Router(config-router)#network 192.168.6.0
+Router(config-router)#
+Router(config-router)#end
+Router#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#interface FastEthernet8/0
+Router(config-if)#ip address 192.168.20.1 255.255.255.0
+Router(config-if)#ip address 192.168.20.1 255.255.255.0
+Router(config-if)#no shutdown
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet8/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet8/0, changed state to up
+
+Router(config-if)#exit
+Router(config)#router rip
+Router(config-router)#network 192.168.20.0
+Router(config-router)#
+
+
+- Konfigurasi Routing RIP Pada Router 3
+Router>enable
+Router#
+Router#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#interface FastEthernet7/0
+Router(config-if)#ip address 192.168.20.2 255.255.255.0
+Router(config-if)#ip address 192.168.20.2 255.255.255.0
+Router(config-if)#no shutdown
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet7/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet7/0, changed state to up
+
+Router(config-if)#exit
+Router(config)#router rip
+Router(config-router)#network 192.168.20.0
+Router(config-router)#network 192.168.7.0
+Router(config-router)#network 192.168.8.0
+Router(config-router)#network 192.168.9.0
+Router(config-router)#
+
+
+- Konfigurasi Router 3 ke Server
+Router#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#interface FastEthernet8/0
+Router(config-if)#
+%SYS-5-CONFIG_I: Configured from console by console
+ip address 192.168.30.1 255.255.255.0
+Router(config-if)#ip address 192.168.30.1 255.255.255.0
+Router(config-if)#no shutdown
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet8/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet8/0, changed state to up
+
+Router(config-if)#exit
+Router(config)#router rip
+Router(config-router)#network 192.168.30.0
+Router(config-router)#
+
+- Konfigurasi Server
+Klik Server -> Desktop -> Ip Configuration
+192.168.30.2
+255.255.255.0
+192.168.30.1
+8.8.8.8
+
+- Konfigurasi Cloud
+Klik Cloud->Config->DSL
+Modem 4 - Ethernet 6
+Add. 
+
+- Test Ping ke Semua Perangkat
+- Test Ip Server menggunakan PC Client
+Klik PC -> Web Browser -> 192.168.30.2
+
+
+
+
+
+
+
+ 

@@ -6,13 +6,13 @@ EGP (Eksterior Gateway Protokol)
 3 Switch (Switch 2960)
 3 PC
 
-- Hubungkan Router 1 ke Router 2 dengan Kabel Automatic (Serial) 
-- Hubungkan Router 2 ke Router 3 dengan Kabel Automatic (Serial)
-- Hubungkan Router 3 ke Router 1 dengan Kabel Automatic (Serial)
+- Hubungkan Router 1 ke Router 2 dengan Kabel Automatic (Serial) (Se2/0 - Se2/0)
+- Hubungkan Router 2 ke Router 3 dengan Kabel Automatic (Serial) (Se3/0 - Se2/0)
+- Hubungkan Router 3 ke Router 1 dengan Kabel Automatic (Serial) (Se3/0 - Se3/0)
 
-- Hubungkan Router 1 dengan Switch dan PC 1 dengan kabel automatic
-- Hubungkan Router 2 dengan Switch dan PC 2 dengan kabel automatic
-- Hubungkan Router 3 dengan Switch dan PC 3 dengan kabel automatic
+- Hubungkan Router 1 dengan Switch dan PC 1 dengan kabel automatic (Fa0/1)(Fa0/2)
+- Hubungkan Router 2 dengan Switch dan PC 2 dengan kabel automatic (Fa0/1)(Fa0/2)
+- Hubungkan Router 3 dengan Switch dan PC 3 dengan kabel automatic (Fa0/1)(Fa0/2)
 
 Router 1 Indosat = No As(Autonomous System). 100
 Router 2 Telkomsel = No As(Autonomous System). 300
