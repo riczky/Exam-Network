@@ -1,0 +1,119 @@
+Konfigurasi Windows Server 2012 | Active Directory Domain Services
+#Tab Menu Local Server
+- Change Nama Computer
+Name: Windows Server2012
+
+- Change Time Zone
+Hanoi, Bangkok, Jakarta
+
+- Matikan Windows Firewall
+Turn Off Windows Firewall
+
+- Windows Update
+Turn On Automatic
+
+- Aktifkan Remote Desktop
+Allow Remote Connection.., Apply, Oke
+
+- Tambahkan IP Static Pada Server
+192.168.1.1
+255.255.255.0
+Oke,Close
+Refresh
+
+- Restart Windows Server
+
+- Install Active Directory Domain Services
+Manage -> Add Roles n Features
+Installation Type -> Role-Based or Feature Based Installation, Next
+Server Selection -> Select a server from the server pool -> (192.168.1.1), Next
+Server Roles -> Active Directory Domain Services -> Add Features, Next	
+Features -> Group Policy Management, Next
+AD DS -> Next
+Confirmation -> Install
+Finish, Close
+
+- Promote Active Directory Domain Services
+Notification -> Promote this server to a domain controller.
+
+Deployment Conf -> Add a new forest
+Root domain name: server.com, next
+Domain Controller Options
+Password: Windows2012
+Conf.Pass: Windows2012
+Next,
+DNS Options, Next
+Additional Options, Next
+Paths, Next
+Rev.Options, Next
+Pre-Requisites Check, Install
+
+- Organization Unit, Group dan User  
+Tools -> Active Directory Users and Computers
+#Install Organization Unit
+Klik kanan pada server.com -> New -> Organization Unit
+Name = SMK Tunas Harapan
+Oke.
+
+Klik Server.com -> SMK Tunas Harapan -> Klik Kanan -> New -> Group
+Group Name = OSIS SMK Tunas Harapan
+Domain Local, Security
+Oke
+
+# Membuat User
+Klik Server.com -> SMK Tunas Harapan -> Klik Kanan -> New -> User
+Name = Andika
+Fullname = Andika
+User Legion Name = andika
+Next
+Password: Admin123
+Confirm Password: Admin123
+User must change password (Uncheck),
+Next, Finish
+
+# Tambahkan User ke Dalam Grup
+Klik Grup SMK Tunas Harapan
+*Members -> Add 
+Andika -> Check Names
+Apply, Oke
+
+- Join Domain
+Buka Virtual Box -> Klik ServerWindows2012 -> Settings
+Network -> HostonlyAdapters -> Oke
+
+Buka Control Panel pada Laptop Kita (Windows10)
+Virtual Box HostOnly->Propeties->Ipv4
+192.168.1.2
+255.255.255.0
+192.168.1.1
+192.168.1.1
+
+Oke
+
+#Test Ping ke Windows Server
+buka cmd
+ping 192.168.1.1
+
+#Join Domain 
+Buka File Explorer -> MyComputer -> Properties Change Settings 
+Computer Name -> Change -> Domain
+server.com
+Oke, Yes
+
+Administrator
+Windows2012
+Oke, Oke, Close, Restart Later
+
+#Aktifkan Remote Setting
+MyComputer -> Remote Settings -> Allow Remote Connection
+Apply, Oke
+
+
+
+
+
+
+
+
+
+

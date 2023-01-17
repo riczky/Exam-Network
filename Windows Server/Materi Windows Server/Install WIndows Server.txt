@@ -1,0 +1,43 @@
+Installasi Windows Server 2012 di Virtual Box
+
+- Create Virtual Machine di Virtual Box
+Buka Virtual Box -> New,
+Name = Windows Server
+Type = Ms.Windows
+Version = 2012 64-bit
+Next,
+Ram = 2048, Next
+Create a Virtual Harddisk Now, Create
+VDI(Virtual Disk Image), Next
+Dynamic Allocated, Next
+File Size = 10GB, Create
+
+- Install Windows Server
+Klik Windows Server->Settings->Network
+Attached to = HostOnlyAdapter
+Name = Virtualbox HostOnlyAdapter
+
+Storage->Empty->Browse Iso Windows
+Oke, Start.
+
+#Windows Setup
+English US
+English US
+US, Next
+
+Install Now
+*Windows Server 2012R2 Standard Evaluation (Server with a GUI)(2), Next
+I Accept Licence (Checklist), Next
+Custom:Install Windows Only
+10 GB, Next 
+
+#Settings
+Username: Administrator
+Password: Administrator7
+Reenter Password: Administrator7
+#Change
+Password: Windows2012
+Reenter Password: Windows2012
+
+
+*Press Ctrl + Alt + Del to Sign in

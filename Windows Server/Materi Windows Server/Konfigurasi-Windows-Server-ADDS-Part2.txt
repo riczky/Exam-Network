@@ -1,0 +1,59 @@
+Konfigurasi-Windows-Server-ADDS | Active Directory Domain Server
+
+- Setting Network WinXp dan Server2012
+Buka Virtual Box -> Settings -> Network
+Attached to: Internal Network
+Nama: intnet
+
+- Setting IP Pada WinXP
+Network n Sharing -> Change Adapter -> Local Area Connection -> Properties -> IPv4 -> Static
+192.168.1.2
+255.255.255.0
+192.168.1.1
+
+192.168.1.1
+8.8.8.8
+
+Apply, Oke
+
+- Test Ping WinXp ke WinServer2012
+Buka CMD
+PC>ping 192.168.1.1
+
+- Join Domain Windows Xp Sebagai Client dengan WinServer2012
+MyComputer -> Klik Kanan -> Properties -> Change Settings
+Change Domain or Workgroup = Change
+Domain -> server.com
+
+administrator
+Windows2012
+
+Oke, Oke, Restart Now
+
+Login->Switch User->OtherUser
+
+andika
+Admin123
+
+Enter, Login...
+
+- Cek ADDS Sudah Terhubung
+MyComputer -> Klik Kanan -> Properties
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
