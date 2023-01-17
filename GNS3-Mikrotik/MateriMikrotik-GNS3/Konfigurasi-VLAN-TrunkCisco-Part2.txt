@@ -1,0 +1,106 @@
+VLAN Trunk Cisco | Mikrotik GNS3
+
+- Tambahkan Router Cisco
+Edit -> Preferences -> Dynamips -> IOS Routers
+New -> Run This Ios On GNS3 VM -> Next
+New Image -> Browse -> ISO Cisco (IOS)-> Next
+Name = Cisco Router
+Platform Default, Next
+Ram, Default, Next
+Network Adapters, Default, Next
+WSC Modules, Default, Next
+Klik Idle PC Finder, Finish
+
+- Tambahkan Cisco Switch
+Edit -> Preferences -> Dynamips -> IOS Routers
+New -> Run This Ios On GNS3 VM -> Next
+New Image -> Browse -> ISO Cisco (IOS)-> Next
+Name = Cisco Switch
+Platform = Default
+Checklist This is an EtherSwitch Router, Next
+Ram, Default, Next
+Network Adapters, Default, Next
+WSC Modules, Default, Next
+Klik Idle PC Finder, Finish
+
+
+- Siapkan Device
+1 Cisco Switch
+2 PC (GNS3 VM)
+
+- Hubungkan Mikrotik 2 dan Cisco Switch dengan Kabel(Ether9 - Fa1/15)
+- Hubungkan Cisco Switch dan PC 1 dengan Kabel (Fa1/1 - Fa0)
+- Hubungkan Cisco Switch dan PC 1 dengan Kabel (Fa1/2 - Fa0)
+
+- Konfigurasi VLAN Pada Mikrotik 2
+Buka Winbox -> Mikrotik 2
+Interfaces
+(+) Tambahkan -> Vlan (10) 
+Name = Vlan 10
+VlanId = 10 
+Interfaces = Ether10 
+Ok.
+
+Interfaces
+(+) Tambahkan Vlan (20)
+Name = Vlan 20
+Id = 20 
+Interfaces = Ether10
+Ok.
+
+#Tambahkan IP Addresses Pada VLAN10 dan 20
+IP -> Addresses -> (+)
+Addresses = 192.168.10.1/24
+Network = 192.168.10.0
+Interfaces = Vlan 10
+Apply, Oke
+
+
+IP -> Addresses -> (+)
+Addresses = 192.168.20.1/24
+Network = 192.168.20.0
+Interfaces = Vlan 20
+Apply, Oke
+
+
+- Konfigurasi Pada Cisco Switch
+ESW1>conf t
+ESW1(config)>int fa1/15
+ESW1(config-if)>switchport mode trunk
+ESW1(config-if)>exit
+
+ESW1(config)>int fa1/1
+ESW1(config-if)>switchport mode access
+ESW1(config-if)>switchport access vlan 10
+
+
+ESW1(config)>int fa1/2
+ESW1(config-if)>switchport mode access
+ESW1(config-if)>switchport access vlan 20
+ESW1(config-if)>end
+ESW1>wr
+[Ok]
+ESW1>
+
+# Menambahkan IP Pada Vlan 10 dan Vlan 20
+ESW1>conf t
+ESW1(config)>int vlan 10
+ESW1(config-if)>ip address 192.168.10.10 255.255.255.0
+ESW1(config-if)>exit
+ESW1(config)>int vlan 20
+ESW1(config-if)>ip address 192.168.20.10 255.255.255.0
+ESW1(config-if)>end
+ESW1>wr
+[Ok]
+ESW1>
+
+- Konfigurasi Pada PC 1 (Vlan 10)
+Klik PC 1 -> Console
+PC>ip 192.168.10.2 255.255.255.0 192.168.10.1
+
+- Konfigurasi Pada PC 2 (Vlan 20)
+Klik PC 2 -> Console
+PC>ip 192.168.20.2 255.255.255.0 192.168.20.1
+
+- Test Ping Semua Device
+
