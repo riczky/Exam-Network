@@ -4,7 +4,7 @@ Sharing Printer Windows 10
 - Terhubung dalam 1 jaringan
 - Cek IP/Nama Computer
 - Masuk Printer n Scanner(Search Windows)
-- Manage -> Printer Properties -> Sharing -> Change Sharing Options -> Share This Printer (Check)
+- Pilih Printer(EPSON LQ-2190) Manage -> Printer Properties -> Sharing -> Change Sharing Options -> Share This Printer (Check)
 - Apply, oke
 
 #Network n Sharing Center

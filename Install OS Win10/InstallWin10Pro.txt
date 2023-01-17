@@ -50,6 +50,7 @@ Jika harddisk msh baru lakukan partisi
 - Pilih Unallocated, New, Apply
 - Pilih Disk C, Format, Oke
 - Next Install
+- Cabut Flashdisk jika sudah finish(sebelum restart now)
 - Restart Now
 
 *Setup
@@ -65,3 +66,27 @@ Jika harddisk msh baru lakukan partisi
 - Password = (Kosongin), Next
 - Accept
 - Finish.
+
+
+============================================================
+Install Driver
+Hanya CPU			CPU+VGA
+                        
+CPU     |  Driver             CPU+VGA  | DRIVER          
+--------------------------------------------------
+INTEL   |  intel             INTEL+AMD | AMD     |
+AMD     |  AMD                AMD+AMD  | AMD     |
+                            INTEL+NVDIA| NVDIA   |
+                            AMD+NVDIA  | NVDIA   |
+--------------------------------------------------
+Driver Intel
+https://www.intel.co.id/content/www/id/id/support/products/80939/graphics.html
+
+Driver AMD
+https://www.amd.com/en/support
+
+Driver NVDIA
+https://www.nvidia.com/Download/index.aspx
+
+
+

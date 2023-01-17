@@ -14,6 +14,7 @@ Use 128-bit Enc...........
 Turn Off Password Protected Sharing
 
 - Mematikan Firewall
+
 - Create Folder(Untuk Sharing)
 ` Klik kanan -> Properties -> Sharing -> Share -> Everyone -> Add -> Share -> Done
 ` Advance Sharing -> Share this folder(Check)
