@@ -1,0 +1,86 @@
+Konfigurasi Access Point TP-Link WR840N
+
+- Siapkan Device
+1 Router Wifi
+1 AccessPoint TPLink
+1 Kabel UTP
+
+- Hubungkan Router Wifi dan TPLink dengan kabel UTP (WAN - WAN)
+
+- Konfigurasi TP-Link
+#Connect menggunakan Wifi, Atau
+SSID: TP-Link_5896
+Wireless Password: 48387149
+#Connect Menggunakan PC(LAN)
+- Hubungkan TPLink dengan kabel LAN 1 ke PC
+- Hubungkan Power TP-Link
+Buka Network n Sharing -> Change Adapter -> Enable Lan
+Local Area Network->Klik Kanan -> Enable
+
+# Berikan IP Static
+Buka Network n Sharing -> Change Adapter -> LAN -> Properties -> IPv4
+192.168.0.15
+255.255.255.0
+Oke, Oke
+
+#Konfigurasi Tp-Link
+Buka Browser -> Search -> 192.168.0.1
+username:admin
+password:admin
+
+#Quick Setup
+Quick Setup -> Start, next
+Quick Setup - Operation Mode -> Access Point, Next
+Quick Setup - Wireless -> 
+Wireless Network Name: Mywifi
+Wireless Password: mypassword
+Checklist More Advanced Wireless Setings, Default, next
+Quick Setup - Network Settings
+Lan Type: Static IP
+Ip Address: 192.168.0.2
+Subnet Mask: 255.255.255.0
+DHCP Server: Disable
+Next, Finish
+Restart Otomatis
+
+Buka Browser -> Search -> 192.168.0.2
+Reconnect Kabel LAN Pada Router Wifi dan TP-Link
+
+#Konfigurasi IP Pada PC yang terhubung dengan LAN
+Network n Sharing Center -> Change Adapter -> LAN -> Properties -> IPv4
+192.168.0.15
+255.255.255.0
+192.168.0.1
+
+8.8.8.8
+8.8.4.4
+
+#Reconnect LAN untuk menghilangkan tanda seru
+Network n Sharing Center -> Change Adapter -> LAN -> Disable
+Network n Sharing Center -> Change Adapter -> LAN -> Enable
+
+- Test Koneksi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

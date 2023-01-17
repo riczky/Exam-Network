@@ -1,0 +1,75 @@
+Konfigurasi AccessPoint Pada Wifi
+
+- Siapkan Device
+1 Router Wifi
+1 Router/Access Point (ZTE_2.4G)(TP-Link/Other)
+1 Kabel LAN 
+
+- Hubungkan Kabel Pada Router Wifi dan Access Point (LAN1 -LAN1)
+
+- Konfigurasi Router Wifi
+Aktifkan Port LAN Pada Router Wifi
+
+- Konfigurasi Access Point
+SSID = ZTE_2.4G
+WPA/WPA2-PSK = x3np6Q7s
+
+Buka Browser -> Search
+192.168.1.1
+Username: admin
+Password: Telkomdso123
+
+#Setting Access Point
+Network -> WAN -> WAN Connection
+Connection Name: Create WAN Connection
+NewConnection Name: MyWifi
+Type: Route
+Service List: Internet
+LinkType: IP
+MTU: 1500
+IP: IPv4
+IP Type: DHCP
+Enable NAT = Checklist
+
+Create
+
+#Port Binding
+Network -> WAN -> Port Binding
+WAN Connection: MyWifi
+Cheklist: LAN1  SSID1
+	  LAN2  SSID2
+	  LAN3  SSID3
+	  LAN4  SSID4
+Submit
+
+#Matikan WPS
+Network -> WLAN -> WPS
+WPS Mode: Disabled
+
+#Routing WAN Ipv4
+Network -> Routing Ipv4 -> Default Gateway
+WAN Connection: MyWifi
+
+Submit
+
+#Change SSID Wifi
+Network -> WLAN -> SSID Settings
+SSID Name = MyWifi
+Submit
+Restart Otomatis
+Login Ulang
+
+#Change Security Password Wifi
+Network -> WLAN -> Security
+WPA PassPhrase = mypassword
+Submit, Confirm
+Restart Otomatis
+Login Ulang
+
+#Matikan DHCP Server (Bridge/Access Point)
+Network -> LAN -> DHCP Server
+Unchkelist: Enable DHCP Server (Matikan)
+Checklist: AssignIspDNS (Nyalakan)
+Submit
+
+- Test Koneksi

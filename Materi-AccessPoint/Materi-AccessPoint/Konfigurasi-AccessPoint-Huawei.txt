@@ -1,0 +1,121 @@
+Konfigurasi Access Point Wifi Huawei HG8245H5
+
+- Siapkan device
+1 Router Wifi (Port LAN Sudah Aktif Setingan Default)
+1 Access Point Huawei HG8245H5
+1 PC
+2 Kabel LAN
+
+- Reset Access Point jika ada Konfigurasi sebelumnya
+Hubungkan Kabel power
+Hubungkan Kabel LAN pada PC
+
+Nyalakan Access Point -> Reset
+
+- Berikan IP Pada PC yang terhubung LAN
+Network n sharing center -> change adapter -> LAN -> Properties -> Ipv4
+192.168.100.11
+255.255.255.0
+192.168.100.1
+Oke,Oke
+
+- Konfigurasi Router Access Point
+Buka Browser -> 192.168.100.1
+Admin atau Support
+admin atau theworldinyourhand
+
+The ONT Web Page, Next
+ONT Authentication, Skip
+WAN Configuration, Skip
+Return to Home Page, Oke
+
+#Aktifkan Port LAN
+Advanced -> LAN -> Layer2/3
+Checklist: LAN 1 LAN 2 LAN 3 LAN 4
+Apply, oke
+
+#Disable DHCP Server
+Advanced -> LAN -> DHCP Server 
+Uncheklist: Enable Primary DHCP Server: Disable
+	    Enable DHCP Relay: Disable
+            Enable Option 125: Disable
+		
+	    Enable Secondary DHCP Server: Disable
+Apply, Oke
+
+#Sesuaikan IP Address
+Advanced -> LAN -> LAN Host
+Primary IP Address: 192.168.22.1
+Subnet Mask: 255.255.255.0
+
+Disable Secondary Address (Uncheck)
+Apply, Oke
+
+#Ganti IP Pada PC yang terhubung LAN
+Network n sharing center -> change adapter -> LAN -> Properties -> Ipv4
+192.168.22.11
+255.255.255.0
+192.168.22.1
+
+Oke,Oke
+
+- Konfigurasi Router Access Point
+Buka Browser -> 192.168.22.1
+Buka Browser -> 192.168.100.1
+Admin atau Support
+admin atau theworldinyourhand
+
+#Konfigurasi Setting WAN
+Advanced -> WAN
+Delete Setingan WAN yang lama
+Cheklist -> Delete
+Apply, Oke
+
+Klik New
+Enable WAN: ✓
+Encapsulation Mode: IPoE ✓
+Protocol Type: Ipv4
+WAN Mode: Bridge WAN
+Service Type: Internet
+
+Enable Vlan: Unchecklist (Disable)
+Binding Options: LAN1 ✓ LAN2 ✓ LAN3 ✓ LAN4 ✓
+		SSID1 ✓ 
+
+Apply, Oke
+
+#Konfigurasi WLAN
+Advanced -> WLAN -> WLAN Basic
+SSID Name: MyWifi
+WPA PreSharedKey: MyPassword
+
+Apply, Oke
+
+- Kembalikan IP DHCP Pada PC
+Network n sharing center -> change adapter -> LAN -> Properties -> Ipv4
+IP DHCP
+
+- Test Koneksi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
