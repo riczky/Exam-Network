@@ -6,6 +6,10 @@ Setting Koneksi Jaringan
 attached to = host only adapter
 name = virtual box host only ethernet adapter
 
+Advanced 
+Adapter type = PCnet-FASTIII
+
+
 - Login ubuntu server
 - ip add show (cek ip)
 - sudo su (12345678)
