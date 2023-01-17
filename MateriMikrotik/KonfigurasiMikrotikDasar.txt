@@ -72,7 +72,7 @@ ip address print
 ip address remove numbers=1
 
 
-Config Ip di Win Xp
+Config Ip di Win Xp:
 Control panel ->network n internet connection->network connection
 Klik kanan pada adapter LAN, properties 
 Set IP, Properties
