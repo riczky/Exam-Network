@@ -1,0 +1,145 @@
+Cisco | Konfigurasi MPLS 
+
+- Siapkan Device
+3 Router (PT-Route)
+2 Switch (PT-Switch)
+2 PC
+
+- Hubungkan Router 1 dan Router 2 dengan kabel serial dte (se2/0 - se2/0)
+- Hubungkan Router 2 dan Router 3 dengan kabel serial dte (se3/0 - se3/0)
+
+- Hubungkan Router 1 dan Switch dengan kabel Straight (fa0/0 - fa0/1)
+- Hubungkan Router 3 dan Switch dengan kabel Straight (fa0/0 - fa0/1)
+
+- Hubungkan Switch 1 dan PC 1 dengan kabel Straight (fa1/1 - fa0)
+- Hubungkan Switch 2 dan PC 2 dengan kabel Straight (fa1/1 - fa0)
+
+- Konfigurasi Router 1
+Router(config)#int fa0/0
+Router(config-if)#ip add 192.168.10.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int se2/0
+Router(config-if)#ip add 192.168.11.1 255.255.255.0
+Router(config-if)#no sh
+
+%LINK-5-CHANGED: Interface Serial2/0, changed state to down
+Router(config-if)#
+
+Router(config)#int lo0
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface Loopback0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Loopback0, changed state to up
+
+Router(config-if)#ip add 5.5.5.5 255.255.255.255
+Router(config-if)#no sh
+Router(config-if)#
+Router(config)#router ospf 10
+Router(config-router)#network 192.168.10.0 0.0.0.255 area 0
+Router(config-router)#network 192.168.11.0 0.0.0.255 area 0
+Router(config-router)#network 5.5.5.5 0.0.0.0 area 0
+Router(config-router)#end
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Router#w
+Building configuration...
+[OK]
+Router#
+Router#
+
+
+- Konfigurasi Router 2
+Router(config)#int se2/0
+Router(config-if)#192.168.11.2 255.255.255.0
+            	
+Router(config-if)#ip add 192.168.11.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface Serial2/0, changed state to up
+
+Router(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Serial2/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int se3/0
+Router(config-if)#ip add 192.168.12.2 255.255.255.0
+Router(config-if)#no sh
+
+%LINK-5-CHANGED: Interface Serial3/0, changed state to down
+Router(config-if)#
+Router(config)#int lo0
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface Loopback0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Loopback0, changed state to up
+
+Router(config-if)#ip add 7.7.7.7 255.255.255.255
+Router(config-if)#no sh
+Router(config-if)#
+
+Router(config-if)#router ospf 10
+Router(config-router)#network 192.168.11.0 0.0.0.255 area 0
+Router(config-router)#
+00:31:47: %OSPF-5-ADJCHG: Process 10, Nbr 5.5.5.5 on Serial2/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#network 192.168.12.0 0.0.0.255 area 0
+Router(config-router)#network 7.7.7.7 0.0.0.0 area 0
+Router(config-router)#
+
+- Konfigurasi Router 3
+Router(config)#int se3/0
+Router(config-if)#ip add 192.168.12.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface Serial3/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int fa0/0
+Router(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Serial3/0, changed state to up
+
+Router(config-if)#ip add 192.168.13.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#
+
+Router(config)#int lo0
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface Loopback0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Loopback0, changed state to up
+
+Router(config-if)#ip add 9.9.9.9 255.255.255.255
+Router(config-if)#no sh
+Router(config-if)#
+
+
+- Konfigurasi PC 1
+192.168.10.2
+255.255.255.0
+192.168.10.1
+
+
+- Konfigurasi PC 2
+192.168.13.2
+255.255.255.0
+192.168.13.1

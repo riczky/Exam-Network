@@ -1,0 +1,131 @@
+Cisco | Konfigurasi Tunneling 
+
+- Siapkan Device
+3 Router 1941
+2 Switch 2960-24TT
+2 PC
+
+- Hubungkan Router 1 dan Router 2 dengan kabel Cross (Gi0/0 - Gi0/1)
+- Hubungkan Router 1 dan Router 3 dengan kabel Cross (Gi0/1 - Gi0/1)
+
+- Hubungkan Router 2 dan Switch 1 dengan kabel Straight(Gi0/0 - Gi0/1)
+- Hubungkan Router 3 dan Switch 2 dengan kabel Straight(Gi0/0 - Gi0/1) 
+
+- Hubungkan Switch 2 dan PC 1 dengan kabel Straight (Fa0/1 - Fa0)
+- Hubungkan Switch 3 dan PC 2 dengan kabel Straight (Fa0/1 - Fa0)
+
+- Konfigurasi Router 1
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int gi0/0
+Router(config-if)#ip add 11.11.11.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int gi0/1
+Router(config-if)#ip add 12.12.12.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to up
+
+Router(config-if)#
+
+- Konfigurasi Router 2
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int gi0/0 
+Router(config-if)#ip add 10.10.10.10 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int gi0/1
+Router(config-if)#ip add 11.11.11.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to up
+
+Router(config-if)#ex
+Router(config)#int tunn0
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface Tunnel0, changed state to up
+
+Router(config-if)#ip add 172.168.1.1 255.255.255.0
+Router(config-if)#tunnel source gi0/1
+Router(config-if)#tunnel destination 12.12.12.2
+Router(config-if)#tunnel mode gre ip
+Router(config-if)#ex
+Router(config)#ip route 13.13.13.0 255.255.255.0 172.168.1.2
+Router(config)#ip route 0.0.0.0 0.0.0.0 gi0/1
+%Default route without gateway, if not a point-to-point interface, may impact performance
+Router(config)#
+
+- Konfigurasi Router 3 
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int gi0/0
+Router(config-if)#ip add 13.13.13.10 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int gi0/1
+Router(config-if)#ip add 12.12.12.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+
+Router(config-if)#int tunn0
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface Tunnel0, changed state to up
+
+Router(config-if)#ip add 172.168.1.2 255.255.255.0
+	
+Router(config-if)#tunnel source gi0/1
+Router(config-if)#tunnel destination 11.11.11.2 
+Router(config-if)#ex
+Router(config)#ip route 10.10.10.0 255.255.255.0 172.168.1.1
+Router(config)#ip route 0.0.0.0 0.0.0.0 gi0/1
+%Default route without gateway, if not a point-to-point interface, may impact performance
+Router(config)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Tunnel0, changed state to up
+
+Router(config)#
+
+- Konfigurasi PC 1
+10.10.10.1
+255.0.0.0
+172.168.1.1
+
+- Konfigurasi PC 2
+13.13.13.1
+255.0.0.0
+172.168.1.2
+
+- Test Ping Tracert dari PC 1
+tracert 13.13.13.1
+ping 13.13.13.1
+tracert 13.13.13.1	

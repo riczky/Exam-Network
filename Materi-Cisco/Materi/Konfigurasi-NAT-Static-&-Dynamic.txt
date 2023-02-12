@@ -1,0 +1,178 @@
+Cisco | Konfigurasi NAT Static & Dynamic
+
+- Siapkan Device:
+1 Server (Server PT)
+2 Router (2811)
+3 Switch (2950-24)
+4 PC
+
+- Hubungkan Server dan Switch 1 dengan kabel automatic (Fa0 -Fa0/1)
+- Hubungkan Switch 1 dan Router 1 dengan kabel automatic(Fa0/2 - Fa0/0)
+- Hubungkan Switch 1 dan Router 2 dengan kabel automatic(Fa0/3 - Fa0/0)
+
+- Hubungkan Router 1 dan Switch 2 dengan kabel automatic(Fa0/1 - Fa0/1)
+- Hubungkan Router 2 dan Switch 3 dengan kabel automatic(Fa0/1 - Fa0/1)
+
+- Hubungkan Switch 2 dan PC 1 dengan kabel automatic(Fa0/2 - Fa0)
+- Hubungkan Switch 2 dan PC 2 dengan kabel automatic(Fa0/3 - Fa0)
+
+- Hubungkan Switch 3 dan PC 3 dengan kabel automatic(Fa0/2 - Fa0)
+- Hubungkan Switch 3 dan PC 4 dengan kabel automatic(Fa0/3 - Fa0)
+
+- Konfigurasi PC 1
+192.168.1.2
+255.255.255.0
+192.168.1.1
+
+- Konfigurasi PC 2
+192.168.1.3
+255.255.255.0
+192.168.1.1
+
+- Konfigurasi PC 3
+172.10.1.2
+255.255.255.0
+172.10.1.1
+
+- Konfigurasi PC 4
+172.10.1.3
+255.255.255.0
+172.10.1.1
+
+- Konfigurasi server
+202.1.1.1
+255.255.255.0
+
+- Konfigurasi Router 1 
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/1
+Router(config-if)#ip add
+Router(config-if)#ip address 192.168.1.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+
+Router(config-if)#
+Router(config-if)#int fa0/0
+Router(config-if)#ip add
+Router(config-if)#ip address 202.1.1.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#end
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Router#sh ip route
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#ip route 172.10.1.0 255.255.255.0 202.1.1.3
+Router(config)#
+
+- Konfigurasi NAT Static pada Router 1
+
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip nat outside
+Router(config-if)#ex
+Router(config)#int fa0/1
+Router(config-if)#ip nat inside
+Router(config-if)#ex
+Router(config)#ip nat inside source static 192.168.1.2 202.1.1.2
+Router(config)#ip nat inside source static 192.168.1.3 202.1.1.2
+Router(config)#
+
+
+- Konfigurasi Router 2
+
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/1
+Router(config-if)#ip add
+Router(config-if)#ip address 172.10.1.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+
+Router(config-if)#end
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 202.1.1.3 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#end
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Router#sh ip route
+
+- Konfigurasi NAT Dynamic Pada Router 2
+Router>
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip nat ou
+Router(config-if)#ip nat outside 
+Router(config-if)#ex
+Router(config)#int fa0/1
+Router(config-if)#ip nat inside
+Router(config-if)#ex
+Router(config)#access-list 1 permit 172.10.1.0 0.0.0.255
+Router(config)#ip nat pool router2 202.1.1.5 202.1.1.8 netmask 255.255.255.0
+Router(config)#ip nat inside source list 1 pool router2
+Router(config)#end
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Router#sh ip nat tra
+Router#sh ip nat translations 
+Router#sh ip nat translations 
+Router#show ip nat tra
+Router#show ip nat translations 
+Pro  Inside global     Inside local       Outside local      Outside global
+icmp 202.1.1.5:4       172.10.1.2:4       202.1.1.1:4        202.1.1.1:4
+icmp 202.1.1.6:3       172.10.1.3:3       202.1.1.1:3        202.1.1.1:3
+tcp 202.1.1.5:1025     172.10.1.2:1025    202.1.1.1:80       202.1.1.1:80
+
+Router#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

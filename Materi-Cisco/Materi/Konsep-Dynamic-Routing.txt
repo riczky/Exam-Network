@@ -1,0 +1,33 @@
+Pemahaman Konsep Dynamic Routing
+
+#Ada 2 Jenis Routing Dynamic
+IGP (Interior Gateway Protocol):
+- digunakan pada intra-autonomous system routing
+- diterapkan untuk mengendalikan dalam suatu organisasi
+- Contoh: Sekolah/kampus, perusahaan, atau institusi lain
+
+
+EGP (Exterior Gateway Protocol)
+- digunakan pada inter-autonomous system routing
+- diterapkan untuk mengendalikan sistem administrasi yang
+berbeda, atau biasa digunakan dalam internet.
+- Contoh: ISP ke ISP, perusahaan ke ISP atau kampus ke ISP
+
+
+#Contoh Protokol IGP
+- Distance vector routing protocol : digunakan oleh router untuk mencapai tujuannya 
+dengan cara melihat berapa banyak titik - titik yang terhubung ketujuannya.
+Contoh: dari Router A ingin terhubung ke Router Z, maka protokol IGP ini akan mencapai
+titik terdekat atau titik terkecil yang ditempuh untuk mencapai Router Z.(semakin sedikit
+titik yang terhubung maka jalur itulah yang dipilih Protokol IGP)
+Contoh Protocol: RIPv1, RIPv2. IGRP
+
+- Link-State routing protocol : biasanya protokol tersebut akan mencari jalur terdekat
+dengan cara melihat bandwitch terbesar atau tercepat disekitar titik tersebut.
+Contoh Protokol: OSPF, IS-IS
+
+- Hybrid routing protocol : bekerja dengan cara menggabungkan distance vektor protokol dan Link State routing protokol 
+Contoh Protokol : EIGRP
+
+#Contoh Protokol EGP
+BGP

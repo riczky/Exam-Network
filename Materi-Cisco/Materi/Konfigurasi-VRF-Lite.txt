@@ -1,0 +1,514 @@
+Cisco | VRF Virtual Routing and Forwarding
+
+- Siapkan Device
+6 Router (PT-Router)
+
+- Tambahkan Port Fa1/0 Pada Router 2 dan Router 3
+
+
+- Hubungkan Router A dan Router R2 dengan Kabel Straight (fa0/0 - fa0/0)
+- Hubungkan Router B dan Router R2 dengan Kabel Straight (fa0/1 - fa0/1)
+- Hubungkan Router R2 dan Router R3 dengan Kabel Straight (fa1/0 - fa1/0)
+- Hubungkan Router C dan Router R3 dengan Kabel Straight (fa0/0 - fa0/0)
+- Hubungkan Router D dan Router R3 dengan Kabel Straight (fa0/1 - fa0/1)
+
+
+- Konfigurasi Router Vrf R2 dengan Router A dan B
+R2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#ip vrf?
+vrf
+
+R2(config)#ip vrf A
+R2(config-vrf)#rd 10.10.10.1:1
+R2(config-vrf)#ip vrf B
+R2(config-vrf)#rd 10.10.10.1:2
+R2(config-vrf)#int fa0/0
+R2(config-if)#ip vrf forwarding A
+R2(config-if)#ip add 10.10.10.1 255.255.255.0
+R2(config-if)#no sh
+R2(config-if)#
+R2(config-if)#i
+*Mar  1 00:04:25.259: %LINK-3-UPDOWN: Interface FastEthernet0/0, changed state to up
+*Mar  1 00:04:26.259: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+R2(config-if)#int fa0/1
+R2(config-if)#ip vrf forwarding B
+R2(config-if)#ip add 10.10.10.1 255.255.255.0
+R2(config-if)#no sh
+R2(config-if)#
+*Mar  1 00:05:17.759: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to up
+*Mar  1 00:05:18.759: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+R2(config-if)#do sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            10.10.10.1      YES manual up                    up
+FastEthernet0/1            10.10.10.1      YES manual up                    up
+FastEthernet1/0            unassigned      YES unset  administratively down down
+R2(config-if)#do sh ip route vrf A
+
+Routing Table: A
+Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     10.0.0.0/24 is subnetted, 1 subnets
+C       10.10.10.0 is directly connected, FastEthernet0/0
+R2(config-if)#do sh ip route vrf B
+
+Routing Table: B
+Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     10.0.0.0/24 is subnetted, 1 subnets
+C       10.10.10.0 is directly connected, FastEthernet0/1
+
+
+- Konfigurasi Router A
+A#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+A(config)#
+A(config)#int fa0/0
+A(config-if)#ip add 10.10.10.2 255.255.255.0
+A(config-if)#no sh
+A(config-if)#
+*Mar  1 00:06:20.955: %LINK-3-UPDOWN: Interface FastEthernet0/0, changed state to up
+*Mar  1 00:06:21.955: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+A(config-if)#do ping 10.10.10.1
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.10.10.1, timeout is 2 seconds:
+.!!!!
+Success rate is 80 percent (4/5), round-trip min/avg/max = 4/15/28 ms
+A(config-if)#do ping 10.10.10.1
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.10.10.1, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 4/12/20 ms
+A(config-if)#
+
+- Konfigurasi Router B
+B#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+B(config)#do sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            unassigned      YES unset  administratively down down
+FastEthernet0/1            unassigned      YES unset  administratively down down
+B(config)#int fa0/1
+B(config-if)#ip add
+B(config-if)#ip address 10.10.10.2 255.255.255.0
+B(config-if)#no sh
+B(config-if)#
+*Mar  1 00:07:53.087: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to up
+*Mar  1 00:07:54.087: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+B(config-if)#do ping 10.10.10.1
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.10.10.1, timeout is 2 seconds:
+.!!!!
+Success rate is 80 percent (4/5), round-trip min/avg/max = 8/14/20 ms
+B(config-if)#
+
+- Test Ping dari R2 dengan Router A dan B
+R2#ping vrf A 10.10.10.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.10.10.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 12/18/24 ms
+R2#ping vrf B 10.10.10.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.10.10.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 16/18/24 ms
+R2#
+
+- Konfigurasi VRF Router R3 dengan Router C dan D
+R3#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R3(config)#ip vrf C
+R3(config-vrf)#rd 20.20.20.1:1
+R3(config-vrf)#ip vrf D
+R3(config-vrf)#rd 20.20.20.1:2
+R3(config-vrf)#
+R3(config-vrf)#int fa0/0
+R3(config-if)#ip vrf forwarding C
+R3(config-if)#ip add 20.20.20.1 255.255.255.0
+R3(config-if)#no sh
+R3(config-if)#
+*Mar  1 00:11:40.223: %LINK-3-UPDOWN: Interface FastEthernet0/0, changed state to up
+*Mar  1 00:11:41.223: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+R3(config-if)#int fa0/1
+R3(config-if)#ip vrf forwarding D
+R3(config-if)#ip add 20.20.20.1 255.255.255.0
+R3(config-if)#no sh
+R3(config-if)#
+*Mar  1 00:13:34.523: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to up
+*Mar  1 00:13:35.523: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+R3(config-if)#do sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            20.20.20.1      YES manual up                    up
+FastEthernet0/1            20.20.20.1      YES manual up                    up
+FastEthernet1/0            unassigned      YES unset  administratively down down
+R3(config-if)#
+
+- Konfigurasi Router C
+C#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+C(config)#int fa0/0
+C(config-if)#ip add 20.20.20.2 255.255.255.0
+C(config-if)#no sh
+C(config-if)#do ping 20.20.20.1
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 20.20.20.1, timeout is 2 seconds:
+.!!!!
+Success rate is 80 percent (4/5), round-trip min/avg/max = 12/29/44 ms
+C(config-if)#do sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            20.20.20.2      YES manual up                    up
+FastEthernet0/1            unassigned      YES unset  administratively down down
+C(config-if)#
+
+- Konfigurasi Router D
+D#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+D(config)#int fa0/1
+D(config-if)#ip add 20.20.20.2 255.255.255.0
+D(config-if)#no sh
+D(config-if)#
+*Mar  1 00:14:58.503: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to up
+*Mar  1 00:14:59.503: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+D(config-if)#
+D(config-if)#do ping 20.20.20.1
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 20.20.20.1, timeout is 2 seconds:
+.!!!!
+Success rate is 80 percent (4/5), round-trip min/avg/max = 16/22/28 ms
+D(config-if)#
+
+- Test Ping dari R3 dengan Router C dan D
+R3#ping
+*Mar  1 00:22:27.863: %SYS-5-CONFIG_I: Configured from console by console
+R3#ping vrf C 20.20.20.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 20.20.20.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 12/16/20 ms
+R3#ping vrf D 20.20.20.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 20.20.20.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 4/9/16 ms
+R3#
+
+- Tambahkan Routing OSPF untuk menghubungkan semua routernya
+
+- Konfigurasi Ip dan Sub Interface pada Router 2
+R2(config)#int fa1/0.1
+R2(config-subif)#enc?
+encapsulation
+
+R2(config-subif)#enc
+R2(config-subif)#encapsulation do
+R2(config-subif)#encapsulation dot1Q 10
+R2(config-subif)#ip vrf forwarding A
+R2(config-subif)#ip add 23.23.23.2 255.255.255.0
+R2(config-subif)#no sh
+R2(config-subif)#int fa1/0.2
+R2(config-subif)#enc
+R2(config-subif)#encapsulation do
+R2(config-subif)#encapsulation dot1Q 20
+R2(config-subif)#ip vrf forwarding B
+R2(config-subif)#ip add 23.23.23.2 255.255.255.0
+R2(config-subif)#no sh
+R2(config-subif)#ex
+R2(config)#do sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            10.10.10.1      YES manual up                    up
+FastEthernet0/1            10.10.10.1      YES manual up                    up
+FastEthernet1/0            unassigned      YES unset  administratively down down
+FastEthernet1/0.1          23.23.23.2      YES manual administratively down down
+FastEthernet1/0.2          23.23.23.2      YES manual administratively down down
+R2(config)#int fa1/0
+R2(config-if)#no sh
+R2(config-if)#
+*Mar  1 02:25:10.151: %LINK-3-UPDOWN: Interface FastEthernet1/0, changed state to up
+*Mar  1 02:25:11.151: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet1/0, changed state to up
+R2(config-if)#do sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            10.10.10.1      YES manual up                    up
+FastEthernet0/1            10.10.10.1      YES manual up                    up
+FastEthernet1/0            unassigned      YES unset  up                    up
+FastEthernet1/0.1          23.23.23.2      YES manual up                    up
+FastEthernet1/0.2          23.23.23.2      YES manual up                    up
+R2(config-if)#
+
+- Konfigurasi Ip dan Sub Interface pada Router 3
+R3#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R3(config)#ip vrf C
+R3(config-vrf)#rd 20.20.20.1:1
+R3(config-vrf)#ip vrf D
+R3(config-vrf)#rd 20.20.20.1:2
+R3(config-vrf)#
+R3(config-vrf)#int fa0/0
+R3(config-if)#ip vrf forwarding C
+R3(config-if)#ip add 20.20.20.1 255.255.255.0
+R3(config-if)#no sh
+R3(config-if)#
+*Mar  1 00:11:40.223: %LINK-3-UPDOWN: Interface FastEthernet0/0, changed state to up
+*Mar  1 00:11:41.223: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+R3(config-if)#int fa0/1
+R3(config-if)#ip vrf forwarding D
+R3(config-if)#ip add 20.20.20.1 255.255.255.0
+R3(config-if)#no sh
+R3(config-if)#
+*Mar  1 00:13:34.523: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to up
+*Mar  1 00:13:35.523: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+R3(config-if)#do sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            20.20.20.1      YES manual up                    up
+FastEthernet0/1            20.20.20.1      YES manual up                    up
+FastEthernet1/0            unassigned      YES unset  administratively down down
+R3(config-if)#end
+R3#ping
+*Mar  1 00:22:27.863: %SYS-5-CONFIG_I: Configured from console by console
+R3#ping vrf C 20.20.20.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 20.20.20.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 12/16/20 ms
+R3#ping vrf D 20.20.20.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 20.20.20.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 4/9/16 ms
+R3#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R3(config)#int fa1/0.1
+R3(config-subif)#enc
+R3(config-subif)#encapsulation do
+R3(config-subif)#encapsulation dot1Q 10
+R3(config-subif)#ip vrf forwarding C
+R3(config-subif)#ip add 23.23.23.3 255.255.255.0
+
+- Tambahkan Routing OSPF Vrf Pada Router R2
+R2(config)#router ospf 1 vrf A
+R2(config-router)#network 10.10.10.0 0.0.0.255 ARE 0
+R2(config-router)#network 23.23.23.0 0.0.0.255 ARE 0
+R2(config-router)#EX
+R2(config)#router ospf 2 vrf B
+R2(config-router)#network 10.10.10.0 0.0.0.255 ARE 0
+R2(config-router)#network 23.23.23.0 0.0.0.255 ARE 0
+R2(config-router)#
+
+- Tambahkan Routing OSPF Vrf pada Router R3
+R3(config)#router ospf 1 vrf C
+R3(config-router)#network 20.20.20.0 0.0.0.255 are 0
+R3(config-router)#network 23.23.23.0 0.0.0.255 are 0
+R3(config-router)#
+*Mar  1 02:29:43.903: %OSPF-5-ADJCHG: Process 1, Nbr 23.23.23.2 on FastEthernet1/0.1 from LOADING to FULL, Loading Done
+R3(config-router)#router ospf 2 vrf D
+R3(config-router)#network 20.20.20.0 0.0.0.255 are 0
+R3(config-router)#network 23.23.23.0 0.0.0.255 are 0
+R3(config-router)#
+*Mar  1 02:30:24.043: %OSPF-5-ADJCHG: Process 2, Nbr 10.10.10.1 on FastEthernet1/0.2 from LOADING to FULL, Loading Done
+R3(config-router)#
+
+- Konfigurasi OSPF pada Router A
+A(config)#router ospf 1
+A(config-router)#network 10.10.10.0 0.0.0.255 are 0
+A(config-router)#
+*Mar  1 02:36:52.703: %OSPF-5-ADJCHG: Process 1, Nbr 23.23.23.2 on FastEthernet0/0 from LOADING to FULL, Loading Done
+A(config-router)#
+
+- Konfigurasi OSPF pada Router B
+B(config)#router ospf 2
+B(config-router)#network 10.10.10.0 0.0.0.255 are 0
+B(config-router)#
+*Mar  1 02:37:27.811: %OSPF-5-ADJCHG: Process 2, Nbr 10.10.10.1 on FastEthernet0/1 from LOADING to FULL, Loading Done
+B(config-router)#
+
+- Konfigurasi OSPF pada Router C
+C(config)#router ospf 1
+C(config-router)#network 20.20.20.0 0.0.0.255 are 0
+C(config-router)#
+*Mar  1 02:33:40.883: %OSPF-5-ADJCHG: Process 1, Nbr 23.23.23.3 on FastEthernet0/0 from LOADING to FULL, Loading Done
+C(config-router)#
+
+- Konfigurasi OSPF pada Router D
+D(config)#router ospf 2
+D(config-router)#network 20.20.20.0 0.0.0.255 are 0
+D(config-router)#
+*Mar  1 02:32:30.059: %OSPF-5-ADJCHG: Process 2, Nbr 20.20.20.1 on FastEthernet0/1 from LOADING to FULL, Loading Done
+D(config-router)#do sh ip route
+Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     20.0.0.0/24 is subnetted, 1 subnets
+C       20.20.20.0 is directly connected, FastEthernet0/1
+     23.0.0.0/24 is subnetted, 1 subnets
+O       23.23.23.0 [110/11] via 20.20.20.1, 00:00:18, FastEthernet0/1
+     10.0.0.0/24 is subnetted, 1 subnets
+O       10.10.10.0 [110/21] via 20.20.20.1, 00:00:18, FastEthernet0/1
+D(config-router)#
+
+- Test Ping dari router D
+D(config-router)#do ping 10.10.10.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.10.10.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 36/52/80 ms
+D(config-router)#do ping 23.23.23.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 23.23.23.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 28/36/40 ms
+D(config-router)#
+
+
+- Test Ping dari Router 3
+R3(config-router)#do ping vrf C 23.23.23.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 23.23.23.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 16/20/24 ms
+R3(config-router)#do ping vrf D 23.23.23.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 23.23.23.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 20/23/32 ms
+R3(config-router)#do ping vrf C 10.10.10.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.10.10.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 16/30/44 ms
+R3(config-router)#do ping vrf D 10.10.10.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.10.10.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 16/25/36 ms
+R3(config-router)#
+
+- Lihat Table Routing dari R3
+R3(config-router)#do sh ip route vrf C
+
+Routing Table: C
+Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     20.0.0.0/24 is subnetted, 1 subnets
+C       20.20.20.0 is directly connected, FastEthernet0/0
+     23.0.0.0/24 is subnetted, 1 subnets
+C       23.23.23.0 is directly connected, FastEthernet1/0.1
+     10.0.0.0/24 is subnetted, 1 subnets
+O       10.10.10.0 [110/11] via 23.23.23.2, 00:22:10, FastEthernet1/0.1
+R3(config-router)#
+
+- Lihat semua Table Routing
+R3(config-router)#do sh ip route vrf *
+Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+
+Routing Table: C
+Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     20.0.0.0/24 is subnetted, 1 subnets
+C       20.20.20.0 is directly connected, FastEthernet0/0
+     23.0.0.0/24 is subnetted, 1 subnets
+C       23.23.23.0 is directly connected, FastEthernet1/0.1
+     10.0.0.0/24 is subnetted, 1 subnets
+O       10.10.10.0 [110/11] via 23.23.23.2, 00:23:01, FastEthernet1/0.1
+
+Routing Table: D
+Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     20.0.0.0/24 is subnetted, 1 subnets
+C       20.20.20.0 is directly connected, FastEthernet0/1
+     23.0.0.0/24 is subnetted, 1 subnets
+C       23.23.23.0 is directly connected, FastEthernet1/0.2
+     10.0.0.0/24 is subnetted, 1 subnets
+O       10.10.10.0 [110/11] via 23.23.23.2, 00:22:22, FastEthernet1/0.2
+R3(config-router)#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
