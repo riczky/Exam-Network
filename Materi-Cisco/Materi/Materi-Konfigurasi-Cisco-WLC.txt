@@ -1,0 +1,282 @@
+Cisco | Materi Konfigurasi Cisco WLC
+
+Study Case:
+- Sebuah kantor dengan 3  lantai
+- Pada setiap lantai dilengkapi dengan 1 Accespoint yang dikontrol 1 WLC
+- Terdapat 3 SSID yang di Plot berbeda untuk setiap AP
+- Lantai 1: Tamu, Magang, Karyawan.
+- Lantai 2: Magang, Karyawan
+- Lantai 3: Karyawan
+- DHCP dikelola oleh sebuah PC Server dan manajemen dikelola oleh PC Admin
+- AP, WLC, PC Server dan PC Admin seluruhnya terkoneksi ke 1 Switch
+
+
+Penyelesaian:
+- Siapkan Device
+1 WLC (2504)
+3 LWAP (3702)
+1 Switch (2960-24TT)
+1 Server (Server-PT)
+1 PC (Admin)
+
+- Hubungkan LWAP Lt.1 dengan Switch menggunakan kabel Straight (gi0 - fa0/1)   
+- Hubungkan LWAP Lt.2 dengan Switch menggunakan kabel Straight (gi0 - fa0/2)
+- Hubungkan LWAP Lt.3 dengan Switch menggunakan kabel Straight (gi0 - fa0/3)
+
+- Hubungkan Server dengan Switch menggunakan kabel Straight (fa0 - fa0/4) 
+- Hubungkan PC dengan Switch menggunakan kabel Straight (fa0 - fa0/5)
+- Hubungkan WLC dengan Switch menggunakan kabel Straight (fa1 - fa0/6)
+
+- Konfigurasi Server (DHCP Server)
+Klik Server -> Desktop -> IP Configuration
+192.168.100.1
+255.255.255.0
+192.168.100.1
+192.168.100.1
+
+Klik Server -> Service -> DHCP
+Default Gateway: 192.168.100.1
+DNS Server: 192.168.100.1
+Start IP Addr: 192.168.100.100
+Subnet Mask: 255.255.255.0
+Max Num. User: 50
+Service:On 
+Save
+
+- Konfigurasi PC
+Klik PC -> Desktop -> IP Configuration -> DHCP
+
+- Konfigurasi WLC
+Klik WLC -> Config -> Management
+Ip Addr: 192.168.100.10
+Subnet Mask: 255.255.255.0
+Gateway: 192.168.100.1
+Dns Server: 192.168.100.1
+
+- Konfigurasi LWAP Lt. 1
+Aktifkan LWAP Lt. 1 -> Drag Adapter ke Port Power 
+
+#LWAP Lt.1 -> Config -> Global
+Display Name: AP-LT1
+
+#LWAP Lt.1 -> Config -> WLC
+Primary Controller: 192.168.100.10
+
+#LWAP Lt.1 -> Config -> GigaEthernet 0
+IP Configuration
+DHCP (v)
+
+
+- Konfigurasi LWAP Lt. 2
+Aktifkan LWAP Lt. 2 -> Drag Adapter ke Port Power 
+
+#LWAP Lt.2 -> Config -> Global
+Display Name: AP-LT2
+
+#LWAP Lt.2 -> Config -> WLC
+Primary Controller: 192.168.100.10
+
+#LWAP Lt.2 -> Config -> GigaEthernet 0
+IP Configuration
+DHCP (v)
+
+
+- Konfigurasi LWAP Lt. 3
+
+Aktifkan LWAP Lt. 3 -> Drag Adapter ke Port Power 
+
+#LWAP Lt.3 -> Config -> Global
+Display Name: AP-LT3
+
+#LWAP Lt.3 -> Config -> WLC
+Primary Controller: 192.168.100.10
+
+#LWAP Lt.3 -> Config -> GigaEthernet 0
+IP Configuration
+DHCP (v)
+
+- Akses WLC menggunakan PC Client
+Klik PC Client -> Browser ->http://192.168.100.10
+
+Username: admin
+Password: Admin123
+Re-type Password: Admin123
+
+System Name: Jaringan Kantor ABC
+Management IP Address: 192.168.100.10
+Subnet Mask: 255.255.255.0
+Def. Gateway: 192.168.100.1
+Next,
+
+Employee Network (Check)
+Network Name: karyawan
+Security: WPA2 Personal
+Passphrase : 12345678
+Confirm-Passphrase : 12345678
+Next
+Advanced Settings
+Next,
+Apply, Oke
+
+- Akses WLC menggunakan PC Client
+Klik PC Client -> Browser ->https://192.168.100.10
+
+#Create WLAN SSID magang
+WLAN -> Create New -> Go
+Type: WLAN
+Profile Name: magang
+SSID: magang
+ID: 2
+Apply
+
+*General
+Status: enabled v(Check)
+
+*Security
+Layer2 Security: WPA + WPA2
+WPA2 Policy v(Check)
+WPA2 Encryption v(Check)
+
+PSK: Enable v(Check)
+PSK Format: ASCII
+12345678
+
+Apply
+
+#Create WLAN SSID tamu
+WLAN -> Create New -> Go
+
+Type: WLAN
+Profile Name: tamu
+SSID: tamu
+ID: 3
+Apply
+
+*General
+Status: enabled v(Check)
+
+*Security
+Layer2 Security: WPA + WPA2
+WPA2 Policy v(Check)
+WPA2 Encryption v(Check)
+
+PSK: Enable v(Check)
+PSK Format: ASCII
+12345678
+
+Apply
+
+- Konfigurasi AP sesuai Lt. yang dibutuhkan (Tamu, Magang, Karyawan)
+(Pengelompokan berdasarkan: Lokasi, Hak Akses, Tipe Perangkat)
+
+Advanced -> AP Groups -> Add Group
+AP Group Name: aplt1
+Description: ap untuk lantai 1
+Add
+
+Advanced -> AP Groups -> Add Group
+AP Group Name: aplt2
+Description: ap untuk lantai 2
+Add
+
+Advanced -> AP Groups -> Add Group
+AP Group Name: aplt3
+Description: ap untuk lantai 3
+Add
+
+
+# Pengelompokan LWAP Sesuai kebutuhan Lokasi Lt.1
+Klik WLANs -> AP Group Name
+aplt1 -> WLAN'S -> Add New
+
+WLAN SSID: karyawan(1)
+Add
+
+WLAN SSID: magang(2)
+Add
+
+WLAN SSID: tamu(3)
+Add
+
+# Set LWAP untuk menjadi anggota Lt. 1
+Klik WLAN's -> APs
+v(Check) AP-Lt1
+Add Aps, Ok, Apply
+
+
+# Pengelompokan LWAP Sesuai kebutuhan Lokasi Lt.2
+Klik WLANs -> AP Group Name
+aplt2 -> WLAN'S -> Add New
+
+WLAN SSID: karyawan(1)
+Add
+
+WLAN SSID: magang(2)
+Add
+
+# Set LWAP untuk menjadi anggota Lt. 2
+Klik WLAN's -> APs
+v(Check) AP-Lt2
+Add Aps, Ok , Apply
+
+
+# Pengelompokan LWAP Sesuai kebutuhan Lokasi Lt.3
+Klik WLANs -> AP Group Name
+aplt3 -> WLAN'S -> Add New
+
+WLAN SSID: karyawan(1)
+Add
+
+# Set LWAP untuk menjadi anggota Lt. 3
+Klik WLAN's -> APs
+v(Check) AP-Lt3
+Add Aps, Ok , Apply
+
+
+- Tambahkan 1 LWAP pada Lt. 2 jika terjadi blank spot/tidak cukup tercover oleh 1 LWAP 
+dengan Hak Akses yang sama.
+
+1 LWAP (3702i)
+
+Aktifkan LWAP Lt. 2 (Perangkat yang baru +) -> Drag Adapter ke Port Power 
+
+#LWAP Lt.2 -> Config -> Global
+Display Name: AP-LT2-2
+
+Gateway/DnsIPv4
+DHCP
+
+#LWAP Lt.2 -> Config -> WLC
+Primary Controller: 192.168.100.10
+
+#LWAP Lt.2 -> Config -> GigaEthernet 0
+IP Configuration
+DHCP (v)
+
+- Hubungkan Switch dan AP-Lt2-2 dengan kabel straight (fa0/7 - gi0) 
+
+# Pengelompokan LWAP Sesuai kebutuhan Lokasi Lt.2 AP-Lt2-2
+Klik WLANs -> Advanced -> AP Groups -> AP Group Name
+aplt2 -> APs
+
+Klik WLAN's -> APs
+v(Check) AP-Lt2-2
+Add Aps, Ok , Apply
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
