@@ -1,0 +1,82 @@
+Spanning Tree Protokol | Cisco Packet Tracert 
+Materi Fiber Optik
+
+
+Spanning Tree Protokol berfungsi untuk mencegah terjadinya looping pada
+sebuah pengiriman data. STP difungsikan apabila terdapat 2 atau lebih
+jalur yang menuju ke 1 tujuan yang sama, STP akan melakukan blocking thdp
+1 atau ke beberapa port yang nantinya hanya ada 1 jalur yang digunakan utk
+mengirim data. sementara utk jalur yang diblock akan dijadikan cadangan 
+ketika jalur utama yg dgunakan mengalami down.
+
+Routes Bridges = Switch yang memiliki port yang semuanya aktif,
+Ketentuan: Priority, Mac Address Terkecil, No.Port Terkecil
+Non Routes Bridges = Switch yang bukan routes bridges, apabila hanya ada 2 switch
+		     maka Non Routes Bridges adalah switch yang salah satunya atau
+		     beberapa portnya mengalami blocking yg bertujuan utk 
+		     mencegah terjadinya looping.
+
+- Siapkan Device:
+Topologi 1:
+2 Switch 2950-24
+2 PC
+
+Topologi 2:
+2 Switch 2950-24
+2 PC
+
+Topologi 3:
+3 Switch 2950-24
+3 PC
+
+- Hubungkan Device Topologi 1
+
+- Hubungkan Device Topologi 2
+
+- Hubungkan Device Topologi 3
+
+- Konfigurasi Switch1 Topologi 1
+#Melihat Routes Bridge pada Switch
+Switch#show spanning-tree
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    32769
+             Address     0001.4366.BE06
+             This bridge is the root
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     0001.4366.BE06
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/3            Desg FWD 19        128.3    P2p
+Fa0/1            Desg FWD 19        128.1    P2p
+Fa0/2            Desg FWD 19        128.2    P2p
+
+Switch#
+
+- Konfigurasi PC 1 dan PC 2 Topologi 1
+192.168.1.1
+255.255.255.0
+
+192.168.1.2
+255.255.255.0
+
+- Memindahkan Routes Bridge (Kelipatan 4096)
+#Mengganti Priority Konfigurasi Switch1 Topologi 3
+Switch(config)#spanning-tree vlan 1 priority 8
+% Bridge Priority must be in increments of 4096.
+% Allowed values are:
+  0     4096  8192  12288 16384 20480 24576 28672
+  32768 36864 40960 45056 49152 53248 57344 61440
+Switch(config)#
+
+Switch(config)>spanning-tree vlan 1 priority 4096
+
+#Mematikan Switch Routes Bridge Konfigurasi Switch1 Topologi 3
+#Untuk mengaktifkan Switch non Routes Bridge
+switch(config)>int fa0/2
+switch(config-if)>shutdown
