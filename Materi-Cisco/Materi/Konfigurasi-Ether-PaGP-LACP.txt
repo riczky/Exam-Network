@@ -1,0 +1,214 @@
+Ether Channel - Cisco Packet Tracert
+
+Ether channel merupakan fitur salah satu fitur dalam jaringan yang berfungsi
+untuk menggabungkan beberapa jalur menjadi satu, dengan tujuan meningkatkan
+bandwith dan sebagai jalur cadangan.
+
+Jenis Ether Channel:
+PAgp - Port Aggregation Protocol (Cisco)
+LACP - Link Aggregation Protocol (IEEE)
+EtherChannel (Cisco Manual)
+
+Simulasi:
+
+- Siapkan Device
+3 Switch 2960
+2 Pc 
+1 Server
+
+- Hubungkan PC1 dan switch1 dengan 1 kabel straight (Fa0 - Gi0/1) 
+- Hubungkan PC2 dan switch2 dengan 1 kabel straight (Fa0 - Gi0/1) 
+- Hubungkan Server dan switch3 dengan 1 kabel straight (Fa0 - Gi0/1)
+ 
+- Hubungkan Switch 1 dan Switch 2 dengan 2 kabel straight (Fa0/1 - Fa0/1) 
+(Fa0/2 - Fa0/2)
+
+- Hubungkan Switch 2 dan Switch 3 dengan 4 kabel straight (Fa0/11 - Fa0/11) 
+(Fa0/12 - Fa0/12) (Fa0/13 - Fa0/13) (Fa0/14 - Fa0/14)
+
+- Hubungkan Switch 1 dan Switch 3 dengan 4 kabel straight (Fa0/21 - Fa0/21) 
+(Fa0/22 - Fa0/22) (Fa0/23 - Fa0/23) (Fa0/24 - Fa0/24)
+
+- Konfigurasi Switch 1 Active LACP
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int range fa0/1-2
+Switch(config-if-range)#channel-group 1 mode ?
+  active     Enable LACP unconditionally
+  auto       Enable PAgP only if a PAgP device is detected
+  desirable  Enable PAgP unconditionally
+  on         Enable Etherchannel only
+  passive    Enable LACP only if a LACP device is detected
+Switch(config-if-range)#channel-group 1 mode active
+Switch(config-if-range)#
+Creating a port-channel interface Port-channel 1
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to up
+
+Switch(config-if-range)#
+
+- Konfigurasi Switch 2 Passive LACP
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int range fa0/1-2
+Switch(config-if-range)#channel-group 1 mode passive
+Switch(config-if-range)#
+Creating a port-channel interface Port-channel 1
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to up
+
+Switch(config-if-range)#
+
+- Konfigurasi Switch 2 Desirable PaGP (Active)
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int range fa0/11-14
+Switch(config-if-range)#channel-group 2 mode ?
+  active     Enable LACP unconditionally
+  auto       Enable PAgP only if a PAgP device is detected
+  desirable  Enable PAgP unconditionally
+  on         Enable Etherchannel only
+  passive    Enable LACP only if a LACP device is detected
+Switch(config-if-range)#channel-group 2 mode desirable 
+Switch(config-if-range)#
+Creating a port-channel interface Port-channel 2
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/11, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/11, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/12, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/12, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/13, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/13, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/14, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/14, changed state to up
+
+Switch(config-if-range)#
+
+- Konfigurasi Switch 3 Auto PaGP (Passive)
+
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int range fa0/11-14
+Switch(config-if-range)#channel-group 2 mode ?
+  active     Enable LACP unconditionally
+  auto       Enable PAgP only if a PAgP device is detected
+  desirable  Enable PAgP unconditionally
+  on         Enable Etherchannel only
+  passive    Enable LACP only if a LACP device is detected
+Switch(config-if-range)#channel-group 2 mode auto
+Switch(config-if-range)#
+Creating a port-channel interface Port-channel 2
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/11, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/11, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/12, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/12, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/13, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/13, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/14, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/14, changed state to up
+
+Switch(config-if-range)#
+%LINK-5-CHANGED: Interface Port-channel2, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Port-channel2, changed state to up
+
+- Konfigurasi Switch 3 On EtherChannel
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int range fa0/21-24
+Switch(config-if-range)#channel-group 3 mode ?
+  active     Enable LACP unconditionally
+  auto       Enable PAgP only if a PAgP device is detected
+  desirable  Enable PAgP unconditionally
+  on         Enable Etherchannel only
+  passive    Enable LACP only if a LACP device is detected
+Switch(config-if-range)#channel-group 3 mode on
+Switch(config-if-range)#
+Creating a port-channel interface Port-channel 3
+
+%LINK-5-CHANGED: Interface Port-channel3, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Port-channel3, changed state to up
+
+Switch(config-if-range)#
+
+- Konfigurasi Switch 1 On EtherChannel
+
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int range fa0/21-24
+Switch(config-if-range)#channel-group 3 mode ?
+  active     Enable LACP unconditionally
+  auto       Enable PAgP only if a PAgP device is detected
+  desirable  Enable PAgP unconditionally
+  on         Enable Etherchannel only
+  passive    Enable LACP only if a LACP device is detected
+Switch(config-if-range)#channel-group 3 mode on
+Switch(config-if-range)#
+Creating a port-channel interface Port-channel 3
+
+%LINK-5-CHANGED: Interface Port-channel3, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Port-channel3, changed state to up
+
+Switch(config-if-range)#
+
+- Konfigurasi PC 1
+192.168.01
+255.255.255.0
+- Konfigurasi PC 2
+192.168.01
+255.255.255.0
+- Konfigurasi Server
+192.168.01
+255.255.255.0
+
+- Test Ping dari PC ke PC dan Server
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,179 @@
+Cisco | Konfigurasi Failover dengan HSRP (Hot Standby Router Protocol)
+
+Router A : Priority
+Router B : Standby
+- Siapkan device:
+3 Router (Router 2811)
+1 Switch (2960-24)
+2 PC
+
+- Hubungkan Router 2 dan Router A dengan Kabel Serial (se2/0 - se2/0)
+- Hubungkan Router 2 dan Router B dengan Kabel Serial (se3/0 - se2/0)
+
+- Hubungkan Router A dan Switch dengan kabel Straight (fa0/0 - fa0/1)
+- Hubungkan Router B dan Switch dengan kabel Straight (fa0/0 - fa0/2)
+
+- Hubungkan Switch dan PC 1 dengan kabel Straight (fa0/3 -fa0)
+- Hubungkan Switch dan PC 2 dengan kabel Straight (fa0/4 -fa0)
+
+- Konfigurasi Router 2 IP dan Loopback Interface
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname R2
+R2(config)#int lo 0
+
+R2(config-if)#
+%LINK-5-CHANGED: Interface Loopback0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Loopback0, changed state to up
+R2(config-if)#ip add 8.8.8.8 255.255.255.255
+R2(config-if)#ex
+
+R2(config)#int se2/0
+R2(config-if)#ip add 11.11.11.1 255.255.255.252
+R2(config-if)#no sh
+%LINK-5-CHANGED: Interface Serial2/0, changed state to down
+
+R2(config)#int se3/0
+R2(config-if)#ip add 12.12.12.1 255.255.255.252
+R2(config-if)#no sh
+%LINK-5-CHANGED: Interface Serial3/0, changed state to down
+R2(config-if)#ex
+
+
+- Konfigurasi OSPF pada Router 2
+Router(config)#router ospf 1
+Router(config-router)#network 8.8.8.8 0.0.0.0 area 0
+Router(config-router)#network 11.11.11.0 0.0.0.3 area 0
+Router(config-router)#
+00:02:13: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.10.2 on Serial2/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#network 12.12.12.0 0.0.0.3 area 0
+Router(config-router)#
+
+	
+- Konfigurasi Interface Router A
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#Hostname A
+A(config)#int se2/0
+A(config-if)#ip add 11.11.11.2 255.255.255.252
+A(config-if)#no sh
+A(config-if)#
+%LINK-5-CHANGED: Interface Serial2/0, changed state to up
+
+
+A(config)#int fa0/0
+A(config-if)#ip add 192.168.10.2 255.255.255.0
+A(config-if)#no sh
+
+A(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+- Konfigurasi ospf Router A
+Router(config)#router ospf 1
+Router(config-router)#network 11.11.11.0 0.0.0.3 area 0
+Router(config-router)#
+00:03:22: %OSPF-5-ADJCHG: Process 1, Nbr 8.8.8.8 on Serial2/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#network 192.168.10.0 0.0.0.255 area 0
+Router(config-router)#
+00:05:08: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.10.3 on FastEthernet0/0 from LOADING to FULL, Loading Done
+
+- Konfigurasi Interface Router B
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname B
+B(config)#int se2/0
+B(config-if)#ip add 12.12.12.2 255.255.255.252
+B(config-if)#no sh
+B(config-if)#
+%LINK-5-CHANGED: Interface Serial2/0, changed state to up
+
+B(config-if)#ex
+B(config)#int fa0/0
+B(config-if)#ip add 192.168.10.3 255.255.255.0
+B(config-if)#no sh
+B(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+- Konfigurasi OSPF pada Router B
+Router(config)#router ospf 1
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Serial2/0, changed state to up
+
+Router(config-router)#network 192.168.10.0 0.0.0.255 area 0
+Router(config-router)#network 12.12.12.0 0.0.0.3 area 0
+00:04:42: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.10.2 on FastEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#
+00:04:51: %OSPF-5-ADJCHG: Process 1, Nbr 8.8.8.8 on Serial2/0 from LOADING to FULL, Loading Done
+
+- Konfigurasi HSRP Pada Router A
+A#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+A(config)#int fa0/0
+A(config-if)#standby 1 ip 192.168.10.1
+A(config-if)#standby 1 preempt
+B(config-if)#standby 1 priority 100
+A(config-if)#
+%HSRP-6-STATECHANGE: FastEthernet0/0 Grp 1 state Speak -> Standby
+
+%HSRP-6-STATECHANGE: FastEthernet0/0 Grp 1 state Standby -> Active
+
+A(config-if)#
+
+- Konfigurasi HSRP Pada Router B
+B(config)#int fa0/0
+B(config-if)#standby 1 ip 192.168.10.1
+B(config-if)#standby 1 preempt
+B(config-if)#standby 1 priority 105
+%HSRP-6-STATECHANGE: FastEthernet0/0 Grp 1 state Speak -> Standby
+
+B(config-if)#
+ %HSRP-6-STATECHANGE: FastEthernet0/0 Grp 1 state Standby -> Active
+
+B(config-if)#
+B#
+%SYS-5-CONFIG_I: Configured from console by console
+
+- Test Ping  menggunakan PC 1 (Priority 192.168.10.3)
+ping 192.168.10.1 
+ping 192.168.10.2
+ping 192.168.10.3
+ping 8.8.8.8
+
+C:\>tracert 8.8.8.8
+
+Tracing route to 8.8.8.8 over a maximum of 30 hops: 
+
+  1   7 ms      0 ms      1 ms      192.168.10.3
+  2   0 ms      0 ms      0 ms      8.8.8.8
+
+Trace complete.
+
+C:\>
+
+- Putuskan Kabel Router B yang terhubung ke Switch (fa0/0 - fa0/2)
+C:\>tracert 8.8.8.8
+
+Tracing route to 8.8.8.8 over a maximum of 30 hops: 
+
+  1   0 ms      1 ms      1 ms      192.168.10.3
+  2   4294967295 ms*         1 ms      192.168.10.3
+  3   *         2 ms      *         Request timed out.
+  4   4294967295 ms*         0 ms      192.168.10.3
+  5   *         *         1 ms      192.168.10.2
+  6   *         3 ms      *         Request timed out.
+  7   1 ms      *         3 ms      192.168.10.2
+  8   
+Control-C
+^C
+C:\>
+
+
+
+
+

@@ -1,0 +1,185 @@
+Konfigurasi Vlan Trunk + VTP (Router on a Stick)
+
+- Siapkan Device
+1 Router 1841
+3 Switch 2950-24
+4 PC
+
+- Hubungkan semua interface dengan kabel automatic
+
+- Konfigurasi Switch 1
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int range fa0/23-24
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport mode trunk
+
+Switch(config)#vlan 10
+Switch(config-vlan)#name Kadin
+Switch(config-vlan)#ex
+Switch(config)#vlan 20
+Switch(config-vlan)#name Kasi
+Switch(config-vlan)#ex
+Switch(config)#vlan 30
+Switch(config-vlan)#name Kabid
+Switch(config-vlan)#ex
+Switch(config)#vtp mode server
+Device mode already VTP SERVER.
+Switch(config)#vtp domain belajar
+Changing VTP domain name from NULL to belajar
+Switch(config)#vtp password jaringan
+Setting device VLAN database password to jaringan
+Switch(config)#do sh vl br
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10, Fa0/11, Fa0/12
+                                                Fa0/13, Fa0/14, Fa0/15, Fa0/16
+                                                Fa0/17, Fa0/18, Fa0/19, Fa0/20
+                                                Fa0/21, Fa0/22
+10   Kadin                            active    
+20   Kasi                             active    
+30   Kabid                            active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+Switch(config)#
+
+- Konfigurasi Switch 2
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int fa0/24
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport mode trunk
+
+Switch(config-if)#ex
+Switch(config)#vtp mode client
+Setting device to VTP CLIENT mode.
+Switch(config)#vtp domain belajar
+Changing VTP domain name from NULL to belajar
+Switch(config)#vtp password jaringan
+Setting device VLAN database password to jaringan
+Switch(config)#do sh vlan br
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10, Fa0/11, Fa0/12
+                                                Fa0/13, Fa0/14, Fa0/15, Fa0/16
+                                                Fa0/17, Fa0/18, Fa0/19, Fa0/20
+                                                Fa0/21, Fa0/22, Fa0/23
+10   Kadin                            active    
+20   Kasi                             active    
+30   Kabid                            active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+Switch(config)#
+
+Switch(config)#int range fa0/1-10
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 10
+Switch(config-if-range)#ex
+Switch(config)#int range fa0/11-20
+Switch(config-if-range)#switchport mode access 
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#ex
+Switch(config)#do sh vlan br
+
+
+- Konfigurasi Switch 3
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int fastEthernet 0/23
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport mode trunk
+
+Switch(config-if)#ex
+Switch(config)#vtp mode client
+Setting device to VTP CLIENT mode.
+Switch(config)#vtp domain belajar
+Changing VTP domain name from NULL to belajar
+Switch(config)#vtp password jaringan
+Setting device VLAN database password to jaringan
+Switch(config)#do sh vlan br
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10, Fa0/11, Fa0/12
+                                                Fa0/13, Fa0/14, Fa0/15, Fa0/16
+                                                Fa0/17, Fa0/18, Fa0/19, Fa0/20
+                                                Fa0/21, Fa0/22, Fa0/24
+10   Kadin                            active    
+20   Kasi                             active    
+30   Kabid                            active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+Switch(config)#
+
+Switch(config)#int range fa0/1-10
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#ex
+Switch(config)#int range fa0/11-20
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#
+Switch(config-if-range)#ex
+Switch(config)#do sh vl br
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/21, Fa0/22, Fa0/24
+10   Kadin                            active    
+20   Kasi                             active    Fa0/11, Fa0/12, Fa0/13, Fa0/14
+                                                Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20
+30   Kabid                            active    Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+Switch(config)#
+
+- Konfigurasi Router
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#no sh
+Router(config-if)#int fa0/0.10
+Router(config-subif)#encapsulation dot1Q 10
+Router(config-subif)#ip add 192.168.10.1 255.255.255.0
+Router(config-subif)#ex
+Router(config)#int fa0/0.20
+Router(config-subif)#encapsulation dot1Q 20
+Router(config-subif)#ip add 192.168.20.1 255.255.255.0
+Router(config-subif)#ex
+Router(config)#int fa0/0.30
+Router(config-subif)#encapsulation dot1Q 30
+Router(config-subif)#ip add 192.168.30.1 255.255.255.0
+Router(config-subif)#ex
+Router(config-if)#
+
+- Konfigurasi Trunk Switch 1 ke Router
+Switch(config)#int fa0/1
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport mode trunk
+Switch(config-if)#ex
+
+
+- Konfigurasi PC
+

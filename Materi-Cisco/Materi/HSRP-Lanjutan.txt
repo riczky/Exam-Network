@@ -1,0 +1,52 @@
+HSRP 2 Switch
+https://ilmiteknik.co.id/konfigurasi-hsrp-hot-standby-router-protocol-pada-router-cisco
+
+Default Priority = 100
+Priority Terbesar yang akan menjadi Router Active
+
+Router(config)#interface gig0/0
+Router(config-if)#standby 1 ip 192.168.1.1
+Router(config-if)#standby 1 priority 200
+Router(config-if)#standby 1 preempt
+Router(config-if)#exit
+Router(config)#interface gig0/1
+Router(config-if)#standby 1 ip 192.168.2.1
+Router(config-if)#standby 1 priority 200
+Router(config-if)#standby 1 preempt
+Router(config-if)#do writeBuilding configuration...[OK]
+Router(config-if)#
+
+
+Router(config)#interface gig0/0
+Router(config-if)#standby 1 ip 192.168.1.1
+Router(config-if)#standby 1 priority 100
+Router(config-if)#standby 1 preempt
+Router(config-if)#exit
+Router(config)#interface gig0/1
+Router(config-if)#standby 1 ip 192.168.2.1
+Router(config-if)#standby 1 priority 100
+Router(config-if)#standby 1 preempt
+Router(config-if)#do writeBuilding configuration...[OK]
+Router(config-if)#
+
+
+ROUTER-GATEWAY-01#sh standby brief 
+                     P indicates configured to preempt.
+                     |
+Interface   Grp Prio P State    Active          Standby         Virtual IP     
+Fa0/1       1   105  P Init     unknown         unknown         172.100.100.254
+ROUTER-GATEWAY-01#                 
+ROUTER-GATEWAY-01#sh standby fa0/1 
+FastEthernet0/1 - Group 1
+  State is Init (interface down)
+    5 state changes, last state change 00:00:51
+  Virtual IP address is 172.100.100.254
+  Active virtual MAC address is unknown
+    Local virtual MAC address is 0000.0c07.ac01 (v1 default)
+  Hello time 3 sec, hold time 10 sec
+  Preemption enabled
+  Active router is unknown
+  Standby router is unknown
+  Priority 105 (configured 105)
+  IP redundancy name is "hsrp-Fa0/1-1" (default)
+ROUTER-GATEWAY-01#
