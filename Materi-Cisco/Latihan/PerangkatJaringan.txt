@@ -1,0 +1,28 @@
+Router adalah perangkat yang mengelola lalu lintas antar jaringan dengan
+meneruskan paket data ke alamat ip yang dituju.
+
+Switch adalah sebuah perangkat jaringan yang tugasnya untuk menghubungkan
+beberapa perangkat, untuk bisa melakukan pertukaran paket data, baik dalam 
+proses penerimaan, serta meneruskan data ke perangkat lain.
+
+LAN adalah jaringan komputer yang cakupan wilayahnya hanya mencakup wilayah
+lokal saja.
+
+VPN adalah salah satu metode yang sering digunakan untuk menghubungkan 
+antar lokasi yang berbeda agar menjadi satu kesatuan jaringan.
+
+Gateway adalah sebuah perangkat yang bertugas untuk menyambungkan satu 
+jaringan komputer terhadap jaringan komputer lainnya dengan protokol 
+informasi yang berbeda.
+
+Menghubungkan koneksi BGP dari Provider menggunakan Link Metro Ethernet
+
+IP Point to Point
+Menentukan Jalur Primary dan Secondary
+IP Host 
+IP Advertize
+IP Neighbor - AS
+
+
+
+
