@@ -1,0 +1,305 @@
+
+Cost OSPF Cisco
+
+auto-cost reference-bandwidth 1000
+
+
+Reference Bandwidth
+--------------------
+interface Bandwidth
+
+FastEthernet: 
+1000
+---	= 10
+10
+
+GigabitEthernet:
+1000
+----	= 1	
+1000
+
+
+- Siapkan 3 Router Cisco
+- Hubungkan menggunakan kabel Cross
+
+- Konfigurasi Router 1
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 30.30.30.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#int gi6/0
+Router(config-if)#ip add 10.10.10.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet6/0, changed state to up
+
+Router(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet6/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#router ospf 1
+Router(config-router)#router-id 1.1.1.1
+Router(config-router)#network 10.10.10.0 0.0.0.255 area 0
+Router(config-router)#network 30.30.30.0 0.0.0.255 area 0
+Router(config-router)#
+00:06:27: %OSPF-5-ADJCHG: Process 1, Nbr 2.2.2.2 on GigabitEthernet6/0 from LOADING to FULL, Loading Done
+
+00:06:34: %OSPF-5-ADJCHG: Process 1, Nbr 3.3.3.3 on FastEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#do sh run | s ospf
+router ospf 1
+ router-id 1.1.1.1
+ log-adjacency-changes
+ network 10.10.10.0 0.0.0.255 area 0
+ network 30.30.30.0 0.0.0.255 area 0
+Router(config-router)#end
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Router#sh ip ospf int gi6/0
+
+GigabitEthernet6/0 is up, line protocol is up
+  Internet address is 10.10.10.1/24, Area 0
+  Process ID 1, Router ID 1.1.1.1, Network Type BROADCAST, Cost: 1
+  Transmit Delay is 1 sec, State BDR, Priority 1
+  Designated Router (ID) 2.2.2.2, Interface address 10.10.10.2
+  Backup Designated Router (ID) 1.1.1.1, Interface address 10.10.10.1
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+    Hello due in 00:00:03
+  Index 1/1, flood queue length 0
+  Next 0x0(0)/0x0(0)
+  Last flood scan length is 1, maximum is 1
+  Last flood scan time is 0 msec, maximum is 0 msec
+  Neighbor Count is 1, Adjacent neighbor count is 1
+    Adjacent with neighbor 2.2.2.2  (Designated Router)
+  Suppress hello for 0 neighbor(s)
+Router#sh ip ospf int fa0/0
+
+FastEthernet0/0 is up, line protocol is up
+  Internet address is 30.30.30.1/24, Area 0
+  Process ID 1, Router ID 1.1.1.1, Network Type BROADCAST, Cost: 1
+  Transmit Delay is 1 sec, State BDR, Priority 1
+  Designated Router (ID) 3.3.3.3, Interface address 30.30.30.2
+  Backup Designated Router (ID) 1.1.1.1, Interface address 30.30.30.1
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+    Hello due in 00:00:07
+  Index 2/2, flood queue length 0
+  Next 0x0(0)/0x0(0)
+  Last flood scan length is 1, maximum is 1
+  Last flood scan time is 0 msec, maximum is 0 msec
+  Neighbor Count is 1, Adjacent neighbor count is 1
+    Adjacent with neighbor 3.3.3.3  (Designated Router)
+  Suppress hello for 0 neighbor(s)
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#router ospf 1
+Router(config-router)#?
+  area                   OSPF area parameters
+  auto-cost              Calculate OSPF interface cost according to bandwidth
+  default-information    Control distribution of default information
+  distance               Define an administrative distance
+  exit                   Exit from routing protocol configuration mode
+  log-adjacency-changes  Log changes in adjacency state
+  neighbor               Specify a neighbor router
+  network                Enable routing on an IP network
+  no                     Negate a command or set its defaults
+  passive-interface      Suppress routing updates on an interface
+  redistribute           Redistribute information from another routing protocol
+  router-id              router-id for this OSPF process
+Router(config-router)#auto-cost
+Router(config-router)#auto-cost ?
+  reference-bandwidth  Use reference bandwidth method to assign OSPF cost
+  <cr>
+Router(config-router)#auto-cost refe
+Router(config-router)#auto-cost reference-bandwidth 1000
+% OSPF: Reference bandwidth is changed.
+        Please ensure reference bandwidth is consistent across all routers.
+Router(config-router)#end
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Router#sh ip ospf int gi6/0
+
+GigabitEthernet6/0 is up, line protocol is up
+  Internet address is 10.10.10.1/24, Area 0
+  Process ID 1, Router ID 1.1.1.1, Network Type BROADCAST, Cost: 1
+  Transmit Delay is 1 sec, State BDR, Priority 1
+  Designated Router (ID) 2.2.2.2, Interface address 10.10.10.2
+  Backup Designated Router (ID) 1.1.1.1, Interface address 10.10.10.1
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+    Hello due in 00:00:07
+  Index 1/1, flood queue length 0
+  Next 0x0(0)/0x0(0)
+  Last flood scan length is 1, maximum is 1
+  Last flood scan time is 0 msec, maximum is 0 msec
+  Neighbor Count is 1, Adjacent neighbor count is 1
+    Adjacent with neighbor 2.2.2.2  (Designated Router)
+  Suppress hello for 0 neighbor(s)
+Router#sh ip ospf int fa0/0
+
+FastEthernet0/0 is up, line protocol is up
+  Internet address is 30.30.30.1/24, Area 0
+  Process ID 1, Router ID 1.1.1.1, Network Type BROADCAST, Cost: 10
+  Transmit Delay is 1 sec, State BDR, Priority 1
+  Designated Router (ID) 3.3.3.3, Interface address 30.30.30.2
+  Backup Designated Router (ID) 1.1.1.1, Interface address 30.30.30.1
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+    Hello due in 00:00:07
+  Index 2/2, flood queue length 0
+  Next 0x0(0)/0x0(0)
+  Last flood scan length is 1, maximum is 1
+  Last flood scan time is 0 msec, maximum is 0 msec
+  Neighbor Count is 1, Adjacent neighbor count is 1
+    Adjacent with neighbor 3.3.3.3  (Designated Router)
+  Suppress hello for 0 neighbor(s)
+Router#
+
+- Konfigurasi Router 2
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int gi6/0
+Router(config-if)#ip add 10.10.10.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet6/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet6/0, changed state to up
+
+Router(config-if)#int fa0/0
+Router(config-if)#ip add 20.20.20.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#
+Router(config-if)#ex
+Router(config)#router ospf 2
+Router(config-router)#router-id 2.2.2.2
+Router(config-router)#network 10.10.10.0 0.0.0.255 area 0
+Router(config-router)#network 20.20.20.0 0.0.0.255 area 0
+Router(config-router)#
+00:05:43: %OSPF-5-ADJCHG: Process 2, Nbr 3.3.3.3 on FastEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#
+00:06:32: %OSPF-5-ADJCHG: Process 2, Nbr 1.1.1.1 on GigabitEthernet6/0 from LOADING to FULL, Loading Done
+
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#router ospf 2
+Router(config-router)#aut
+Router(config-router)#auto-cost re
+Router(config-router)#auto-cost reference-bandwidth 1000
+% OSPF: Reference bandwidth is changed.
+        Please ensure reference bandwidth is consistent across all routers.
+Router(config-router)#
+
+- Konfigurasi Router 3
+
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa1/0
+Router(config-if)#ip add 20.20.20.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet1/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet1/0, changed state to up
+
+Router(config-if)#int fa1/0
+Router(config-if)#ip add 30.30.30.2 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#
+Router(config-if)#no ip add 30.30.30.2 255.255.255.0
+Router(config-if)#sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet1/0, changed state to administratively down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet1/0, changed state to down
+
+Router(config-if)#ip add 20.20.20.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet1/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet1/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int fa0/0
+Router(config-if)#ip add 30.30.30.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#
+Router(config-if)#ex
+Router(config)#router ospf 3
+Router(config-router)#router-id 3.3.3.3
+Router(config-router)#network 20.20.20.0 0.0.0.255 area 0
+Router(config-router)#network 30.30.30.0 0.0.0.255 area 0
+Router(config-router)#
+00:06:30: %OSPF-5-ADJCHG: Process 3, Nbr 2.2.2.2 on FastEthernet1/0 from LOADING to FULL, Loading Done
+
+00:07:26: %OSPF-5-ADJCHG: Process 3, Nbr 1.1.1.1 on FastEthernet0/0 from LOADING to FULL, Loading Done
+
+
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#router ospf 3
+Router(config-router)#auto-
+Router(config-router)#auto-cost r
+Router(config-router)#auto-cost reference-bandwidth 1000
+% OSPF: Reference bandwidth is changed.
+        Please ensure reference bandwidth is consistent across all routers.
+Router(config-router)#
+
+
+- Check Cost Router
+Router#sh ip ospf int fa0/0
+
+FastEthernet0/0 is up, line protocol is up
+  Internet address is 30.30.30.1/24, Area 0
+  Process ID 1, Router ID 1.1.1.1, Network Type BROADCAST, Cost: 10
+  Transmit Delay is 1 sec, State BDR, Priority 1
+  Designated Router (ID) 3.3.3.3, Interface address 30.30.30.2
+  Backup Designated Router (ID) 1.1.1.1, Interface address 30.30.30.1
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+    Hello due in 00:00:07
+  Index 2/2, flood queue length 0
+  Next 0x0(0)/0x0(0)
+  Last flood scan length is 1, maximum is 1
+  Last flood scan time is 0 msec, maximum is 0 msec
+  Neighbor Count is 1, Adjacent neighbor count is 1
+    Adjacent with neighbor 3.3.3.3  (Designated Router)
+  Suppress hello for 0 neighbor(s)
+Router#
+
+- Check Konfigurasi Ospf
+Router(config-router)#do sh run | s ospf
+router ospf 1
+ router-id 1.1.1.1
+ log-adjacency-changes
+ network 10.10.10.0 0.0.0.255 area 0
+ network 30.30.30.0 0.0.0.255 area 0

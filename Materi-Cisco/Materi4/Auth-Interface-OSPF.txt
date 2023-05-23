@@ -1,0 +1,164 @@
+Authentication Interface OSPF
+
+
+- Siapkan Device
+3 Router PT
+
+- Hubungkan dengan kabel Cross
+
+- Konfigurasi Router 1
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 12.12.12.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#router ospf 1
+Router(config-router)#network 12.12.12.0 0.0.0.255 area 0
+Router(config-router)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+00:05:24: %OSPF-5-ADJCHG: Process 1, Nbr 24.24.24.1 on FastEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#
+Router(config-router)#ex
+
+- Auth Interface Router 1
+Router(config)#int fa0/0
+Router(config-if)#ip ospf authentication message-digest 
+Router(config-if)#ip ospf message-digest-key 1 md5 P4ssword
+Router(config-if)#do sh ip os nei
+
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+24.24.24.1        1   FULL/BDR        00:00:09    12.12.12.2      FastEthernet0/0
+Router(config-if)#
+00:08:11: %OSPF-5-ADJCHG: Process 1, Nbr 24.24.24.1 on FastEthernet0/0 from FULL to DOWN, Neighbor Down: Dead timer expired
+
+00:08:11: %OSPF-5-ADJCHG: Process 1, Nbr 24.24.24.1 on FastEthernet0/0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+00:11:04: %OSPF-5-ADJCHG: Process 1, Nbr 24.24.24.1 on FastEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config-if)#do sh ip ospf int fa0/0
+
+FastEthernet0/0 is up, line protocol is up
+  Internet address is 12.12.12.1/24, Area 0
+  Process ID 1, Router ID 12.12.12.1, Network Type BROADCAST, Cost: 1
+  Transmit Delay is 1 sec, State BDR, Priority 1
+  Designated Router (ID) 24.24.24.1, Interface address 12.12.12.2
+  Backup Designated Router (ID) 12.12.12.1, Interface address 12.12.12.1
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+    Hello due in 00:00:05
+  Index 1/1, flood queue length 0
+  Next 0x0(0)/0x0(0)
+  Last flood scan length is 1, maximum is 1
+  Last flood scan time is 0 msec, maximum is 0 msec
+  Neighbor Count is 1, Adjacent neighbor count is 1
+    Adjacent with neighbor 24.24.24.1  (Designated Router)
+  Suppress hello for 0 neighbor(s)
+  Message digest authentication enabled
+    Youngest key id is 1
+Router(config-if)#
+
+ 
+- Konfigurasi Router 2
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 12.12.12.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int fa1/0
+Router(config-if)#ip add 24.24.24.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet1/0, changed state to up
+
+Router(config-if)#router ospf 2
+Router(config-router)#network 24.24.24.0 0.0.0.255 area 0
+Router(config-router)#network 12.12.12.0 0.0.0.255 area 0
+Router(config-router)#
+00:05:23: %OSPF-5-ADJCHG: Process 2, Nbr 12.12.12.1 on FastEthernet0/0 from LOADING to FULL, Loading Done
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet1/0, changed state to up
+
+00:06:49: %OSPF-5-ADJCHG: Process 2, Nbr 24.24.24.2 on FastEthernet1/0 from LOADING to FULL, Loading Done
+
+00:08:08: %OSPF-5-ADJCHG: Process 2, Nbr 12.12.12.1 on FastEthernet0/0 from FULL to DOWN, Neighbor Down: Dead timer expired
+
+00:08:08: %OSPF-5-ADJCHG: Process 2, Nbr 12.12.12.1 on FastEthernet0/0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+Router(config-router)#
+Router(config-router)#ex
+
+- Auth Interface Router 2
+Router(config)#int fa0/0
+Router(config-if)#ip ospf authentication message-digest 
+Router(config-if)#ip ospf message-digest-key 1 md5 P4ssword   
+Router(config-if)#
+00:11:03: %OSPF-5-ADJCHG: Process 2, Nbr 12.12.12.1 on FastEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config-if)#do sh ip os nei
+
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+12.12.12.1        1   FULL/BDR        00:00:35    12.12.12.1      FastEthernet0/0
+24.24.24.2        1   FULL/DR         00:00:36    24.24.24.2      FastEthernet1/0
+	
+Router(config-if)#do sh ip ospf int fa0/0
+
+FastEthernet0/0 is up, line protocol is up
+  Internet address is 12.12.12.2/24, Area 0
+  Process ID 2, Router ID 24.24.24.1, Network Type BROADCAST, Cost: 1
+  Transmit Delay is 1 sec, State DR, Priority 1
+  Designated Router (ID) 24.24.24.1, Interface address 12.12.12.2
+  Backup Designated Router (ID) 12.12.12.1, Interface address 12.12.12.1
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+    Hello due in 00:00:06
+  Index 2/2, flood queue length 0
+  Next 0x0(0)/0x0(0)
+  Last flood scan length is 1, maximum is 1
+  Last flood scan time is 0 msec, maximum is 0 msec
+  Neighbor Count is 1, Adjacent neighbor count is 1
+    Adjacent with neighbor 12.12.12.1  (Backup Designated Router)
+  Suppress hello for 0 neighbor(s)
+  Message digest authentication enabled
+    Youngest key id is 1
+Router(config-if)#
+
+
+- Konfigurasi Router 3
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 24.24.24.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#router ospf 3
+Router(config-router)#network 24.24.24.0 0.0.0.255 area 0
+Router(config-router)#
+00:06:49: %OSPF-5-ADJCHG: Process 3, Nbr 24.24.24.1 on FastEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#ex
+Router(config)#

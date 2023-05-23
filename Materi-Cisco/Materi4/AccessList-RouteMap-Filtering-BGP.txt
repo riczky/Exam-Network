@@ -1,0 +1,102 @@
+Access-List Route Map Filtering | BGP
+
+- Siapkan Device 
+3 Router PT
+
+- Hubungkan dengan kabel Cross
+
+- Konfigurasi Router 1 
+R1(config)#int e0/0
+R1(config-if)#no sh
+R1(config-if)#ip add 12.12.12.1 255.255.255.0
+
+R1(config-if)#int l0
+R1(config-if)#ip add 1.1.1.1 255.255.255.255
+
+R1(config-if)#int l1
+R1(config-if)#ip add 1.1.1.2 255.255.255.255
+
+R1(config-if)#int l2
+R1(config-if)#ip add 1.1.1.3 255.255.255.255
+
+R1(config-if)#int l3
+R1(config-if)#ip add 1.1.1.4 255.255.255.255
+
+R1(config-if)#int l4
+R1(config-if)#ip add 1.1.1.5 255.255.255.255
+
+R1(config-if)#int l5
+R1(config-if)#ip add 1.1.1.6 255.255.255.255
+
+R1(config-if)#router bgp 1
+R1(config-router)#neighbor 12.12.12.2 remote-as 2
+R1(config-router)#net 1.1.1.1 mask 255.255.255.255 
+R1(config-router)#net 1.1.1.2 mask 255.255.255.255
+R1(config-router)#net 1.1.1.3 mask 255.255.255.255
+R1(config-router)#net 1.1.1.4 mask 255.255.255.255
+R1(config-router)#net 1.1.1.5 mask 255.255.255.255
+R1(config-router)#net 1.1.1.6 mask 255.255.255.255
+
+- Konfigurasi Router 2
+R2(config)#int e0/0
+R2(config-if)#no sh
+R2(config-if)#ip add 12.12.12.2 255.255.255.0
+
+R2(config-if)#int e0/1
+R2(config-if)#ip add 23.23.23.2 255.255.255.0
+
+R2(config)#router bgp 2
+R2(config-router)#neighbor 12.12.12.1 remote-as 1
+R2(config-router)#neighbor 23.23.23.3 remote-as 3
+
+
+- Konfigurasi Router 3
+R3(config)#int e0/0
+R3(config-if)#no sh
+R3(config-if)#ip add 23.23.23.3 255.255.255.0
+
+R3(config-if)#router bgp 3
+R3(config-router)#neighbor 23.23.23.2 remote-as 2
+
+
+- Cek Seluruh IP pada Router 2 dan Router 3
+R2(config-router)#do sh ip ro
+      1.0.0.0/32 is subnetted, 6 subnets
+B        1.1.1.1 [20/0] via 12.12.12.1, 00:02:10
+B        1.1.1.2 [20/0] via 12.12.12.1, 00:02:10
+B        1.1.1.3 [20/0] via 12.12.12.1, 00:02:10
+B        1.1.1.4 [20/0] via 12.12.12.1, 00:02:10
+B        1.1.1.5 [20/0] via 12.12.12.1, 00:02:10
+B        1.1.1.6 [20/0] via 12.12.12.1, 00:02:10
+      12.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        12.12.12.0/24 is directly connected, Ethernet0/0
+      23.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        23.23.23.0/24 is directly connected, Ethernet0/1
+R3(config-router)#do sh ip ro
+
+- Konfigurasi Access List dan Route Map pada R1
+R1(config)#access-list 1 deny 1.1.1.0 0.0.0.254
+R1(config)#access-list 1 permit any 
+
+R1(config)#route-map FILTERING
+R1(config-route-map)#match ip address 1
+
+R1(config-route-map)#router bgp 1
+R1(config-router)#neighbor 12.12.12.2 route-map FILTERING out
+
+R1(config-router)#do cle ip bgp *
+
+
+- Cek setelah dilakukan filtering pada R2 dan R3
+R2(config-router)#do sh ip ro 
+
+      1.0.0.0/32 is subnetted, 3 subnets
+B        1.1.1.1 [20/0] via 12.12.12.1, 00:00:44
+B        1.1.1.3 [20/0] via 12.12.12.1, 00:00:44
+B        1.1.1.5 [20/0] via 12.12.12.1, 00:00:44
+      12.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        12.12.12.0/24 is directly connected, Ethernet0/0
+      23.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        23.23.23.0/24 is directly connected, Ethernet0/1
+
+

@@ -1,0 +1,196 @@
+Local Preferences
+
+Konfigurasi local preference agar jalur yang digunakan hanya yang melewati 
+R3.
+
+Secara default nilai local preference adalah 100 dan route dengan local 
+preference tertinggi yang akan digunakan
+
+
+- Siapkan Device
+4 Router PT
+
+- Hubungkan Router dengan kabel Interface
+- Konfigurasi Router 1
+R1(config)#int e0/0
+R1(config-if)#no sh
+R1(config-if)#ip add 12.12.12.1 255.255.255.0
+
+R1(config-if)#int e0/1
+R1(config-if)#no sh
+R1(config-if)#ip add 14.14.14.1 255.255.255.0
+
+R1(config-if)#router bgp 1
+R1(config-router)#bgp confederation identifier 123
+R1(config-router)#bgp confederation peers 2
+R1(config-router)#neighbor 12.12.12.2 remote-as 2
+R1(config-router)#neighbor 12.12.12.2 next-hop-self
+R1(config-router)#neighbor 14.14.14.4 remote-as 4
+R1(config-router)#net 12.12.12.0 mask 255.255.255.0 
+
+- Konfigurasi Router 2
+R2(config)#int e0/0
+R2(config-if)#no sh
+R2(config-if)#ip add 12.12.12.2 255.255.255.0
+
+R2(config-if)#int e0/1
+R2(config-if)#no sh
+R2(config-if)#ip add 23.23.23.2 255.255.255.0
+
+R2(config-if)#router bgp 2
+R2(config-router)#bgp confederation identifier 123
+R2(config-router)#bgp confederation peers 1 3
+R2(config-router)#neighbor 12.12.12.1 remote-as 1
+R2(config-router)#neighbor 12.12.12.1 next-hop-self
+R2(config-router)#neighbor 23.23.23.3 remote-as 3
+R2(config-router)#neighbor 23.23.23.3 next-hop-self
+
+- Konfigurasi Router 3
+R3(config)#int e0/0
+R3(config-if)#no sh
+R3(config-if)#ip add 23.23.23.3 255.255.255.0
+
+R3(config-if)#int e0/1
+R3(config-if)#no sh
+R3(config-if)#ip add 34.34.34.3 255.255.255.0
+
+R3(config-if)#router bgp 3
+R3(config-router)#bgp confederation identifier 123
+R3(config-router)#bgp confederation peers 2
+R3(config-router)#neighbor 23.23.23.2 remote-as 2
+R3(config-router)#neighbor 23.23.23.2 next-hop-self
+R3(config-router)#neighbor 34.34.34.4 remote-as 4
+R3(config-router)#net 23.23.23.0 mask 255.255.255.0
+R3(config-router)#net 34.34.34.0 mask 255.255.255.0
+
+- Konfigurasi Router 4
+R4(config)#int e0/0
+R4(config-if)#no sh
+R4(config-if)#ip add 14.14.14.4 255.255.255.0
+
+R4(config-if)#int e0/1
+R4(config-if)#no sh
+R4(config-if)#ip add 34.34.34.4 255.255.255.0
+
+R4(config-if)#int l0
+R4(config-if)#ip add 4.4.4.4 255.255.255.255
+
+R4(config-if)#router bgp 4
+R4(config-router)#neighbor 14.14.14.1 remote-as 123
+R4(config-router)#neighbor 34.34.34.3 remote-as 123
+R4(config-router)#net 4.4.4.4 mask 255.255.255.255
+
+
+- Cek Ip Route BGP pada Router 2 dan 4
+R2(config-router)#do sh ip ro
+
+      4.0.0.0/32 is subnetted, 1 subnets
+B        4.4.4.4 [200/0] via 12.12.12.1, 00:11:56
+      12.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        12.12.12.0/24 is directly connected, Ethernet0/0
+      14.0.0.0/24 is subnetted, 1 subnets
+B        14.14.14.0 [200/0] via 12.12.12.1, 00:11:25
+      23.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        23.23.23.0/24 is directly connected, Ethernet0/1
+      34.0.0.0/24 is subnetted, 1 subnets
+B        34.34.34.0 [200/0] via 23.23.23.3, 00:11:25
+
+R4(config-router)#do sh ip ro
+4.0.0.0/32 is subnetted, 1 subnets
+C        4.4.4.4 is directly connected, Loopback0
+      12.0.0.0/24 is subnetted, 1 subnets
+B        12.12.12.0 [20/0] via 14.14.14.1, 00:11:54
+      14.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        14.14.14.0/24 is directly connected, Ethernet0/0
+      23.0.0.0/24 is subnetted, 1 subnets
+B        23.23.23.0 [20/0] via 14.14.14.1, 00:11:54
+      34.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        34.34.34.0/24 is directly connected, Ethernet0/1
+
+- Cek ping ke IP lo Router4
+R2(config-router)#do ping 4.4.4.4
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 4.4.4.4, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/8 ms
+
+- Konfigurasi Local Preference BGP
+- Cek Nilai Local Preference pada semua Router
+R1#sh ip bg
+BGP table version is 6, local router ID is 14.14.14.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network             Next Hop            Metric LocPrf Weight Path
+*  4.4.4.4/32          12.12.12.2            0    100      0 (2 3) 4 i
+*>                  14.14.14.4               0             0 4 i
+*> 12.12.12.0/24    0.0.0.0                  0         32768 i
+*> 14.14.14.0/24    0.0.0.0                  0         32768 i
+*> 23.23.23.0/24    12.12.12.2               0    100      0 (2 3) i
+*> 34.34.34.0/24    12.12.12.2               0    100      0 (2 3) i
+
+
+- Konfigurasi Local Preference Router 1
+R1(config)#access-list 2 permit 4.4.4.4
+R1(config)#route-map PREFERENCE permit 10
+R1(config-route-map)#match ip address 2
+R1(config-route-map)#set local-preference 200
+R1(config-route-map)#route-map PREFERENCE permit 20
+
+R1(config-route-map)#router bgp 1
+R1(config-router)#neighbor 14.14.14.4 route-map PREFERENCE in  
+
+R1(config-router)#do clea ip bgp *
+
+- Konfigurasi Local Preference Router
+R3(config)#access-list 2 permit 4.4.4.4
+R3(config)#route-map PREFERENCE permit 10
+R3(config-route-map)#match ip address 2
+R3(config-route-map)#set local-preference 300
+R3(config-route-map)#route-map PREFERENCE permit 20
+
+R3(config-route-map)#router bgp 1
+R3(config-router)#neighbor 34.34.34.4 route-map PREFERENCE in  
+
+R3(config-router)#do clea ip bgp *
+
+- Lihat Nilai Local Preference pada semua Router
+R1#sh ip bg
+BGP table version is 6, local router ID is 14.14.14.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network             Next Hop            Metric LocPrf Weight Path
+*  4.4.4.4/32          12.12.12.2            0    300      0 (2 3) 4 i
+*>                  14.14.14.4               0    200           0 4 i
+*> 12.12.12.0/24    0.0.0.0                  0         32768 i
+*> 14.14.14.0/24    0.0.0.0                  0         32768 i
+*> 23.23.23.0/24    12.12.12.2               0    100      0 (2 3) i
+*> 34.34.34.0/24    12.12.12.2               0    100      0 (2 3) i
+
+- Lakukan pengujian pada R1, R2 dan R3 untuk ping ke Lo 4.4.4.4 R4
+R1(config)#do traceroute 4.4.4.4
+Type escape sequence to abort.
+Tracing the route to 4.4.4.4
+
+  1 12.12.12.2 0 msec 4 msec 0 msec
+  2 23.23.23.3 [AS 3] 0 msec 0 msec 0 msec
+  3 34.34.34.4 [AS 3] 4 msec 0 msec 0 msec
+
+R2(config)#do traceroute 4.4.4.4
+
+Type escape sequence to abort.
+Tracing the route to 4.4.4.4
+
+  1 23.23.23.3 [AS 3] 0 msec 0 msec 4 msec
+  2 34.34.34.4 [AS 3] 0 msec 0 msec 0 msec
+
+R3(config)#do traceroute 4.4.4.4
+
+Type escape sequence to abort.
+Tracing the route to 4.4.4.4
+
+  1 34.34.34.4 0 msec 4 msec 0 msec

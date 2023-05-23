@@ -1,0 +1,51 @@
+Filtering Regexp | BGP
+
+http://coretanbocahit.blogspot.com/2016/11/lab-91-bgp-filtering-regexp.html
+
+R3(config-router)#do sh ip bgp
+BGP table version is 7, local router ID is 23.23.23.3
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 1.1.1.1/32       23.23.23.2                             0 2 1 i
+*> 1.1.1.2/32       23.23.23.2                             0 2 1 i
+*> 1.1.1.3/32       23.23.23.2                             0 2 1 i
+*> 1.1.1.4/32       23.23.23.2                             0 2 1 i
+*> 1.1.1.5/32       23.23.23.2                             0 2 1 i
+*> 1.1.1.6/32       23.23.23.2                             0 2 1 i
+
+Kasusnya kita pengen agar R3 tidak memiliki informasi route yang dibuat 
+oleh router yang berada di AS 1. Kita akan melakukan filtering di R3
+
+R3(config)#ip as-path access-list 1 deny _1$
+R3(config)#ip as-path access-list 1 permit .*
+
+R3(config)#route-map REGEXP
+R3(config-route-map)#match as-path 1
+
+R3(config-route-map)#router bgp 3
+R3(config-router)#neighbor 23.23.23.2 route-map REGEXP in
+
+R3(config-router)#do cle ip bgp *
+
+Untuk sekarang R3 tidak akan punya informasi routing BGP apapun.. karena 
+semua route yang sebelumnya berada di R3 berasal dari AS 1. Untuk pengujian
+kita coba bikin IP Loopback di R2 kemudian kita advertise ke BGP
+
+R2(config)#int l0
+R2(config-if)#ip add 2.2.2.2 255.255.255.255
+
+R2(config-if)#router bgp 2
+R2(config-router)#net 2.2.2.2 mask 255.255.255.255
+
+R3(config-router)#do sh ip bgp
+BGP table version is 2, local router ID is 23.23.23.3
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 2.2.2.2/32       23.23.23.2               0             0 2 i
+

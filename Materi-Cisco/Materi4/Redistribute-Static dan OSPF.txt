@@ -1,0 +1,121 @@
+Redistrubite OSPF + Static Routing
+
+- Siapkan Device
+3 Router 
+2 Pc
+
+- Hubungkan semua perangkat menggunakan kabel automatic
+
+- Konfigurasi PC 1
+192.168.1.2	
+255.255.255.0
+192.168.1.1
+
+
+- Konfigurasi PC 2
+192.168.2.2	
+255.255.255.0
+192.168.2.1
+
+- Konfigurasi Router 1
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 192.168.1.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int se2/0
+Router(config-if)#ip add 20.20.20.1 255.255.255.0
+Router(config-if)#no sh
+
+%LINK-5-CHANGED: Interface Serial2/0, changed state to down
+Router(config-if)#
+Router(config-if)#
+%LINK-5-CHANGED: Interface Serial2/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Serial2/0, changed state to up
+
+Router(config-if)#
+Router(config-if)#ex
+Router(config)#ip route 10.10.10.0 255.255.255.0 20.20.20.2
+Router(config)#ip route 192.168.2.0 255.255.255.0 20.20.20.2
+
+- Konfigurasi Router 2
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int se2/0
+Router(config-if)#ip add 20.20.20.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface Serial2/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Serial2/0, changed state to up
+
+Router(config)#int se3/0
+Router(config-if)#ip add 10.10.10.1 255.255.255.0
+Router(config-if)#no sh
+
+%LINK-5-CHANGED: Interface Serial3/0, changed state to down
+Router(config-if)#
+Router(config-if)#
+%LINK-5-CHANGED: Interface Serial3/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Serial3/0, changed state to up
+
+Router(config-if)#
+Router(config-if)#
+Router(config-if)#ex
+Router(config)#ip route 192.168.1.0 255.255.255.0 20.20.20.1
+Router(config)#router ospf 1
+Router(config-router)#network 10.10.10.0 0.0.0.255 area 0
+Router(config-router)#
+00:11:51: %OSPF-5-ADJCHG: Process 1, Nbr 1.1.1.1 on Serial3/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#redistribute static subnets 
+
+- Konfigruasi Router 3
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 192.168.2.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int se2/0
+Router(config-if)#ip add 10.10.10.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface Serial2/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Serial2/0, changed state to up
+
+Router(config)#
+Router(config)#
+Router(config)#router ospf 1
+Router(config-router)#router-id 1.1.1.1
+Router(config-router)#network 10.10.10.0 0.0.0.255 area 0
+00:11:38: %OSPF-5-ADJCHG: Process 1, Nbr 20.20.20.2 on Serial2/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#network 192.168.2.0 255.255.255.0 area 0
+Router(config-router)#
+
+
+
+

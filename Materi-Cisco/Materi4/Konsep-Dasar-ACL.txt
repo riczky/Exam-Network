@@ -1,0 +1,79 @@
+Access List
+
+
+Access List atau ACL merupakan sebuah mekanisme yang digunakan untuk 
+melakukan filtering terhadap trafik yang ada pada jaringan
+
+Jenis:
+ACL Standard 
+- Digunakan untuk melakukan filter secara general(umum)
+- Menggunakan penomoran 1-99
+- Diletakkan pada interface yang dekat dengan destination .packet
+
+ACL Extended 
+- Digunakan untuk melakukan filter secara spesifik.
+- Menggunakan penomoran 100 - 199.
+- Diletakkan pada interface yang paling dekat dengan source paket.
+
+Penulisan ACL:
+1. Numbered ACL
+- Konfigurasi ACL yang di dituliskan berdasarkan nomer
+- Nomor 1-99 digunakan untuk ACL Standard. 100-199 digunakan ACL Extended
+Contoh:
+access-list 1 permit host 192.168.10.5 (Standard)
+access-list 1 permit icmp host 192.168.10.5 host 172.30.10.7 (Extended)
+
+2. Named ACL
+- Konfigurasi ACL yang dituliskan menggunakan nama/huruf
+
+ip access-list [standard/extended] [nama_ACL]
+Contoh:
+R1(config)#ip access-list standard ALLOW_HOST
+R1(config-std-nacl)# permit host 192.168.10.7
+
+Konfigurasi diatas mendefinisikan access list standard dengan nama
+ALLOW_HOST, sedangkan aturan yang dibuat adalah mengijinkan host
+192.168.10.7
+
+Penempatan interface ACL
+
+- in (untuk trafik inbound) = Trafik yang masuk dari sebuah Router
+- out (untuk trafik outbound) = Trafik yang keluar dari router itu.
+
+Sebuah interface dapat menangani trafik inbound maupun outbound. Maka dari
+itu, kita perlu melihat arah dari trafik tersebut.
+
+Contoh: 
+int g0/1
+ip access-group in
+Artinya = Source trafik nya masuk kerouter utama
+
+int g0/1
+ip access-group out
+Artinya = Source trafik nya keluar kerouter utama menuju destination
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

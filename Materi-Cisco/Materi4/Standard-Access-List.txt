@@ -1,0 +1,117 @@
+Standard Access List | Cisco
+Standard Access List + OSPF
+
+Standard: Diletakkan pada interface yang dekat dengan destination .packet
+Skenario: 
+Network 192.168.20.0 tidak dapat mengakses server
+
+- Siapkan device:
+2 Router
+3 Switch
+4 PC
+1 Server
+
+- Konfigurasi PC 1-2
+192.168.10.2
+255.255.255.0
+192.168.10.1
+
+192.168.10.3
+255.255.255.0
+192.168.10.1
+
+- Konfigurasi PC 3-4
+192.168.20.2
+255.255.255.0
+192.168.20.1
+
+192.168.20.3
+255.255.255.0
+192.168.20.1
+
+- Konfigurasi Server
+12.12.12.2
+255.255.255.0
+12.12.12.1
+
+- Konfigurasi Router 1
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 192.168.10.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int se2/0
+Router(config-if)#ip add 10.10.10.1 255.255.255.0
+Router(config-if)#no sh
+
+%LINK-5-CHANGED: Interface Serial2/0, changed state to down
+Router(config-if)#
+Router(config-if)#
+%LINK-5-CHANGED: Interface Serial2/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Serial2/0, changed state to up
+
+Router(config-if)#
+Router(config-if)#ex
+Router(config)#router ospf 1
+Router(config-router)#network 192.168.10.0 0.0.0.255 area 0
+Router(config-router)#network 10.10.10.0 0.0.0.255 area 0
+Router(config-router)#
+00:09:53: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.20.1 on Serial2/0 from LOADING to FULL, Loading Done
+
+
+- Konfigurasi Router 2
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa1/0
+Router(config-if)#ip add 192.168.20.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet1/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet1/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#int se2/0
+Router(config-if)#ip add 10.10.10.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface Serial2/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Serial2/0, changed state to up
+
+Router(config)#int fa0/0
+Router(config-if)#ip add 12.12.12.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#ex
+Router(config)#router ospf 2
+Router(config-router)#network 12.12.12.0 0.0.0.255 area 0
+Router(config-router)#network 192.168.20.0 0.0.0.255 area 0
+Router(config-router)#network 10.10.10.0 0.0.0.255 area 0
+Router(config-router)#
+00:09:50: %OSPF-5-ADJCHG: Process 2, Nbr 192.168.10.1 on Serial2/0 from LOADING to FULL, Loading Done
+
+- Konfigurasi Access List pada Router 2
+Router(config-router)#ex
+Router(config)#access-list 1 permit 192.168.10.0 0.0.0.255
+Router(config)#access-list 1 deny any
+Router(config)#int fa0/0
+Router(config-if)#ip access-group 1 out
+Router(config-if)#
