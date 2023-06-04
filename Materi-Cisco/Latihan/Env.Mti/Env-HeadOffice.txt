@@ -1,0 +1,81 @@
+Env. Head Office:
+
+Topologi : Three layer hierarchy model
+Access Layer: Lapisan ini juga disebut lapisan desktop karena berfokus pada menghubungkan
+node klien, seperti workstation ke jaringan.
+
+Distribution Layer: Lapisan distribusi adalah lapisan cerdas dalam model tiga lapisan.
+Kebijakan perutean, pemfilteran, dan QoS dikelola di lapisan distribusi. Perangkat 
+lapisan distribusi juga sering mengelola koneksi WAN kantor cabang individual.
+Lapisan ini juga disebut lapisan Workgroup.
+
+Access Layer: Inti adalah tulang punggung jaringan, di mana gateway internet (internetwork)
+berada. Jaringan inti menyediakan layanan penerusan berkecepatan tinggi dan
+sangat redundan untuk memindahkan paket antar perangkat lapisan distribusi 
+di wilayah jaringan yang berbeda. Sakelar dan router inti biasanya yang paling 
+kuat, dalam hal daya penerusan mentah, di perusahaan; perangkat jaringan 
+inti mengelola koneksi berkecepatan tertinggi, seperti 10 Gigabit Ethernet 
+atau 100 Gigabit Ethernet .
+
+
+Pada topologi ini memiliki sebuah tri angle topologi yang digunakan
+untuk menghubungkan antara perangkat jaringan pada environment Headoffice, 
+DC dan DRC.
+
+Switch MCC-18-CRE 1 & 2 memiliki sebuah 2 jaringan lan yang terhubung pada 
+MCC-17-AGG yang digunakan untuk lantai 17 dan MCC-18-AGG yang digunakan 
+untuk Lt.18 
+
+Wccp digunakan untuk mengatur lalu lintas packet data pada Lt.17
+untuk mengarahkan ke Proxy dibandingkan VBR lebih fleksibel untuk 
+melakukan pengiriman packet data. 
+
+Pada switch MCC-17-AGG memiliki beberapa jalur vlan yang digunakan
+untuk pengelompokkan pada sebuah interface, adapun vlan yang digunakan pada
+switch MCC-17-AGG ini menggunakan vlan 23, 123, 101 yang terhubung pada beberapa 
+perangkat seperti PC, Access Point dan perangkat lainnya.
+
+Pada switch MCC-18-AGG memeliki beberapa jalur vlan yang digunakan
+untuk pengelompokkan pada sebuah interface, adapun vlan yang digunakan pada
+switch MCC-18-AGG ini menggunakan vlan 25, 125, 101 yang terhubung pada beberapa perangkat
+seperti PC, access point dan perangkat lainnya. 
+ 
+Pada MCC-18-SF01-N3K ini digunakan untuk kebutuhan pada sebuah server yang menyimpan 
+berbagai kebutuhan system.
+
+
+Pada switch MCC-18-AGG membutuhkan sebuah filter pada lalulintas komunikasi
+data yang di filter melalui Proxy dan juga membutuhkan sebuah WLC 
+untuk mengelola sebuah access point yang digunakan pada Lt.17 dan 18.
+
+
+Triangle Topology:
+tri angle topologi yang digunakan untuk menghubungkan antara perangkat 
+jaringan pada environment Headoffice, DC dan DRC.
+
+Pada MCC-18-CRE 1 & 2 memiliki sebuah routing OSPF melalui sebuah jalur 
+firewall yang sifatnya transparent untuk menghubungkan point to point
+menggunakan link provider agar bisa menghubungkan dari HeadOffice to 
+DC-CR-SW-01-02 dan juga DR-CR-02.
+ 
+Switch DC-CR-SW-01-02 dan DR-CR-02 tehubung menggunakan jalur DWDM
+-IForte dan juga DWDM Indosat agar tetap saling terhubung antara DC dan juga
+DRC.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
