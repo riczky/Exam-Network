@@ -4,8 +4,6 @@ tabel routing yang dikonfigurasi secara manual oleh administrator jaringan.
 Routing dinamis adalah routing yang secara otomatis dapat menghasilkan
 tabel routing berdasarkan lalu lintas jaringan dan router yang terhubung.
 
-
-
 Vlan adalah pengelompokkan perangkat jaringan yang memungkinkan pembuatan 
 beberapa jalur dalam satu segmen jaringan yang sama.
 

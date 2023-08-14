@@ -1,0 +1,175 @@
+Vlan 2 Switch + 2 Router (Static)
+
+- Siapkan device
+2 Router PT
+2 Switch PT
+4 PC
+
+- Hubungkan semua perangkat menggunakan kabel automatic sesuai topologi.
+
+- Konfigurasi Switch 1
+
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#vlan 10
+Switch(config-vlan)#name Guru
+Switch(config-vlan)#vlan 20
+Switch(config-vlan)#name Siswa
+Switch(config-vlan)#ex
+
+Switch(config)#int fa1/1
+Switch(config-if)#sw
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport access vlan 10
+Switch(config-if)#ex
+
+Switch(config)#int fa2/1	
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport access vlan 20
+
+Switch(config-if)#int fa0/1
+Switch(config-if)#switchport mode trunk
+Switch(config-if)#switchport trunk allowed vlan 10-20
+Switch(config-if)#end
+Switch#
+%SYS-5-CONFIG_I: Configured from console by console
+Switch#wr
+Building configuration...
+[OK]
+
+- Konfigurasi Router 1
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 192.168.1.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#int fa0/0.10
+Router(config-subif)#
+%LINK-5-CHANGED: Interface FastEthernet0/0.10, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0.10, changed state to up
+
+Router(config-subif)#encapsulation dot1Q 10
+Router(config-subif)#ip add 192.168.10.1 255.255.255.0
+Router(config-subif)#ex
+Router(config)#int fa0/0.20
+Router(config-subif)#
+%LINK-5-CHANGED: Interface FastEthernet0/0.20, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0.20, changed state to up
+
+Router(config-subif)#encapsulation dot1Q 20
+Router(config-subif)#ip add 192.168.20.1 255.255.255.0
+Router(config-subif)#ex
+Router(config)#
+Router(config)#do wr
+Building configuration...
+[OK]
+Router(config)#
+
+
+- Konfigurasi PC 1
+192.168.10.2
+255.255.255.0
+192.168.10.1
+
+- Konfigurasi PC 2
+192.168.20.2
+255.255.255.0
+192.168.20.1
+
+
+- Konfigurasi Switch 2 
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#vlan 10
+Switch(config-vlan)#name Guru
+Switch(config-vlan)#vlan 20 
+Switch(config-vlan)#name Siswa
+Switch(config-vlan)#ex
+Switch(config)#int fa1/1
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport access vlan 10
+Switch(config-if)#int fa2/1
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport access vlan 20
+Switch(config-if)#int fa0/1
+Switch(config-if)#switchport mode trunk
+Switch(config-if)#switchport trunk allowed vlan 10-20
+Switch(config-if)#
+
+- Konfigurasi Router 2
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int fa0/0
+Router(config-if)#ip add 192.168.2.1 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#int fa0/0.10
+Router(config-subif)#
+%LINK-5-CHANGED: Interface FastEthernet0/0.10, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0.10, changed state to up
+
+Router(config-subif)#encapsulation dot1Q 10
+Router(config-subif)#ip add 192.168.10.1 255.255.255.0
+Router(config-subif)#ex
+Router(config)#int fa0/0.20
+Router(config-subif)#
+%LINK-5-CHANGED: Interface FastEthernet0/0.20, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0.20, changed state to up
+
+Router(config-subif)#encapsulation dot
+Router(config-subif)#encapsulation dot1Q 20
+Router(config-subif)#ip add 
+Router(config-subif)#ip add 192.168.20.1 255.255.255.0
+Router(config-subif)#ex
+Router(config)#
+
+- Konfigurasi PC 3
+192.168.10.2
+255.255.255.0
+192.168.10.1
+
+- Konfigurasi PC 4
+192.168.20.2
+255.255.255.0
+192.168.20.1
+
+- Routing Static Router 1
+Router(config)#int fa1/0
+Router(config-if)#ip add 10.10.10.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet1/0, changed state to up
+Router(config-if)#ex
+Router(config)#ip route 192.168.2.0 255.255.255.0 10.10.10.2
+Router(config)#ip route 192.168.10.0 255.255.255.0 10.10.10.2
+Router(config)#ip route 192.168.20.0 255.255.255.0 10.10.10.2
+
+- Routing Static Router 2
+Router(config)#int fa1/0
+Router(config-if)#ip add 10.10.10.2 255.255.255.0
+Router(config-if)#no sh
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet1/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet1/0, changed state to up
+
+Router(config-if)#ip route 192.168.1.0 255.255.255.0 10.10.10.1
+Router(config)#ip route 192.168.10.0 255.255.255.0 10.10.10.1
+Router(config)#ip route 192.168.20.0 255.255.255.0 10.10.10.1
+Router(config)#do sh ip route

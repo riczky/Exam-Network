@@ -15,6 +15,19 @@ Gateway adalah sebuah perangkat yang bertugas untuk menyambungkan satu
 jaringan komputer terhadap jaringan komputer lainnya dengan protokol 
 informasi yang berbeda.
 
+
+
+
+
+
+
+
+
+===========================================================================
+==============================================================
+
+
+
 Menghubungkan koneksi BGP dari Provider menggunakan Link Metro Ethernet
 
 IP Point to Point

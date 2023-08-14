@@ -1,0 +1,65 @@
+Routing Static Menggunakan Multilayer Switch (Layer 3)
+
+- Siapkan device:
+2 Switch Multilayer
+2 PC
+
+- Hubungkan semua device menggunakan kabel automatic sesuai topologi
+
+- Konfigurasi Switch Multilayer 1
+Switch(config)#hostname MS1
+MS1(config)#do sh vl br
+MS1(config)#int vlan 1
+MS1(config-if)#ip address 192.168.1.254 255.255.255.0
+MS1(config-if)#no sh
+
+MS1(config-if)#int fa0/2
+MS1(config-if)#no switchport
+MS1(config-if)#
+
+MS1(config-if)#ip add 100.100.100.1 255.255.255.252
+MS1(config-if)#no sh
+MS1(config-if)#ex
+MS1(config)#ip routing
+MS1(config)#ip route 192.168.2.0 255.255.255.0 100.100.100.2
+MS1(config)#do sh ip route
+
+- Konfigurasi Switch Multilayer 2
+MS2(config)#int vlan 1
+MS2(config-if)#ip add 192.168.2.254 255.255.255.0
+MS2(config-if)#no sh
+
+MS2(config-if)#int fa0/2
+MS2(config-if)#no switchport
+MS2(config-if)#ip add 100.100.100.2 255.255.255.252
+MS2(config-if)#no sh
+MS2(config-if)#ex
+MS2(config)#ip routing
+MS2(config)#ip route 192.168.1.0 255.255.255.0 100.100.100.1
+MS2(config)#do sh ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     100.0.0.0/30 is subnetted, 1 subnets
+C       100.100.100.0 is directly connected, FastEthernet0/2
+S    192.168.1.0/24 [1/0] via 100.100.100.1
+C    192.168.2.0/24 is directly connected, Vlan1
+
+- Konfigurasi PC 1
+192.168.1.1
+255.255.255.0
+192.168.1.254
+
+- Konfigurasi PC 2
+192.168.2.1
+255.255.255.0
+192.168.2.254
+
+
